@@ -664,6 +664,52 @@ describe 'editing profile preferences' do
           end
         end
       end
+
+      context 'when the user has education history items', :js do
+        let!(:edu1) { create(:education_history_item,
+                             user: user,
+                             institution: 'University A',
+                             degree: 'PhD',
+                             emphasis_or_major: 'Biology',
+                             end_year: 2004) }
+        let!(:edu2) { create(:education_history_item,
+                             visible_in_profile: false,
+                             user: user,
+                             institution: 'University B',
+                             degree: 'MS',
+                             emphasis_or_major: 'Computer Science',
+                             end_year: 2000) }
+
+        before { visit profile_bio_path }
+
+        it 'shows the education history items' do
+          expect(page).to have_content 'Education History'
+          expect(page).to have_content 'University A'
+          expect(page).to have_content 'PhD'
+          expect(page).to have_content 'Biology'
+          expect(page).to have_content '2004'
+          expect(page).to have_content 'University B'
+          expect(page).to have_content 'MS'
+          expect(page).to have_content 'Computer Science'
+          expect(page).to have_content '2000'
+        end
+
+        it 'allows toggling the visible_in_profile checkbox' do
+          uncheck "education_history_item_#{edu1.id}"
+          sleep 0.25
+          expect(edu1.reload.visible_in_profile).to be false
+
+          check "education_history_item_#{edu2.id}"
+          sleep 0.25
+          expect(edu2.reload.visible_in_profile).to be true
+        end
+      end
+
+      context 'when the user has no education history items' do
+        it 'does not show the education history section' do
+          expect(page).to have_no_content 'Education History'
+        end
+      end
     end
 
     context 'when the user is not signed in' do

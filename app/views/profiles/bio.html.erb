@@ -1,6 +1,6 @@
 <h4>Profile Bio</h4>
 <div class="row">
-  <div class="col-xl">
+  <div class="col-xl-6">
     <div class="profile-bio-section">
       <h5>Personal Information</h5>
       <table class="table">
@@ -53,8 +53,8 @@
     <% end %>
   </div>
 
-  <% if @user.orcid_identifier %>
-    <div class="col-xl-4">
+  <div class="col-xl-6">
+    <% if @user.orcid_identifier %>
       <div class="profile-bio-section" id="orcid-info">
         <%= link_to @user.orcid_identifier, id: "orcid-link", target: "_blank" do %>
           <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
@@ -80,6 +80,43 @@
           <% end %>
         <% end %>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+
+    <% if @education_history_items.present? %>
+      <div class="profile-bio-section">
+        <h4>Education History</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Degree</th>
+                <th>Institution</th>
+                <th>Year</th>
+                <th>Visible in Profile</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @education_history_items.each do |edu| %>
+                <div <%= dom_id(edu) %> ">
+                  <tr>
+                    <td>
+                      <%= "#{edu.degree}, #{edu.emphasis_or_major}" %>
+                    </td>
+                    <td>
+                      <%= "#{edu.institution}" %>
+                    </td>
+                    <td>
+                      <%= "#{edu.end_year}" %>
+                    </td>
+                    <td>
+                      <%= form_with model: edu, method: :put, class: 'visibility-control', remote: true do |f| %>
+                        <div class=" row "><%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(edu) %></div>
+                      <% end %>
+                    </td>
+                  </tr>
+                </div>
+              <% end %>
+            </tbody>
+          </table>
+      </div>
+    <% end %>
+  </div>
