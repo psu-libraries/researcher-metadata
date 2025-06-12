@@ -120,5 +120,7 @@ Rails.application.routes.draw do
   put 'user_performances/sort' => 'user_performances#sort'
   put 'user_performances/:id' => 'user_performances#update', as: :user_performance
 
+  put 'education_history_item/:id' => 'education_history_item#update', as: :education_history_item
+
   post 'webhooks/scholarsphere_events' => 'webhooks#scholarsphere_events', as: :scholarsphere_events_webhook
 end

@@ -33,6 +33,7 @@ class ProfilesController < ProfileManagementController
   def bio
     @user = current_user
     @memberships = current_user.user_organization_memberships
+    @education_history_items = current_user.education_history_items
   end
 
   helper_method :profile_for_current_user?,

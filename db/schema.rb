@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_29_020354) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_11_182801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -199,6 +199,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_29_020354) do
     t.integer "end_year"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.boolean "visible_in_profile", default: true, null: false
     t.index ["activity_insight_identifier"], name: "index_education_history_items_on_activity_insight_identifier", unique: true
     t.index ["user_id"], name: "index_education_history_items_on_user_id"
   end
@@ -503,9 +504,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_29_020354) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
+    t.datetime "oa_status_last_checked_at", precision: nil
     t.string "preferred_version"
     t.datetime "permissions_last_checked_at", precision: nil
-    t.datetime "oa_status_last_checked_at", precision: nil
     t.datetime "wrong_oa_version_notification_sent_at", precision: nil
     t.boolean "preferred_file_version_none_email_sent"
     t.boolean "doi_error"
