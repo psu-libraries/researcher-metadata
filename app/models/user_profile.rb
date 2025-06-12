@@ -118,6 +118,7 @@ class UserProfile
 
   def education_history
     degrees = user.education_history_items
+      .where(visible_in_profile: true)
       .where.not(degree: [nil, 'Other'])
       .where.not(institution: nil)
       .where.not(emphasis_or_major: nil)
