@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EducationHistoryItemController < UserController
+class EducationHistoryItemsController < UserController
   def update
     uehi = current_user.education_history_items.find(params[:id])
     uehi.update!(education_history_item_params)

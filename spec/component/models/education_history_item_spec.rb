@@ -26,6 +26,7 @@ describe 'the education_history_items table', type: :model do
   it { is_expected.to have_db_column(:end_year).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:visible_in_profile).of_type(:boolean).with_options(default: true, null: false) }
 
   it { is_expected.to have_db_index(:user_id) }
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }

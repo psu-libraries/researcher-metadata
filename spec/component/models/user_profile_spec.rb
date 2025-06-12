@@ -940,43 +940,57 @@ describe UserProfile do
                             degree: 'MS',
                             emphasis_or_major: 'Ecology',
                             institution: 'The Pennsylvania State University',
-                            end_year: 2003) }
+                            end_year: 2003,
+                            visible_in_profile: true) }
       let!(:item2) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: 2000) }
+                            end_year: 2000,
+                            visible_in_profile: true) }
       let!(:item3) { create(:education_history_item,
                             user: user,
                             degree: nil,
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: 2000) }
+                            end_year: 2000,
+                            visible_in_profile: true) }
       let!(:item4) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: nil,
                             institution: 'University of Pittsburgh',
-                            end_year: 2000) }
+                            end_year: 2000,
+                            visible_in_profile: true) }
       let!(:item5) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: 'Biology',
                             institution: nil,
-                            end_year: 2000) }
+                            end_year: 2000,
+                            visible_in_profile: true) }
       let!(:item6) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: nil) }
+                            end_year: nil,
+                            visible_in_profile: true) }
       let!(:item7) { create(:education_history_item,
                             user: user,
                             degree: 'Other',
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: 2000) }
+                            end_year: 2000,
+                            visible_in_profile: true) }
+      let!(:item8) { create(:education_history_item,
+                            user: user,
+                            degree: 'MS',
+                            emphasis_or_major: 'Biochemistry',
+                            institution: 'The Pennsylvania State University',
+                            end_year: 2003,
+                            visible_in_profile: false) }
 
       it "returns an array of strings describing the user's education history in order by year" do
         expect(profile.education_history).to eq [
