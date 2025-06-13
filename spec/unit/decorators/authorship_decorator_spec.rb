@@ -9,6 +9,8 @@ require_relative '../../../app/decorators/authorship_decorator'
 describe AuthorshipDecorator do
   let(:auth) { double 'authorship',
                       title: title,
+                      secondary_title: secondary_title,
+                      publication_type: publication_type,
                       published_by: publisher,
                       year: year,
                       preferred_open_access_url: url,
@@ -23,6 +25,8 @@ describe AuthorshipDecorator do
                       confirmed: confirmed,
                       user: user }
   let(:title) { '' }
+  let(:secondary_title) { '' }
+  let(:publication_type) { 'Journal Article' }
   let(:publisher) { '' }
   let(:year) { '' }
   let(:url) { '' }
@@ -122,6 +126,39 @@ describe AuthorshipDecorator do
               expect(ad.label).to eq %{<span class="publication-title">Test Title</span>}
             end
           end
+        end
+      end
+    end
+
+    context "when the given object is not a Chapter" do
+      let(:title) { 'Test Title' }
+      let(:publisher) { 'A Journal' }
+
+      context 'when the given object has a secondary_title' do
+        let(:secondary_title) { 'Test Book Title' }
+
+        it 'returns a label for the given object with the publication title and publisher' do
+          expect(ad.label).to eq %{<span class=\"publication-title\">Test Title</span>, <span class=\"journal-name\">A Journal</span>}
+        end
+      end
+    end
+
+    context "when the given object is a Chapter" do
+      let(:title) { 'Test Title' }
+      let(:publication_type) { 'Chapter' }
+      let(:publisher) { 'A Journal' }
+
+      context 'when the given object has a secondary_title' do
+        let(:secondary_title) { 'Test Book Title' }
+
+        it 'returns a label for the given object with the publication title and secondary title' do
+          expect(ad.label).to eq %{<span class=\"publication-title\">Test Title</span>, <span class=\"journal-name\">Test Book Title</span>}
+        end
+      end
+
+      context 'when the given object has no secondary_title' do
+        it 'returns a label for the given object with the publication title' do
+          expect(ad.label).to eq %{<span class=\"publication-title\">Test Title</span>}
         end
       end
     end
@@ -240,6 +277,39 @@ describe AuthorshipDecorator do
 
         it 'returns a label without a link for the given object with the publication title' do
           expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}
+        end
+      end
+    end
+
+     context "when the given object is not a Chapter" do
+      let(:title) { 'Test Title' }
+      let(:publisher) { 'A Journal' }
+
+      context 'when the given object has a secondary_title' do
+        let(:secondary_title) { 'Test Book Title' }
+
+        it 'returns a label for the given object with the publication title and publisher' do
+          expect(ad.profile_management_label).to eq %{<span class=\"publication-title\">the pub link</span>, <span class=\"journal-name\">A Journal</span>}
+        end
+      end
+    end
+
+    context "when the given object is a Chapter" do
+      let(:title) { 'Test Title' }
+      let(:publication_type) { 'Chapter' }
+      let(:publisher) { 'A Journal' }
+
+      context 'when the given object has a secondary_title' do
+        let(:secondary_title) { 'Test Book Title' }
+
+        it 'returns a label for the given object with the publication title and secondary title' do
+          expect(ad.profile_management_label).to eq %{<span class=\"publication-title\">the pub link</span>, <span class=\"journal-name\">Test Book Title</span>}
+        end
+      end
+
+      context 'when the given object has no secondary_title' do
+        it 'returns a label for the given object with the publication title' do
+          expect(ad.profile_management_label).to eq %{<span class=\"publication-title\">the pub link</span>}
         end
       end
     end
