@@ -87,6 +87,6 @@ class AuthorshipDecorator < BaseDecorator
       # Chapters should reference the "secondary_title" instead of "published_by"
       # "secondary_title" generally stores the title of the book the chapter resides in
       # This is preferred over "published_by" which is generally the publisher
-      publication_type != 'Chapter' ? published_by : secondary_title
+      publication_type == 'Chapter' ? secondary_title : published_by
     end
 end
