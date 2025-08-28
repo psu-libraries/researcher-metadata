@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/abc123
+    uri: https://search-service.k8s.psu.edu/people/userid/abc123
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v1.8.0
+      - Faraday v2.13.4
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,31 +19,50 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 18 Nov 2021 18:24:48 GMT
+      - Thu, 28 Aug 2025 18:28:32 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '357'
+      - '572'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=Rtqvxp9Iv0f8vhN_6mhpT9_s4IVCg_VLaEC7vJ19.search-service-77488f987b-hfzhk;
-        path=/search-service
-      X-Request-Id:
-      - e55fdb971b52b5de87c467d1a17f8458
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - 2e489ad3-7452-4f71-9e48-2f10c8890b71
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - ffd903093d4abf8520d0ff52ed458e7a
     body:
       encoding: UTF-8
-      string: '{"userid":"abc123","cprid":"2784093","givenName":"Firstname","middleName":"Garner","familyName":"Lastname","preferredGivenName":"PreferredFirstname","preferredFamilyName":"PreferredLastname","preferredMiddleName":"PreferredMiddlename","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"PreferredFirstname
-        PreferredLastname","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
-  recorded_at: Thu, 18 Nov 2021 18:24:48 GMT
-recorded_with: VCR 6.0.0
+      string: |-
+        {
+          "userid": "abc123",
+          "cprid": "2460424",
+          "givenName": "FirstName",
+          "middleName": "MiddleName",
+          "familyName": "LastName",
+          "honorificPrefix": "",
+          "honorificSuffix": "",
+          "preferredGivenName": "FirstName",
+          "preferredMiddleName": "MiddleName",
+          "preferredFamilyName": "LastName",
+          "preferredHonorificPrefix": "",
+          "preferredHonorificSuffix": "",
+          "active": true,
+          "confHold": false,
+          "universityEmail": "abc123@psu.edu",
+          "otherEmail": "",
+          "serviceAccount": false,
+          "primaryAffiliation": "STAFF",
+          "affiliation": [
+            "MEMBER",
+            "STAFF"
+          ],
+          "altUserids": [],
+          "link": {
+            "href": "https://cpr.k8s.psu.edu/cpr/resources/2460424"
+          },
+          "displayName": "FirstName LastName"
+        }    '
+  recorded_at: Thu, 28 Aug 2025 18:28:32 GMT
+recorded_with: VCR 6.3.1

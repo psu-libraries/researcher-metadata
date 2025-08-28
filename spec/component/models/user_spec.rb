@@ -307,7 +307,7 @@ describe User, type: :model do
     end
 
     context 'when given an auth object with a UID that does not match a user in the database', :vcr do
-      let(:uid) { 'agw13' }
+      let(:uid) { 'ajk5603' }
 
       it 'adds a new user' do
         expect {
