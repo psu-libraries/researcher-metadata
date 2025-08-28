@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 28 Aug 2025 18:28:33 GMT
+      - Thu, 28 Aug 2025 19:54:29 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -31,40 +31,12 @@ http_interactions:
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
       X-Request-Id:
-      - c2755477eb4d638e5ce0467a76eca69b
+      - 58da3358fb2dffad8f945b43bf9b2ae6
     body:
       encoding: UTF-8
-      string: |-
-        {
-          "userid": "ajk5603",
-          "cprid": "2460424",
-          "givenName": "Alexander",
-          "middleName": "",
-          "familyName": "Kiessling",
-          "honorificPrefix": "",
-          "honorificSuffix": "",
-          "preferredGivenName": "Alex",
-          "preferredMiddleName": "",
-          "preferredFamilyName": "Kiessling",
-          "preferredHonorificPrefix": "",
-          "preferredHonorificSuffix": "",
-          "active": true,
-          "confHold": false,
-          "universityEmail": "ajk5603@psu.edu",
-          "otherEmail": "",
-          "serviceAccount": false,
-          "primaryAffiliation": "STAFF",
-          "affiliation": [
-            "MEMBER",
-            "STAFF"
-          ],
-          "altUserids": [],
-          "link": {
-            "href": "https://cpr.k8s.psu.edu/cpr/resources/2460424"
-          },
-          "displayName": "Alex Kiessling"
-        }    Kiessling"}
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"Alex","preferredMiddleName":"","preferredFamilyName":"Kiessling","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["MEMBER","STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}
 
         '
-  recorded_at: Thu, 28 Aug 2025 18:28:33 GMT
+  recorded_at: Thu, 28 Aug 2025 19:54:29 GMT
 recorded_with: VCR 6.3.1

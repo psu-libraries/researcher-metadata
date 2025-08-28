@@ -34,36 +34,8 @@ http_interactions:
       - db4e8e3833d6faf649a5370c5753aa27
     body:
       encoding: UTF-8
-      string: |-
-        {
-          "userid": "ajk5603",
-          "cprid": "2460424",
-          "givenName": "Alexander",
-          "middleName": "",
-          "familyName": "Kiessling",
-          "honorificPrefix": "",
-          "honorificSuffix": "",
-          "preferredGivenName": "Alex",
-          "preferredMiddleName": "",
-          "preferredFamilyName": "Kiessling",
-          "preferredHonorificPrefix": "",
-          "preferredHonorificSuffix": "",
-          "active": true,
-          "confHold": false,
-          "universityEmail": "ajk5603@psu.edu",
-          "otherEmail": "",
-          "serviceAccount": false,
-          "primaryAffiliation": "STAFF",
-          "affiliation": [
-            "MEMBER",
-            "STAFF"
-          ],
-          "altUserids": [],
-          "link": {
-            "href": "https://cpr.k8s.psu.edu/cpr/resources/2460424"
-          },
-          "displayName": "Alex Kiessling"
-        }    Kiessling"}
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","middleName":"","familyName":"Kiessling","honorificPrefix":"","honorificSuffix":"","preferredGivenName":"Alex","preferredMiddleName":"","preferredFamilyName":"Kiessling","preferredHonorificPrefix":"","preferredHonorificSuffix":"","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","otherEmail":"","serviceAccount":false,"primaryAffiliation":"STAFF","affiliation":["MEMBER","STAFF"],"altUserids":[],"link":{"href":"https://cpr.k8s.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}
 
         '
   recorded_at: Thu, 28 Aug 2025 18:28:33 GMT

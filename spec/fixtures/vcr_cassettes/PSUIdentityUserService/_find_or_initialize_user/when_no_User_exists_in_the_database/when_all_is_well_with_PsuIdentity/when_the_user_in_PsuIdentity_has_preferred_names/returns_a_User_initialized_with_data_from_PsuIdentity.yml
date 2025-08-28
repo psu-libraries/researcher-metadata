@@ -34,35 +34,6 @@ http_interactions:
       - ffd903093d4abf8520d0ff52ed458e7a
     body:
       encoding: UTF-8
-      string: |-
-        {
-          "userid": "abc123",
-          "cprid": "2460424",
-          "givenName": "FirstName",
-          "middleName": "MiddleName",
-          "familyName": "LastName",
-          "honorificPrefix": "",
-          "honorificSuffix": "",
-          "preferredGivenName": "FirstName",
-          "preferredMiddleName": "MiddleName",
-          "preferredFamilyName": "LastName",
-          "preferredHonorificPrefix": "",
-          "preferredHonorificSuffix": "",
-          "active": true,
-          "confHold": false,
-          "universityEmail": "abc123@psu.edu",
-          "otherEmail": "",
-          "serviceAccount": false,
-          "primaryAffiliation": "STAFF",
-          "affiliation": [
-            "MEMBER",
-            "STAFF"
-          ],
-          "altUserids": [],
-          "link": {
-            "href": "https://cpr.k8s.psu.edu/cpr/resources/2460424"
-          },
-          "displayName": "FirstName LastName"
-        }    '
+      string: '{"userid": "abc123", "cprid": "2460424", "givenName": "Firstname", "middleName": "Middlename", "familyName": "Lastname", "honorificPrefix": "", "honorificSuffix": "", "preferredGivenName": "PreferredFirstname", "preferredMiddleName": "PreferredMiddlename", "preferredFamilyName": "PreferredLastname", "preferredHonorificPrefix": "", "preferredHonorificSuffix": "", "active": true, "confHold": false, "universityEmail": "abc123@psu.edu", "otherEmail": "", "serviceAccount": false, "primaryAffiliation": "STAFF", "affiliation": ["MEMBER", "STAFF"], "altUserids": [], "link": {"href": "https://cpr.k8s.psu.edu/cpr/resources/2460424"}, "displayName": "Firstname Lastname"}'
   recorded_at: Thu, 28 Aug 2025 18:28:32 GMT
 recorded_with: VCR 6.3.1

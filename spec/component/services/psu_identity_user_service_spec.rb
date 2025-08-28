@@ -23,9 +23,9 @@ describe PSUIdentityUserService, :vcr do
         it 'returns the User updated with data from PsuIdentity' do
           expect(call).to eq user
           user.reload
-          expect(user.first_name).to eq 'Firstname'
-          expect(user.middle_name).to eq 'Middlename'
-          expect(user.last_name).to eq 'Lastname'
+          expect(user.first_name).to eq 'PreferredFirstname'
+          expect(user.middle_name).to eq 'PreferredMiddlename'
+          expect(user.last_name).to eq 'PreferredLastname'
           expect(user.psu_identity.present?).to be true
         end
       end
