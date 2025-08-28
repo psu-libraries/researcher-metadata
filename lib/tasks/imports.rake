@@ -113,7 +113,7 @@ namespace :import do
 
   desc 'Import publication data from Penn State Law School OAI repositories'
   task law_school_publications: :environment do
-    PSULawSchoolPublicationImporter.new.call
+    # PSULawSchoolPublicationImporter.new.call
     PSUDickinsonPublicationImporter.new.call
   end
 

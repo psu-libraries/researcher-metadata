@@ -8,7 +8,7 @@ class PSUDickinsonPublicationImporter < OAIImporter
     end
 
     def import_source
-      'Dickinson Law IDEAS Repo'
+      'Insight at Dickinson Law'
     end
 
     # TODO this is a temporary method so we can refactor the sources used in
@@ -16,11 +16,11 @@ class PSUDickinsonPublicationImporter < OAIImporter
     # to use the Source object, then we should remove this method and only
     # use #import_source
     def location_source
-      Source::DICKINSON_IDEAS
+      Source::INSIGHT_DICKINSON
     end
 
     def repo_url
-      'https://ideas.dickinsonlaw.psu.edu/do/oai'
+      'https://insight.dickinsonlaw.psu.edu/do/oai'
     end
 
     def set
