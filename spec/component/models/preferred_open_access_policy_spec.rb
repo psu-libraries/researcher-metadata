@@ -20,9 +20,9 @@ describe PreferredOpenAccessPolicy do
       expect(policy.rank_all.map(&:source).map(&:to_s)).to eq [
         # Most preferred
         Source::SCHOLARSPHERE,
+        Source::DICKINSON_INSIGHT,
         Source::DICKINSON_IDEAS,
         Source::PSU_LAW_ELIBRARY,
-        Source::DICKINSON_INSIGHT,
         Source::OPEN_ACCESS_BUTTON,
         Source::UNPAYWALL,
         Source::USER
