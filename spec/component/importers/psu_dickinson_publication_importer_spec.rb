@@ -47,15 +47,15 @@ describe PSUDickinsonPublicationImporter do
   let!(:u3) { create(:user) }
 
   let!(:existing_import) { create(:publication_import,
-                                  source: 'Dickinson Law IDEAS Repo',
+                                  source: 'Dickinson Law INSIGHT Repo',
                                   source_identifier: 'existing-identifier') }
 
   before do
-    allow(Fieldhand::Repository).to receive(:new).with('https://ideas.dickinsonlaw.psu.edu/do/oai').and_return dickinson_law_repo
+    allow(Fieldhand::Repository).to receive(:new).with('https://insight.dickinsonlaw.psu.edu/do/oai').and_return dickinson_law_repo
     allow(dickinson_law_repo).to receive(:records).with(metadata_prefix: 'dcs', set: 'publication:fac-works').and_return records
-    allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record1).and_return r1
-    allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record2).and_return r2
-    allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record3).and_return r3
+    allow(PSUDickinsonOAIRepoRecord).to receive(:new).with(record1).and_return r1
+    allow(PSUDickinsonOAIRepoRecord).to receive(:new).with(record2).and_return r2
+    allow(PSUDickinsonOAIRepoRecord).to receive(:new).with(record3).and_return r3
     allow(DOIVerificationJob).to receive(:perform_later)
   end
 
@@ -107,7 +107,7 @@ describe PSUDickinsonPublicationImporter do
 
     it 'saves the correct metadata' do
       importer.call
-      import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+      import = PublicationImport.find_by(source: 'Dickinson Law INSIGHT Repo',
                                          source_identifier: 'non-existing-identifier')
 
       pub = import.publication
@@ -140,7 +140,7 @@ describe PSUDickinsonPublicationImporter do
       expect(auth3.author_number).to eq 2
       expect(auth3.confirmed).to be false
 
-      oal = pub.open_access_locations.find_by(source: Source::DICKINSON_IDEAS)
+      oal = pub.open_access_locations.find_by(source: Source::DICKINSON_INSIGHT)
       expect(oal.url).to eq 'https://example.com/article'
     end
 
@@ -159,7 +159,7 @@ describe PSUDickinsonPublicationImporter do
 
       it 'groups duplicates of new publication records' do
         expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
-        import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+        import = PublicationImport.find_by(source: 'Dickinson Law INSIGHT Repo',
                                            source_identifier: 'non-existing-identifier')
         pub = import.publication
 
@@ -171,7 +171,7 @@ describe PSUDickinsonPublicationImporter do
       it 'hides new publications that might be duplicates' do
         importer.call
 
-        import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+        import = PublicationImport.find_by(source: 'Dickinson Law INSIGHT Repo',
                                            source_identifier: 'non-existing-identifier')
         pub = import.publication
         expect(pub.visible).to be false
@@ -180,7 +180,7 @@ describe PSUDickinsonPublicationImporter do
 
     it 'runs the DOI verification' do
       importer.call
-      pub_import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+      pub_import = PublicationImport.find_by(source: 'Dickinson Law INSIGHT Repo',
                                              source_identifier: 'non-existing-identifier').publication
       expect(DOIVerificationJob).to have_received(:perform_later).with(pub_import.id)
     end

@@ -4,11 +4,11 @@ class PSUDickinsonPublicationImporter < OAIImporter
   private
 
     def record_type
-      PSULawSchoolOAIRepoRecord
+      PSUDickinsonOAIRepoRecord
     end
 
     def import_source
-      'Insight at Dickinson Law'
+      'Dickinson Law INSIGHT Repo'
     end
 
     # TODO this is a temporary method so we can refactor the sources used in

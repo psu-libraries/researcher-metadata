@@ -46,7 +46,8 @@ describe PublicationImport, type: :model do
         'Pure',
         'Web of Science',
         'Penn State Law eLibrary Repo',
-        'Dickinson Law IDEAS Repo'
+        'Dickinson Law IDEAS Repo',
+        'Dickinson Law INSIGHT Repo'
       ]
     end
   end

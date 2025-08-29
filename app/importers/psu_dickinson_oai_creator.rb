@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PSULawSchoolOAICreator < OAICreator
+class PSUDickinsonOAICreator < OAICreator
   private
 
     def law_school_organization_ids

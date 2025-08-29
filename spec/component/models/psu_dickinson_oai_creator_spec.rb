@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PSULawSchoolOAICreator do
+describe PSUDickinsonOAICreator do
   let(:creator) { described_class.new('Tester, Sue') }
 
   describe '#last_name' do

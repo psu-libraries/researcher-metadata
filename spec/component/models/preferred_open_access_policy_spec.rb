@@ -22,6 +22,7 @@ describe PreferredOpenAccessPolicy do
         Source::SCHOLARSPHERE,
         Source::DICKINSON_IDEAS,
         Source::PSU_LAW_ELIBRARY,
+        Source::DICKINSON_INSIGHT,
         Source::OPEN_ACCESS_BUTTON,
         Source::UNPAYWALL,
         Source::USER
