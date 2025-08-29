@@ -48,6 +48,7 @@ class ActivityInsightOAFile < ApplicationRecord
                 open_access_locations.source = '#{Source::SCHOLARSPHERE}'
                 OR open_access_locations.source = '#{Source::PSU_LAW_ELIBRARY}'
                 OR open_access_locations.source = '#{Source::DICKINSON_IDEAS}'
+                OR open_access_locations.source = '#{Source::DICKINSON_INSIGHT}'
               )
           )
         SQL
@@ -87,6 +88,7 @@ class ActivityInsightOAFile < ApplicationRecord
                 open_access_locations.source = '#{Source::SCHOLARSPHERE}'
                 OR open_access_locations.source = '#{Source::PSU_LAW_ELIBRARY}'
                 OR open_access_locations.source = '#{Source::DICKINSON_IDEAS}'
+                OR open_access_locations.source = '#{Source::DICKINSON_INSIGHT}'
               )
           )
         SQL

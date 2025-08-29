@@ -8,7 +8,7 @@ class PublicationImport < ApplicationRecord
       'Web of Science',
       'Penn State Law eLibrary Repo',
       'Dickinson Law IDEAS Repo',
-      'Insight at Dickinson Law'
+      'Dickinson Law INSIGHT Repo'
     ]
   end
 

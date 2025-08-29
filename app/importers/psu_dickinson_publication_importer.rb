@@ -16,7 +16,7 @@ class PSUDickinsonPublicationImporter < OAIImporter
     # to use the Source object, then we should remove this method and only
     # use #import_source
     def location_source
-      Source::INSIGHT_DICKINSON
+      Source::DICKINSON_INSIGHT
     end
 
     def repo_url

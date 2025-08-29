@@ -200,6 +200,7 @@ en:
     unpaywall: 'Unpaywall'
     dickinson_ideas: 'Dickinson Law IDEAS Repo'
     psu_law_elibrary: 'Penn State Law eLibrary Repo'
+    dickinson_insight: 'Dickinson Law INSIGHT Repo'
   view_component:
     deputy_assignment_component:
       delete_as_primary: Revoke

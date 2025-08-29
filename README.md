@@ -137,19 +137,19 @@ has a second weekly import on Sunday at 10:00 PM where Unpaywall data is only im
 We import the following types of records from Unpaywall:
     - open_access_locations
 
-1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
-by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open
-Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). Dickinson maintains the
-[IDEAS repository](https://ideas.dickinsonlaw.psu.edu/), and Penn State Law maintains the
-[Penn State Law eLibrary](https://elibrary.law.psu.edu/). Part of our reason for importing metadata from
-these sources is to facilitate onboarding the law school faculty into Activity Insight. In the future, we
-may not need to import data from these sources since new data may eventually be available via Activity Insight.
-This import not currently scheduled to run automatically. We import the following types of records from these
-repositories:
+1. **Penn State Law School repository - We import publication metadata from the repository maintained
+by Dickinson Law via the Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). 
+This is the repository maintained by Dickinson Law: [INSIGHT repository](https://insight.dickinsonlaw.psu.edu/).
+Part of our reason for importing metadata from this source is to facilitate onboarding the law school faculty 
+into Activity Insight. In the future, we may not need to import data from these sources since new data may eventually be available via Activity Insight.
     - authorships
     - contributor_names
     - publications
     - open_access_locations
+
+Penn State Law used to have two separate schools with two separate repositories.  The `PublicationImport` records
+for these repositories and their `OpenAccessLocations` are still stored in our database and linked to canonical
+publications.  In the future, we may want to remove any data containing the names and locations of the old Law Schools.
 
 ### Obtaining New Data
 While much of our data importing is fully automated, some of it involves parsing files that are manually
