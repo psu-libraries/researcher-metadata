@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/abc123
+    uri: https://search-service.k8s.psu.edu/people/userid/abc123
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v1.8.0
+      - Faraday v2.13.4
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -19,31 +19,21 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 23 Aug 2022 19:58:05 GMT
+      - Thu, 28 Aug 2025 18:28:32 GMT
       Content-Type:
-      - application/vnd-psu.edu-v1+json
+      - application/json
       Content-Length:
-      - '119'
+      - '572'
       Connection:
       - keep-alive
-      X-Content-Security-Policy:
-      - frame-ancestors 'none'
-      Set-Cookie:
-      - JSESSIONID=3BOwgk5PL8Zl1D32J29V76IIKPnf0kkeNWvmODgp.search-service-5bdcf97bc4-8pv7k;
-        path=/search-service
-      X-Request-Id:
-      - cfc12df443292f973be66c40bac029e4
-      X-Frame-Options:
-      - DENY
-      Content-Security-Policy:
-      - frame-ancestors 'none'
-      Uniqueid:
-      - cfc12df443292f973be66c40bac029e4
+      Vary:
+      - Origin
       Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - ffd903093d4abf8520d0ff52ed458e7a
     body:
       encoding: UTF-8
-      string: '{"userid":"abc123","cprid":"7489945","givenName":"Firstname","familyName":"Lastname","middleName":"Middlename","active":true,"confHold":false,"serviceAccount":false,"affiliation":["MEMBER"],"displayName":"Firstname
-        Lastname","link":{"href":"https://dev.apps.psu.edu/cpr/resources/7489945"}}'
-  recorded_at: Tue, 23 Aug 2022 19:58:05 GMT
-recorded_with: VCR 6.1.0
+      string: '{"userid": "abc123", "cprid": "2460424", "givenName": "Firstname", "middleName": "Middlename", "familyName": "Lastname", "honorificPrefix": "", "honorificSuffix": "", "preferredGivenName": "PreferredFirstname", "preferredMiddleName": "PreferredMiddlename", "preferredFamilyName": "PreferredLastname", "preferredHonorificPrefix": "", "preferredHonorificSuffix": "", "active": true, "confHold": false, "universityEmail": "abc123@psu.edu", "otherEmail": "", "serviceAccount": false, "primaryAffiliation": "STAFF", "affiliation": ["MEMBER", "STAFF"], "altUserids": [], "link": {"href": "https://cpr.k8s.psu.edu/cpr/resources/2460424"}, "displayName": "Firstname Lastname"}'
+  recorded_at: Thu, 28 Aug 2025 18:28:32 GMT
+recorded_with: VCR 6.3.1
