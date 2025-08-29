@@ -34,8 +34,8 @@ describe PSUDickinsonOAIRepoRecord do
   end
 
   describe '#date' do
-    it "returns the timestamp of the date attribute from the given metadata object" do
-      expect(psu_rr.date).to eq "2012-04-23T02:31:14Z"
+    it 'returns the timestamp of the date attribute from the given metadata object' do
+      expect(psu_rr.date).to eq '2012-04-23T02:31:14Z'
     end
   end
 

@@ -184,15 +184,9 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          open_access_status: 'green')
     }
     let!(:pub7) { create(:publication,
-                         title: 'pub6',
+                         title: 'pub7',
                          open_access_locations: [
-                           build(:open_access_location, source: Source::DICKINSON_IDEAS, url: 'url', publication: nil)
-                         ])
-    }
-    let!(:pub8) { create(:publication,
-                         title: 'pub6',
-                         open_access_locations: [
-                           build(:open_access_location, source: Source::PSU_LAW_ELIBRARY, url: 'url', publication: nil)
+                           build(:open_access_location, source: Source::DICKINSON_INSIGHT, url: 'url', publication: nil)
                          ])
     }
     let(:uploader) { fixture_file_open('test_file.pdf') }
@@ -272,7 +266,6 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       )
     }
     let!(:file20) { create(:activity_insight_oa_file, publication: pub7) }
-    let!(:file21) { create(:activity_insight_oa_file, publication: pub8) }
 
     describe '.subject_to_ai_oa_workflow' do
       it 'returns files that have an associated publication that is subject to the activity insight oa workflow' do
@@ -294,7 +287,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.send_oa_status_to_activity_insight' do
       it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status' do
-        expect(described_class.send_oa_status_to_activity_insight).to contain_exactly(file6, file7, file9, file10, file11, file20, file21)
+        expect(described_class.send_oa_status_to_activity_insight).to contain_exactly(file6, file7, file9, file10, file11, file20)
       end
     end
 
