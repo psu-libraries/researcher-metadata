@@ -48,6 +48,7 @@ describe OpenAccessLocation, type: :model do
         scholarsphere: 'scholarsphere',
         open_access_button: 'open_access_button',
         unpaywall: 'unpaywall',
+        dickinson_insight: 'dickinson_insight',
         dickinson_ideas: 'dickinson_ideas',
         psu_law_elibrary: 'psu_law_elibrary'
       )

@@ -9,7 +9,8 @@ class OpenAccessLocation < ApplicationRecord
                                Source::OPEN_ACCESS_BUTTON,
                                Source::UNPAYWALL,
                                Source::DICKINSON_IDEAS,
-                               Source::PSU_LAW_ELIBRARY
+                               Source::PSU_LAW_ELIBRARY,
+                               Source::DICKINSON_INSIGHT
                              ]), prefix: :source
 
   belongs_to :publication, inverse_of: :open_access_locations

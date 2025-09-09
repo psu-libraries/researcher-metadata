@@ -7,6 +7,7 @@ class Source
   UNPAYWALL = 'unpaywall'
   DICKINSON_IDEAS = 'dickinson_ideas'
   PSU_LAW_ELIBRARY = 'psu_law_elibrary'
+  DICKINSON_INSIGHT = 'dickinson_insight'
 
   def initialize(source)
     @source = source

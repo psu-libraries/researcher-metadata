@@ -14,7 +14,7 @@ class OAIRepoRecord
   end
 
   def date
-    record.header.datestamp
+    attribute('date')
   end
 
   def publisher

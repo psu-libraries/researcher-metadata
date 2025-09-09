@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PSULawSchoolOAIRepoRecord do
+describe PSUDickinsonOAIRepoRecord do
   let(:psu_rr) { described_class.new(record) }
   let(:record) { double 'fieldhand record', metadata: metadata_xml_fixture, header: header }
   let(:metadata_xml_fixture) { Rails.root.join('spec', 'fixtures', 'oai_record_metadata.xml').read }
@@ -17,8 +17,8 @@ describe PSULawSchoolOAIRepoRecord do
   let(:aum2) { [] }
 
   before do
-    allow(PSULawSchoolOAICreator).to receive(:new).with('Testington, Allie').and_return(creator1)
-    allow(PSULawSchoolOAICreator).to receive(:new).with('Testworth, Roger').and_return(creator2)
+    allow(PSUDickinsonOAICreator).to receive(:new).with('Testington, Allie').and_return(creator1)
+    allow(PSUDickinsonOAICreator).to receive(:new).with('Testworth, Roger').and_return(creator2)
   end
 
   describe '#title' do
@@ -34,8 +34,8 @@ describe PSULawSchoolOAIRepoRecord do
   end
 
   describe '#date' do
-    it "returns the timestamp from the given metadata object's header" do
-      expect(psu_rr.date).to eq Time.new(2013, 11, 20, 13, 33, 11, 0)
+    it 'returns the timestamp of the date attribute from the given metadata object' do
+      expect(psu_rr.date).to eq '2012-04-23T02:31:14Z'
     end
   end
 
@@ -47,7 +47,7 @@ describe PSULawSchoolOAIRepoRecord do
 
   describe '#url' do
     it 'returns the value of the identifier attribute from the given metadata object' do
-      expect(psu_rr.url).to eq 'https://elibrary.law.psu.edu/abc/etc/etc'
+      expect(psu_rr.url).to eq 'https://insight.dickinsonlaw.psu.edu/abc/etc/etc'
     end
   end
 

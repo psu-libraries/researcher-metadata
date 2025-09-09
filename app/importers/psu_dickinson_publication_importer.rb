@@ -4,11 +4,11 @@ class PSUDickinsonPublicationImporter < OAIImporter
   private
 
     def record_type
-      PSULawSchoolOAIRepoRecord
+      PSUDickinsonOAIRepoRecord
     end
 
     def import_source
-      'Dickinson Law IDEAS Repo'
+      'Dickinson Law INSIGHT Repo'
     end
 
     # TODO this is a temporary method so we can refactor the sources used in
@@ -16,11 +16,11 @@ class PSUDickinsonPublicationImporter < OAIImporter
     # to use the Source object, then we should remove this method and only
     # use #import_source
     def location_source
-      Source::DICKINSON_IDEAS
+      Source::DICKINSON_INSIGHT
     end
 
     def repo_url
-      'https://ideas.dickinsonlaw.psu.edu/do/oai'
+      'https://insight.dickinsonlaw.psu.edu/do/oai'
     end
 
     def set

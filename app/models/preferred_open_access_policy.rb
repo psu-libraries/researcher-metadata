@@ -23,6 +23,7 @@ class PreferredOpenAccessPolicy
       source_rankings = [
         # Most preferred
         Source::SCHOLARSPHERE,
+        Source::DICKINSON_INSIGHT,
         Source::DICKINSON_IDEAS,
         Source::PSU_LAW_ELIBRARY,
         Source::OPEN_ACCESS_BUTTON,
