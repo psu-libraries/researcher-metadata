@@ -116,6 +116,7 @@ Rails.application.routes.draw do
 
   put 'presentation_contributions/sort' => 'presentation_contributions#sort'
   put 'presentation_contributions/:id' => 'presentation_contributions#update', as: :presentation_contribution
+  put 'presentation_contributions/bulk_update_visibility' => 'presentation_contributions#bulk_update_visibility', as: :bulk_update_presentation_contributions_visibility
 
   put 'user_performances/sort' => 'user_performances#sort'
   put 'user_performances/:id' => 'user_performances#update', as: :user_performance

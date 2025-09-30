@@ -15,6 +15,10 @@ class PresentationContributionsController < UserController
     end
   end
 
+  def bulk_update_visibility
+    current_user.presentation_contributions.update_all!(contribution_params)
+  end
+
   private
 
     def contribution_params
