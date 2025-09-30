@@ -20,6 +20,7 @@ x-web_env: &web_env
       SETTINGS__pure__api_key: ${SETTINGS__pure__api_key}
       SETTINGS__scholarsphere__client_key: ${SETTINGS__scholarsphere__client_key}
       SETTINGS__scholarsphere__endpoint: ${SETTINGS__scholarsphere__endpoint}
+      SETTINGS__external_assets__endpoint: ${SETTINGS__external_assets__endpoint}
 services:
   web:
     # Configure in .env
