@@ -4,7 +4,7 @@
       <h4>Manage Profile Presentations</h4>
     </div>
     <div class='col-1'>
-      <button id="select-all" class="btn btn-secondary btn-sm mb-2">Select All</button>
+      <button id="select-all" class="btn btn-secondary btn-sm mb-2">Deselect All</button>
     </div>
   </div>
   <table class="table">
@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateButtonLabel() {
     const cbs = checkboxes();
-    const allChecked = cbs.length > 0 && cbs.every(cb => cb.checked);
-    selectAllBtn.textContent = allChecked ? "Deselect All" : "Select All";
+    const noneChecked = cbs.length > 0 && cbs.every(cb => !cb.checked);
+    selectAllBtn.textContent = noneChecked ? "Select All" : "Deselect All";
   }
 
   selectAllBtn.addEventListener("click", async function () {
     const cbs = checkboxes();
-    const allChecked = cbs.every(cb => cb.checked);
-    const newState = !allChecked;
+    const noneChecked = cbs.every(cb => !cb.checked);
+    const newState = noneChecked;
 
     cbs.forEach(cb => cb.checked = newState);
 
