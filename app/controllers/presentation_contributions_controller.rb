@@ -16,7 +16,8 @@ class PresentationContributionsController < UserController
   end
 
   def bulk_update_visibility
-    current_user.presentation_contributions.update_all!(contribution_params)
+    visible = ActiveModel::Type::Boolean.new.cast(params[:visible_in_profile])
+    current_user.presentation_contributions.update_all(visible_in_profile: visible)
   end
 
   private
