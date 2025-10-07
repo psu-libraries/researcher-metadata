@@ -490,6 +490,19 @@ describe 'editing profile preferences' do
         expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
         expect(page).to have_no_content "Bob's Other Presentation - -"
       end
+
+      it 'allows user to deselect and select all presentations', :js do
+        expect(page).to have_button 'Deselect All'
+        expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
+
+        click_button 'Deselect All'
+        expect(page).to have_button 'Select All'
+        expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
+
+        click_button 'Select All'
+        expect(page).to have_button 'Deselect All'
+        expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
+      end
     end
 
     context 'when the user is not signed in' do
