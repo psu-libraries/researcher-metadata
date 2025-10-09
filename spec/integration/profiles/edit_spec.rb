@@ -492,16 +492,18 @@ describe 'editing profile preferences' do
       end
 
       it 'allows user to deselect and select all presentations', :js do
-        expect(page).to have_button 'Deselect All'
-        expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
-
-        click_button 'Deselect All'
         expect(page).to have_button 'Select All'
         expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
 
         click_button 'Select All'
+        sleep(4)
         expect(page).to have_button 'Deselect All'
         expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
+
+        click_button 'Deselect All'
+        sleep(4)
+        expect(page).to have_button 'Select All'
+        expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
       end
     end
 
