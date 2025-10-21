@@ -1,10 +1,27 @@
 <div class="manage-profile-list">
   <div class="row">
-    <div class='col-11'>
+    <div class='col-10'>
       <h4>Manage Profile Presentations</h4>
     </div>
     <div class='col-1'>
-      <button id="select-all" class="btn btn-secondary btn-sm mb-2">Deselect All</button>
+      <div class='row ps-5'>
+        <%= form_with url: presentation_contributions_bulk_update_visibility_path,
+                method: :put,
+                class: 'visibility-control',
+                remote: true do |f| %>
+          <%= f.hidden_field :visible_in_profile, value: true %>
+          <%= f.submit "Make All Visible", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+      <div class='row mt-2 ps-5'>
+        <%= form_with url: presentation_contributions_bulk_update_visibility_path,
+                      method: :put,
+                      class: 'visibility-control',
+                      remote: true do |f| %>
+          <%= f.hidden_field :visible_in_profile, value: false %>
+          <%= f.submit "Make All Hidden", class: "btn btn-secondary" %>
+        <% end %>
+      </div>
     </div>
   </div>
   <table class="table">
