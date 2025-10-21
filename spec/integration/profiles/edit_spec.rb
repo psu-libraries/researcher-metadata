@@ -492,16 +492,20 @@ describe 'editing profile preferences' do
       end
 
       it 'allows user to deselect and select all presentations', :js, type: :feature do
+        expect(page).to have_button 'Make All Visible', wait: 1
+        expect(page).to have_button 'Make All Hidden', wait: 1
+        expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
         expect(user.presentation_contributions.first.visible_in_profile).to be false
 
         click_button 'Make All Visible', wait: 1
 
+        expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
         user.presentation_contributions.first.reload
+        expect(user.presentation_contributions.first.visible_in_profile).to be true
 
-        expect(user.presentation_contributions.first.visible_in_profile).to be true
         click_button 'Make All Hidden', wait: 1
-        user.presentation_contributions.first.reload
-        expect(user.presentation_contributions.first.visible_in_profile).to be true
+        expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
+        expect(user.presentation_contributions.first.visible_in_profile).to be false
       end
     end
 

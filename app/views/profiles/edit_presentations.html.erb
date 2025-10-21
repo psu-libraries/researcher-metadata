@@ -10,7 +10,7 @@
                 class: 'visibility-control',
                 remote: true do |f| %>
           <%= f.hidden_field :visible_in_profile, value: true %>
-          <%= f.submit "Make All Visible", class: "btn btn-primary" %>
+          <%= f.submit "Make All Visible", class: "btn btn-primary", id: "select-all" %>
         <% end %>
       </div>
       <div class='row mt-2 ps-5'>
@@ -19,7 +19,7 @@
                       class: 'visibility-control',
                       remote: true do |f| %>
           <%= f.hidden_field :visible_in_profile, value: false %>
-          <%= f.submit "Make All Hidden", class: "btn btn-secondary" %>
+          <%= f.submit "Make All Hidden", class: "btn btn-secondary", id: "deselect-all" %>
         <% end %>
       </div>
     </div>
