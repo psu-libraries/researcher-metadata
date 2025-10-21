@@ -496,13 +496,13 @@ describe 'editing profile preferences' do
         expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
         expect(user.presentation_contributions.first.visible_in_profile).to be false
 
-        find('button#select-all', wait: 1).click
+        click_button 'Select All', wait: 1
 
         expect(page).to have_button 'Deselect All', wait: 1
         expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
         expect(user.presentation_contributions.first.visible_in_profile).to be true
 
-        find('button#select-all', wait: 1).click
+        click_button 'Deselect All', wait: 1
 
         expect(page).to have_button 'Select All', wait: 1
         expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
