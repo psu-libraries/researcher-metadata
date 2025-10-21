@@ -14,9 +14,13 @@ export default function initUpdateAllVisibility() {
     const cbs = checkboxes();
     const noneChecked = cbs.every(cb => !cb.checked);
     const newState = noneChecked;
-
+    
+    
     cbs.forEach(cb => (cb.checked = newState));
-
+    console.log("Update checkboxes");
+    updateButtonLabel();
+    console.log("Update button label");
+    
     fetch("/presentation_contributions/bulk_update_visibility", {
       method: "PUT",
       headers: {
@@ -24,9 +28,17 @@ export default function initUpdateAllVisibility() {
         "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
       },
       body: JSON.stringify({ visible_in_profile: newState })
+    }).then(response => {
+      console.log("Response status:", response.status);
+      console.log("Response ok?:", response.ok);
+      return response.text();
+    }).then(body => {
+      console.log("Response body:", body);
+    }).catch(err => {
+      console.error("Fetch error:", err);
     });
-
-    updateButtonLabel();
+    console.log("SQL Query");
+    
   });
 
   document.addEventListener("change", e => {
