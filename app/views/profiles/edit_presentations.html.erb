@@ -10,7 +10,9 @@
                 class: 'visibility-control',
                 remote: true do |f| %>
           <%= f.hidden_field :visible_in_profile, value: true %>
-          <%= f.submit "Select All", class: "btn btn-primary", style: PresentationContribution.select_all_style(@presentation_contributions), id: "select-all" %>
+          <%= f.submit "Select All", class: "btn btn-primary",
+            style: PresentationContribution.select_all_style(@presentation_contributions),
+            id: "select-all" %>
         <% end %>
       </div>
       <div class='row ps-5'>
@@ -19,7 +21,9 @@
                       class: 'visibility-control',
                       remote: true do |f| %>
           <%= f.hidden_field :visible_in_profile, value: false %>
-          <%= f.submit "Deselect All", class: "btn btn-secondary", style: PresentationContribution.deselect_all_style(@presentation_contributions), id: "deselect-all" %>
+          <%= f.submit "Deselect All", class: "btn btn-secondary",
+            style: PresentationContribution.deselect_all_style(@presentation_contributions),
+            id: "deselect-all" %>
         <% end %>
       </div>
     </div>

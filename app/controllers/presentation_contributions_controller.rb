@@ -17,7 +17,9 @@ class PresentationContributionsController < UserController
 
   def bulk_update_visibility
     visible = ActiveModel::Type::Boolean.new.cast(params[:visible_in_profile])
-    current_user.presentation_contributions.update_all(visible_in_profile: visible)
+    UserProfile.new(current_user).presentation_records.each do |p|
+      p.presentation_contributions.find_by(user: current_user).update(visible_in_profile: visible)
+    end
   end
 
   private
