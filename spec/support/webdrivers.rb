@@ -42,6 +42,7 @@ Capybara.register_driver :rmd_chrome_headless do |app|
     opts.add_argument('--disable-gpu') if Gem.win_platform?
     # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
     opts.add_argument('--disable-site-isolation-trials')
+    opts.add_argument('--no-sandbox')
     opts.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::DIRECTORY)
     opts.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
   end
