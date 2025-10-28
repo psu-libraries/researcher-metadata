@@ -41,4 +41,61 @@ describe PresentationContribution, type: :model do
   it { is_expected.to delegate_method(:presentation_organization).to(:presentation).as(:organization) }
   it { is_expected.to delegate_method(:presentation_location).to(:presentation).as(:location) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
+
+  describe '.select_all_style' do
+    let(:user) { create(:user) }
+    let!(:pc1) { create(:presentation_contribution,
+                        user: user,
+                        visible_in_profile: true) }
+    let!(:pc2) { create(:presentation_contribution,
+                        user: user,
+                        visible_in_profile: false) }
+
+    context 'when at least one presentation is visible' do
+      it 'returns display none' do
+        expect(described_class.select_all_style(user.presentation_contributions)).to eq('display: none;')
+      end
+    end
+
+    context 'when no presentations are visible' do
+      it 'returns display inline-block' do
+        pc1.update(visible_in_profile: false)
+        expect(described_class.select_all_style(user.presentation_contributions)).to eq('display: inline-block;')
+      end
+    end
+  end
+
+  describe '.deselect_all_style' do
+    let(:user) { create(:user) }
+    let!(:pc1) { create(:presentation_contribution,
+                        user: user,
+                        visible_in_profile: true) }
+    let!(:pc2) { create(:presentation_contribution,
+                        user: user,
+                        visible_in_profile: false) }
+
+    let(:user2) { create(:user) }
+
+    context 'when at least one presentation is visible' do
+      it 'returns display inline-block' do
+        expect(described_class.deselect_all_style(user.presentation_contributions)).to eq('display: inline-block;')
+        expect(described_class.select_all_style(user.presentation_contributions)).to eq('display: none;')
+      end
+    end
+
+    context 'when no presentations are visible' do
+      it 'returns display none' do
+        pc1.update(visible_in_profile: false)
+        expect(described_class.deselect_all_style(user.presentation_contributions)).to eq('display: none;')
+        expect(described_class.select_all_style(user.presentation_contributions)).to eq('display: inline-block;')
+      end
+    end
+
+    context 'when user has no presentations' do
+      it 'returns display none' do
+        expect(described_class.deselect_all_style(user2.presentation_contributions)).to eq('display: none;')
+        expect(described_class.select_all_style(user2.presentation_contributions)).to eq('display: none;')
+      end
+    end
+  end
 end
