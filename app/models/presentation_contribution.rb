@@ -10,7 +10,7 @@ class PresentationContribution < ApplicationRecord
   delegate :webaccess_id, to: :user, prefix: true
 
   def self.select_all_style(collection)
-    if collection == []
+    if collection.empty?
       'display: none;'
     else
       any_visible?(collection) ? 'display: none;' : 'display: inline-block;'
@@ -18,7 +18,7 @@ class PresentationContribution < ApplicationRecord
   end
 
   def self.deselect_all_style(collection)
-    if collection == []
+    if collection.empty?
       'display: none;'
     else
       any_visible?(collection) ? 'display: inline-block;' : 'display: none;'
