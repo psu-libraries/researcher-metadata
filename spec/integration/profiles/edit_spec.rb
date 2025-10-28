@@ -508,6 +508,17 @@ describe 'editing profile preferences' do
         expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
         expect(user.presentation_contributions.first.reload.visible_in_profile).to be false
       end
+
+      context 'when the user has no presentations' do
+        it 'hides select all and deselect all buttons when there are no presentations', :js, type: :feature do
+          pres1.visible = false
+          pres1.save!
+          cont_1.reload
+          visit edit_profile_presentations_path
+          expect(page).to have_no_button 'Select All', wait: 1
+          expect(page).to have_no_button 'Deselect All', wait: 1
+        end
+      end
     end
 
     context 'when the user is not signed in' do

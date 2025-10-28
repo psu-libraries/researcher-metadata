@@ -74,9 +74,12 @@ describe PresentationContribution, type: :model do
                         user: user,
                         visible_in_profile: false) }
 
+    let(:user2) { create(:user) }
+
     context 'when at least one presentation is visible' do
       it 'returns display inline-block' do
         expect(described_class.deselect_all_style(user.presentation_contributions)).to eq('display: inline-block;')
+        expect(described_class.select_all_style(user.presentation_contributions)).to eq('display: none;')
       end
     end
 
@@ -84,6 +87,14 @@ describe PresentationContribution, type: :model do
       it 'returns display none' do
         pc1.update(visible_in_profile: false)
         expect(described_class.deselect_all_style(user.presentation_contributions)).to eq('display: none;')
+        expect(described_class.select_all_style(user.presentation_contributions)).to eq('display: inline-block;')
+      end
+    end
+
+    context 'when user has no presentations' do
+      it 'returns display none' do
+        expect(described_class.deselect_all_style(user2.presentation_contributions)).to eq('display: none;')
+        expect(described_class.select_all_style(user2.presentation_contributions)).to eq('display: none;')
       end
     end
   end
