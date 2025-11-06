@@ -82,7 +82,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
       work_type: 'article',
       visibility: 'open',
       rights: rights,
-      creators: publication.contributor_names.order('position ASC').map(&:to_scholarsphere_creator)
+      creators: publication.contributor_names.order(:position).map(&:to_scholarsphere_creator)
     }
     base_metadata[:embargoed_until] = embargoed_until if embargoed_until.present?
     base_metadata[:identifier] = [doi] if doi.present?

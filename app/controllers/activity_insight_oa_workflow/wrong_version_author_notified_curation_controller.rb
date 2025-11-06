@@ -2,7 +2,7 @@
 
 class ActivityInsightOAWorkflow::WrongVersionAuthorNotifiedCurationController < ActivityInsightOAWorkflow::WrongVersionBaseController
   def index
-    @publications = Publication.wrong_version_author_notified.order('wrong_oa_version_notification_sent_at DESC')
+    @publications = Publication.wrong_version_author_notified.order(wrong_oa_version_notification_sent_at: :desc)
   end
 
   def email_author

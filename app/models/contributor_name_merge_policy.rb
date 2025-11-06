@@ -18,7 +18,7 @@ class ContributorNameMergePolicy
     def user_id_uniqued(names)
       grouped = names.group_by(&:user_id)
       grouped.each do |key, value|
-        if key.present? && value.count > 1
+        if key.present? && value.many?
           grouped[key] = select_from_preferred_source(value)
         end
       end

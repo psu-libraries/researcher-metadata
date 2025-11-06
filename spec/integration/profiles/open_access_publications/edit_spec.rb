@@ -155,6 +155,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
       describe 'file upload and version check', :js do
         include ActiveJob::TestHelper
+
         let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
         let(:cache) { Rails.cache }
         let(:file_handler) { instance_double(ScholarsphereFileHandler,
@@ -275,6 +276,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
       describe 'completing the workflow', :js do
         include ActiveJob::TestHelper
+
         let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
         let(:cache) { Rails.cache }
 
@@ -318,6 +320,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
         describe 'changing some pre-filled values and successfully submitting the form to deposit a publication in ScholarSphere' do
           include ActiveJob::TestHelper
+
           let(:ingest) { double 'scholarsphere client ingest', publish: response }
           let(:response) { double 'scholarsphere client response', status: status, body: response_body }
           let(:response_body) { %{{"url": "/the-url"}} }
@@ -352,7 +355,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
             expect(dep.publisher_statement).to eq 'A set statement from the publisher'
             expect(dep.published_date).to eq Date.new(2019, 3, 17)
             expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
-            expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
+            expect(dep.embargoed_until).to eq Date.new(Date.today.year + 1, 5, 22)
             expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
             expect(dep.publisher).to eq 'A Prestegious Journal'
             expect(dep.deposit_workflow).to eq 'Standard OA Workflow'
@@ -375,7 +378,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
                                               title: 'Test Publication',
                                               visibility: 'open',
                                               work_type: 'article',
-                                              embargoed_until: Date.new((Date.today.year + 1), 5, 22)
+                                              embargoed_until: Date.new(Date.today.year + 1, 5, 22)
                                             })
               expect(args[:depositor]).to eq 'xyz123'
               expect(args[:files]).to be_an Array
@@ -416,6 +419,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
       describe 'submitting a valid form with an error in the deposit process' do
         include ActiveJob::TestHelper
+
         let(:ingest) { double 'scholarsphere client ingest' }
         let(:file_handler) { instance_double(ScholarsphereFileHandler,
                                              version: I18n.t('file_versions.published_version'),
@@ -458,7 +462,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
           expect(dep.description).to eq 'An abstract of the test publication'
           expect(dep.published_date).to eq Date.new(2019, 3, 17)
           expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
-          expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
+          expect(dep.embargoed_until).to eq Date.new(Date.today.year + 1, 5, 22)
           expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
           expect(dep.publisher).to eq 'A Prestegious Journal'
           expect(dep.deposit_workflow).to eq 'Standard OA Workflow'

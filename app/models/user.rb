@@ -144,7 +144,7 @@ class User < ApplicationRecord
     PsuIdentity::SearchService::Person.new(attributes['psu_identity']['data'])
   end
 
-  def is_active # rubocop:disable Naming/PredicateName
+  def is_active
     return false if psu_identity.nil?
 
     psu_identity.affiliation != ['MEMBER']

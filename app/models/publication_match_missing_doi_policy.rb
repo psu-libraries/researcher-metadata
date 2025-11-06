@@ -23,7 +23,7 @@ class PublicationMatchMissingDOIPolicy
   private
 
     def one_value_present?(value1, value2)
-      return true if [value1, value2].compact_blank.count == 1
+      return true if [value1, value2].compact_blank.one?
 
       false
     end

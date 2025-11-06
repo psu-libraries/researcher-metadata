@@ -726,11 +726,11 @@ class Publication < ApplicationRecord
   end
 
   def has_single_import_from_pure?
-    imports.count == 1 && has_pure_import?
+    imports.one? && has_pure_import?
   end
 
   def has_single_import_from_ai?
-    imports.count == 1 && imports.where(source: 'Activity Insight').any?
+    imports.one? && imports.where(source: 'Activity Insight').any?
   end
 
   def preferred_journal_title
@@ -828,13 +828,13 @@ class Publication < ApplicationRecord
     if preferred_version != PUBLISHED_OR_ACCEPTED_VERSION
       return activity_insight_oa_files
           .where(version: preferred_version)
-          .order('created_at DESC')
+          .order(created_at: :desc)
           .first
     end
 
     activity_insight_oa_files
       .where("version = 'acceptedVersion' OR version = 'publishedVersion'")
-      .order('created_at DESC')
+      .order(created_at: :desc)
       .first
   end
 

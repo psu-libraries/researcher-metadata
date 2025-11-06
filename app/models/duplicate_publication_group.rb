@@ -23,7 +23,7 @@ class DuplicatePublicationGroup < ApplicationRecord
   end
 
   def self.group_duplicates_of(publication)
-    duplicates = if publication.imports.count == 1 && publication.imports.find { |i| i.source == 'Activity Insight' }
+    duplicates = if publication.imports.one? && publication.imports.find { |i| i.source == 'Activity Insight' }
                    Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL)) OR (doi ILIKE ? AND doi != '')},
                                      "#{publication.title}#{publication.secondary_title}",
                                      publication.published_on.try(:year),
@@ -146,10 +146,11 @@ class DuplicatePublicationGroup < ApplicationRecord
               end
               pub_primary.merge_on_matching!(pub)
             end
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
         end
 
-        if reload.publications.count == 1
+        if reload.publications.one?
           pub_primary.update!(duplicate_group: nil)
           destroy
         end

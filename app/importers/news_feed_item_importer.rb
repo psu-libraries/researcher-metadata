@@ -65,7 +65,7 @@ class NewsFeedItemImporter
 
     def matched_users(name)
       u = User.where('similarity(lower(first_name), ?) > 0.35 AND lower(last_name) = ?', name[0].downcase, name[2].downcase)
-      return u if u.count == 1 || u.blank?
+      return u if u.one? || u.blank?
 
       u_final = u.where('lower(middle_name) = ?', name[1].downcase)
       return u_final if name[1].blank?

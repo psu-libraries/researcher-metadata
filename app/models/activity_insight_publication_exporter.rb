@@ -74,8 +74,8 @@ class ActivityInsightPublicationExporter < ActivityInsightExporter
                 xml.PAGENUM_(publication.page_range, access: 'READ_ONLY')
                 xml.CITATION_COUNT_(publication.total_scopus_citations, access: 'READ_ONLY')
                 xml.AUTHORS_ETAL_(publication.authors_et_al, access: 'READ_ONLY')
-                xml.WEB_ADDRESS_((publication.preferred_open_access_url || publication.doi || publication.url), access: 'READ_ONLY')
-                xml.ISBNISSN_((publication.isbn || publication.issn), access: 'READ_ONLY')
+                xml.WEB_ADDRESS_(publication.preferred_open_access_url || publication.doi || publication.url, access: 'READ_ONLY')
+                xml.ISBNISSN_(publication.isbn || publication.issn, access: 'READ_ONLY')
                 publication.contributor_names.each do |contributor|
                   xml.INTELLCONT_AUTH do
                     xml.FNAME_(contributor.first_name, access: 'READ_ONLY')
