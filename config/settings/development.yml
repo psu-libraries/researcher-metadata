@@ -10,4 +10,4 @@ default_url_options:
   protocol: http
 
 external_assets:
-  endpoint: https://assets.qa.k8s.libraries.psu.edu
+  endpoint: https://assets.uldev.k8s.libraries.psu.edu
