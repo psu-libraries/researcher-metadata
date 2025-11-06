@@ -14,7 +14,7 @@ FactoryBot.define do
     factory :sample_publication do
       title { FFaker::Lorem.sentence }
       secondary_title { FFaker::Lorem.sentence }
-      journal { Journal.count.zero? ? FactoryBot.create(:journal) : Journal.order('RANDOM()').first }
+      journal { Journal.none? ? FactoryBot.create(:journal) : Journal.order('RANDOM()').first }
       abstract { FFaker::Lorem.paragraph }
       isbn { FFaker::Book.isbn }
       volume { rand(50) }

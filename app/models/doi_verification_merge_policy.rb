@@ -75,6 +75,6 @@ class DOIVerificationMergePolicy
     end
 
     def given_unmergable_pubs?
-      all_verified_dois.uniq(&:downcase).count > 1
+      all_verified_dois.uniq(&:downcase).many?
     end
 end

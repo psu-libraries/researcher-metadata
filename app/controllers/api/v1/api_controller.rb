@@ -19,7 +19,9 @@ module API::V1
       end
 
       def api_token
-        @api_token ||= APIToken.find_by(token: request.headers['HTTP_X_API_KEY'])
+        return @api_token if defined?(@api_token)
+
+        @api_token = APIToken.find_by(token: request.headers['HTTP_X_API_KEY'])
       end
   end
 end

@@ -2774,7 +2774,8 @@ describe Publication, type: :model do
       it 'does not reassign any imports' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         expect(pub1.reload.imports).to contain_exactly(pub1_import1)
         expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
         expect(pub3.reload.imports).to contain_exactly(pub3_import1)
@@ -2784,7 +2785,8 @@ describe Publication, type: :model do
       it 'does not delete any publications' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         expect(pub2.reload).to eq pub2
         expect(pub3.reload).to eq pub3
         expect(pub4.reload).to eq pub4
@@ -2793,14 +2795,16 @@ describe Publication, type: :model do
       it 'does not update the modification timestamp on the publication' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
 
       it 'does not transfer any authorships' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         expect(pub1.authorships.count).to eq 1
         expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
       end
@@ -2808,7 +2812,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship confirmation information' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.confirmed).to be false
       end
@@ -2816,7 +2821,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship roles' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
@@ -2824,7 +2830,8 @@ describe Publication, type: :model do
       it 'does not transfer any orcid identifiers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
@@ -2832,7 +2839,8 @@ describe Publication, type: :model do
       it 'does not transfer any open access notification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.open_access_notification_sent_at).to be_nil
       end
@@ -2840,7 +2848,8 @@ describe Publication, type: :model do
       it 'does not transfer any owner modification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
@@ -2849,7 +2858,8 @@ describe Publication, type: :model do
       it 'does not transfer any waivers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to be_nil
@@ -2858,7 +2868,8 @@ describe Publication, type: :model do
       it 'does not transfer any ScholarSphere deposits' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
@@ -2867,7 +2878,8 @@ describe Publication, type: :model do
       it 'does not transfer visibility' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.visible_in_profile).to be true
@@ -2876,7 +2888,8 @@ describe Publication, type: :model do
       it 'does not transfer position' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to be_nil
@@ -2885,7 +2898,8 @@ describe Publication, type: :model do
       it 'does not transfer open access locations' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -2893,7 +2907,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue RuntimeError; end
+          rescue RuntimeError
+          end
           expect(pub1.reload.visible).to be false
         end
       end
@@ -2904,7 +2919,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue RuntimeError; end
+          rescue RuntimeError
+          end
           expect(pub1.reload.visible).to be true
         end
       end
@@ -2912,7 +2928,8 @@ describe Publication, type: :model do
       it 'does not transfer activity insight oa files' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
+        rescue RuntimeError
+        end
         expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
@@ -3291,7 +3308,8 @@ describe Publication, type: :model do
       it 'does not reassign any imports' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.imports).to contain_exactly(pub1_import1)
         expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
         expect(pub3.reload.imports).to contain_exactly(pub3_import1)
@@ -3301,7 +3319,8 @@ describe Publication, type: :model do
       it 'does not delete any publications' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub2.reload).to eq pub2
         expect(pub3.reload).to eq pub3
         expect(pub4.reload).to eq pub4
@@ -3310,21 +3329,24 @@ describe Publication, type: :model do
       it 'does not update the modification timestamp on the publication' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
 
       it 'does not update any non-duplicate groups' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(ndpg.reload.publications).to contain_exactly(pub2, pub4)
       end
 
       it 'does not transfer any authorships' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.authorships.count).to eq 1
         expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
       end
@@ -3332,7 +3354,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship confirmation information' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.confirmed).to be false
       end
@@ -3340,7 +3363,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship roles' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
@@ -3348,7 +3372,8 @@ describe Publication, type: :model do
       it 'does not transfer any orcid identifiers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
@@ -3356,7 +3381,8 @@ describe Publication, type: :model do
       it 'does not transfer any open access notification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.open_access_notification_sent_at).to be_nil
       end
@@ -3364,7 +3390,8 @@ describe Publication, type: :model do
       it 'does not transfer any owner modification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
@@ -3373,7 +3400,8 @@ describe Publication, type: :model do
       it 'does not transfer any waivers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to be_nil
@@ -3382,7 +3410,8 @@ describe Publication, type: :model do
       it 'does not transfer any ScholarSphere deposits' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
@@ -3391,7 +3420,8 @@ describe Publication, type: :model do
       it 'does not transfer visibility' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.visible_in_profile).to be true
@@ -3400,7 +3430,8 @@ describe Publication, type: :model do
       it 'does not transfer position' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to be_nil
@@ -3409,7 +3440,8 @@ describe Publication, type: :model do
       it 'does not transfer open access locations' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -3417,7 +3449,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be false
         end
       end
@@ -3428,7 +3461,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be true
         end
       end
@@ -3436,7 +3470,8 @@ describe Publication, type: :model do
       it 'does not transfer activity insight oa files' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
@@ -3452,7 +3487,8 @@ describe Publication, type: :model do
       it 'does not reassign any imports' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.imports).to contain_exactly(pub1_import1)
         expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
         expect(pub3.reload.imports).to contain_exactly(pub3_import1)
@@ -3462,7 +3498,8 @@ describe Publication, type: :model do
       it 'does not delete any publications' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub2.reload).to eq pub2
         expect(pub3.reload).to eq pub3
         expect(pub4.reload).to eq pub4
@@ -3471,14 +3508,16 @@ describe Publication, type: :model do
       it 'does not update the modification timestamp on the publication' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
 
       it 'does not update any non-duplicate groups' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(ndpg1.reload.publications).to contain_exactly(pub2, pub4)
         expect(ndpg2.reload.publications).to contain_exactly(pub2, pub4)
       end
@@ -3486,7 +3525,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorships' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.authorships.count).to eq 1
         expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
       end
@@ -3494,7 +3534,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship confirmation information' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.confirmed).to be false
       end
@@ -3502,7 +3543,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship roles' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
@@ -3510,7 +3552,8 @@ describe Publication, type: :model do
       it 'does not transfer any orcid identifiers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
@@ -3518,7 +3561,8 @@ describe Publication, type: :model do
       it 'does not transfer any open access notification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.open_access_notification_sent_at).to be_nil
       end
@@ -3526,7 +3570,8 @@ describe Publication, type: :model do
       it 'does not transfer any owner modification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
@@ -3535,7 +3580,8 @@ describe Publication, type: :model do
       it 'does not transfer any waivers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to be_nil
@@ -3544,7 +3590,8 @@ describe Publication, type: :model do
       it 'does not transfer any ScholarSphere deposits' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
@@ -3553,7 +3600,8 @@ describe Publication, type: :model do
       it 'does not transfer visibility' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.visible_in_profile).to be true
@@ -3562,7 +3610,8 @@ describe Publication, type: :model do
       it 'does not transfer position' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to be_nil
@@ -3571,7 +3620,8 @@ describe Publication, type: :model do
       it 'does not transfer open access locations' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -3579,7 +3629,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be false
         end
       end
@@ -3590,7 +3641,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be true
         end
       end
@@ -3598,7 +3650,8 @@ describe Publication, type: :model do
       it 'does not transfer activity insight oa files' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
@@ -3613,7 +3666,8 @@ describe Publication, type: :model do
       it 'does not reassign any imports' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.imports).to contain_exactly(pub1_import1)
         expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
         expect(pub3.reload.imports).to contain_exactly(pub3_import1)
@@ -3623,7 +3677,8 @@ describe Publication, type: :model do
       it 'does not delete any publications' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub2.reload).to eq pub2
         expect(pub3.reload).to eq pub3
         expect(pub4.reload).to eq pub4
@@ -3632,21 +3687,24 @@ describe Publication, type: :model do
       it 'does not update the modification timestamp on the publication' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
 
       it 'does not update any non-duplicate groups' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(ndpg.reload.publications).to contain_exactly(pub1, pub3)
       end
 
       it 'does not transfer any authorships' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.authorships.count).to eq 1
         expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
       end
@@ -3654,7 +3712,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship confirmation information' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.confirmed).to be false
       end
@@ -3662,7 +3721,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship roles' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
@@ -3670,7 +3730,8 @@ describe Publication, type: :model do
       it 'does not transfer any orcid identifiers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
@@ -3678,7 +3739,8 @@ describe Publication, type: :model do
       it 'does not transfer any open access notification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.open_access_notification_sent_at).to be_nil
       end
@@ -3686,7 +3748,8 @@ describe Publication, type: :model do
       it 'does not transfer any owner modification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
@@ -3695,7 +3758,8 @@ describe Publication, type: :model do
       it 'does not transfer any waivers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to be_nil
@@ -3704,7 +3768,8 @@ describe Publication, type: :model do
       it 'does not transfer any ScholarSphere deposits' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
@@ -3713,7 +3778,8 @@ describe Publication, type: :model do
       it 'does not transfer visibility' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.visible_in_profile).to be true
@@ -3722,7 +3788,8 @@ describe Publication, type: :model do
       it 'does not transfer position' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to be_nil
@@ -3731,7 +3798,8 @@ describe Publication, type: :model do
       it 'does not transfer open access locations' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -3739,7 +3807,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be false
         end
       end
@@ -3750,7 +3819,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be true
         end
       end
@@ -3758,7 +3828,8 @@ describe Publication, type: :model do
       it 'does not transfer activity insight oa files' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
@@ -3773,7 +3844,8 @@ describe Publication, type: :model do
       it 'does not reassign any imports' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.imports).to contain_exactly(pub1_import1)
         expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
         expect(pub3.reload.imports).to contain_exactly(pub3_import1)
@@ -3783,7 +3855,8 @@ describe Publication, type: :model do
       it 'does not delete any publications' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub2.reload).to eq pub2
         expect(pub3.reload).to eq pub3
         expect(pub4.reload).to eq pub4
@@ -3792,21 +3865,24 @@ describe Publication, type: :model do
       it 'does not update the modification timestamp on the publication' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
 
       it 'does not update any non-duplicate groups' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(ndpg.reload.publications).to contain_exactly(pub1, pub2, pub3, pub4)
       end
 
       it 'does not transfer any authorships' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.authorships.count).to eq 1
         expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
       end
@@ -3814,7 +3890,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship confirmation information' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.confirmed).to be false
       end
@@ -3822,7 +3899,8 @@ describe Publication, type: :model do
       it 'does not transfer any authorship roles' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
@@ -3830,7 +3908,8 @@ describe Publication, type: :model do
       it 'does not transfer any orcid identifiers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
@@ -3838,7 +3917,8 @@ describe Publication, type: :model do
       it 'does not transfer any open access notification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.open_access_notification_sent_at).to be_nil
       end
@@ -3846,7 +3926,8 @@ describe Publication, type: :model do
       it 'does not transfer any owner modification timestamps' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
@@ -3855,7 +3936,8 @@ describe Publication, type: :model do
       it 'does not transfer any waivers' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to be_nil
@@ -3864,7 +3946,8 @@ describe Publication, type: :model do
       it 'does not transfer any ScholarSphere deposits' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
@@ -3873,7 +3956,8 @@ describe Publication, type: :model do
       it 'does not transfer visibility' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.visible_in_profile).to be true
@@ -3882,7 +3966,8 @@ describe Publication, type: :model do
       it 'does not transfer position' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to be_nil
@@ -3891,7 +3976,8 @@ describe Publication, type: :model do
       it 'does not transfer open access locations' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -3899,7 +3985,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be false
         end
       end
@@ -3910,7 +3997,8 @@ describe Publication, type: :model do
         it 'does not change the visibility' do
           begin
             pub1.merge!([pub2, pub3, pub4])
-          rescue Publication::NonDuplicateMerge; end
+          rescue Publication::NonDuplicateMerge
+          end
           expect(pub1.reload.visible).to be true
         end
       end
@@ -3918,7 +4006,8 @@ describe Publication, type: :model do
       it 'does not transfer activity insight oa files' do
         begin
           pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
+        rescue Publication::NonDuplicateMerge
+        end
         expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end

@@ -6,7 +6,7 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
       .left_joins(:activity_insight_oa_files)
       .select('publications.*, MIN(activity_insight_oa_files.created_at) AS oldest_file_date')
       .group('publications.id')
-      .order('oldest_file_date ASC')
+      .order(:oldest_file_date)
   end
 
   def email_author

@@ -65,10 +65,14 @@ class PSUHRUserImporter < CSVImporter
     end
 
     def law_school_org
-      @law_school_org ||= Organization.find_by(pure_external_identifier: 'COLLEGE-PL')
+      return @law_school_org if defined?(@law_school_org)
+
+      @law_school_org = Organization.find_by(pure_external_identifier: 'COLLEGE-PL')
     end
 
     def dickinson_org
-      @dickinson_org ||= Organization.find_by(pure_external_identifier: 'CAMPUS-DN')
+      return @dickinson_org if defined?(@dickinson_org)
+
+      @dickinson_org = Organization.find_by(pure_external_identifier: 'CAMPUS-DN')
     end
 end

@@ -515,6 +515,7 @@ describe 'editing profile preferences' do
           pres1.save!
           cont_1.reload
           visit edit_profile_presentations_path
+          expect(page).to have_current_path edit_profile_presentations_path
           expect(page).to have_no_button 'Select All', wait: 1
           expect(page).to have_no_button 'Deselect All', wait: 1
         end

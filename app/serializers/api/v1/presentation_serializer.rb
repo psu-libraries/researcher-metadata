@@ -3,6 +3,7 @@
 module API::V1
   class PresentationSerializer
     include JSONAPI::Serializer
+
     attributes :title,
                :activity_insight_identifier,
                :name,

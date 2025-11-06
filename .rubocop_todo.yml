@@ -108,18 +108,11 @@ Naming/MemoizedInstanceVariableName:
     - 'app/importers/activity_insight_importer.rb'
     - 'app/importers/psu_law_school_oai_creator.rb'
 
-# Offense count: 6
-# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
-# NamePrefix: is_, has_, have_
-# ForbiddenPrefixes: is_, has_, have_
-# AllowedMethods: is_a?
-# MethodDefinitionMacros: define_method, define_singleton_method
-Naming/PredicateName:
-  Exclude:
-    - 'app/importers/activity_insight_importer.rb'
-    - 'app/importers/unpaywall_response.rb'
-    - 'app/models/external_publication_waiver.rb'
-    - 'app/models/publication.rb'
+Naming/PredicateMethod:
+  Enabled: false
+
+Naming/PredicatePrefix:
+  Enabled: false
 
 # Offense count: 373
 # Configuration parameters: EnforcedStyle, CheckMethodNames, CheckSymbols, AllowedIdentifiers, AllowedPatterns.
@@ -140,9 +133,7 @@ Performance/StringInclude:
     - 'app/importers/web_of_science_publication.rb'
     - 'app/models/wos_grant.rb'
 
-# Offense count: 217
-# Configuration parameters: Prefixes, AllowedPatterns.
-# Prefixes: when, with, without
+
 RSpec/ContextWording:
   Enabled: false
 

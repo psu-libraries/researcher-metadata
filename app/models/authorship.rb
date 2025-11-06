@@ -29,7 +29,6 @@ class Authorship < ApplicationRecord
            :no_open_access_information?,
            :is_oa_publication?,
            :published_on,
-           :secondary_title,
            :preferred_publisher_name,
            :preferred_journal_title,
            :published?,
