@@ -853,7 +853,7 @@ describe API::V1::UsersController do
           create(:authorship, user: user, publication: pub5)
           create(:authorship, user: user, publication: pub6)
 
-          create(:presentation_contribution, user: user, presentation: pres1)
+          create(:presentation_contribution, user: user, presentation: pres1, visible_in_profile: true)
           create(:presentation_contribution, user: user, presentation: pres2)
           create(:presentation_contribution, user: user, presentation: pres3)
 
