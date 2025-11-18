@@ -67,4 +67,11 @@ namespace :database_data do
     # Catch up on any migrations
     ActiveRecord::Tasks::DatabaseTasks.migrate
   end
+
+  task change_presentation_contribution_visibility: :environment do
+    desc 'Change all presentation contributions to not visible in profile'
+    PresentationContribution.where(visible_in_profile: true).find_each do |pc|
+      pc.update(visible_in_profile: false)
+    end
+  end
 end

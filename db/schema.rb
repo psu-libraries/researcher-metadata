@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_11_182801) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_17_140741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -420,7 +420,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_11_182801) do
     t.string "role"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.boolean "visible_in_profile", default: true
+    t.boolean "visible_in_profile", default: false
     t.integer "position_in_profile"
     t.index ["activity_insight_identifier"], name: "index_presentation_contributions_on_activity_insight_identifier", unique: true
     t.index ["presentation_id"], name: "index_presentation_contributions_on_presentation_id"

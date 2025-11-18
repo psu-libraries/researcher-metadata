@@ -95,8 +95,8 @@ describe 'Profile page', :js, type: :feature do
     create(:authorship, user: user, publication: pub3)
     create(:authorship, user: user, publication: pub4)
 
-    create(:presentation_contribution, user: user, presentation: pres1)
-    create(:presentation_contribution, user: user, presentation: pres2)
+    create(:presentation_contribution, user: user, presentation: pres1, visible_in_profile: true)
+    create(:presentation_contribution, user: user, presentation: pres2, visible_in_profile: true)
 
     create(:user_performance, user: user, performance: perf1)
     create(:user_performance, user: user, performance: perf2)
