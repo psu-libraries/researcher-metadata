@@ -285,7 +285,7 @@ jobs:
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
   version: 2
-  build_and_test:     # The name of our workflow is "build_and_test"
+  rmd-ci-cd:     # The name of our workflow is "build_and_test"
     jobs:             # The list of jobs we run as part of this workflow.
       - push-image:
           context:
@@ -299,6 +299,7 @@ workflows:
           requires:
           - push-image
           - test-application
+          clusters: << pipeline.parameters.CLUSTERS_DEV >>
           filters:
             branches:
               only:
@@ -308,6 +309,7 @@ workflows:
           context:
             - org-global
           name: "Release"
+          clusters: << pipeline.parameters.CLUSTERS_PROD >>
           filters:
             tags:
               only:
