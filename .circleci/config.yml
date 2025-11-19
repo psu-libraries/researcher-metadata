@@ -293,7 +293,7 @@ workflows:
       - build-image         # Run build first.
       - test-application:         # Then run test,
           requires:   # Test requires that build passes for it to run.
-            - build   # Finally, run the build job.
+            - build-image   # Finally, run the build job.
       - deploy-application:
           context: org-global
           requires:
