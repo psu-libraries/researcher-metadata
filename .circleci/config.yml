@@ -310,6 +310,8 @@ workflows:
             - org-global
           name: "Release"
           clusters: << pipeline.parameters.CLUSTERS_PROD >>
+          from_tag: "<< pipeline.git.revision >>"
+          to_tag: "<< pipeline.git.tag >>"          
           filters:
             tags:
               only:
