@@ -179,10 +179,12 @@ jobs:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
-    executor:
-      name: ci-utils
-      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
-      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    # executor:
+    #   name: ci-utils
+    #   image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
+    #   registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    docker: 
+      - image: cimg/ruby:3.4.1-node
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
@@ -212,7 +214,7 @@ jobs:
           root: /tmp
           paths:
             - docker-image.tar
-            - docker-image-info      
+            - docker-image-info
 
   delete-deployment:
     parameters:
@@ -292,8 +294,14 @@ workflows:
             - org-global
       - build-image         # Run build first.
       - test-application:         # Then run test,
+          name: test-application
           requires:   # Test requires that build passes for it to run.
             - build-image   # Finally, run the build job.
+          context:
+            - org-global
+          filters:
+            branches:
+              only: /.*/            
       - deploy-application:
           context: org-global
           requires:
