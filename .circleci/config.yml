@@ -295,8 +295,8 @@ workflows:
       - build-image         # Run build first.
       - test-application:         # Then run test,
           name: test-application
-          requires:   # Test requires that build passes for it to run.
-            - build-image   # Finally, run the build job.
+          # requires:   # Test requires that build passes for it to run.
+            # - build-image   # Finally, run the build job.
           context:
             - org-global
           filters:
