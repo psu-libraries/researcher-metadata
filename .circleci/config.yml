@@ -290,9 +290,27 @@ workflows:
   rmd-ci-cd:     # The name of our workflow is "build_and_test"
     jobs:             # The list of jobs we run as part of this workflow.
       - push-image:
+          name: push-image
           context:
             - org-global
-      - build-image         # Run build first.
+          filters:
+            branches:              
+              only:
+                - main
+                - /preview\/.*/
+          requires:
+            - build-image
+            - test-application
+      - build-image:
+          name: build-image
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+
       - test-application:         # Then run test,
           name: test-application
           # requires:   # Test requires that build passes for it to run.
@@ -303,16 +321,17 @@ workflows:
             branches:
               only: /.*/            
       - deploy-application:
-          context: org-global
-          requires:
-          - push-image
-          - test-application
+          name: deploy-application
+          context:
+            - org-global
           clusters: << pipeline.parameters.CLUSTERS_DEV >>
           filters:
             branches:
               only:
                 - main
                 - /preview\/.*/
+          requires:
+            - push-image
       - release-image:
           context:
             - org-global
