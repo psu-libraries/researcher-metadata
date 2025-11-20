@@ -113,7 +113,7 @@ jobs:
             for cluster in "${CLUSTERS[@]}"; do
               export TARGET_CLUSTER="$cluster"
               echo "Processing cluster: $TARGET_CLUSTER"
-              /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/$CIRCLE_PROJECT_REPONAME/prod.yaml"
+              /usr/local/bin/image-release-pr "~/project/$CONFIG_REPO_NAME/clusters/$TARGET_CLUSTER/manifests/$CIRCLE_PROJECT_REPONAME/prod.yaml"
             done          
 
 
