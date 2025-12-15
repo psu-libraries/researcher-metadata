@@ -11,10 +11,11 @@ a:hover {
 }
 
 .navbar {
-  .nav-link{
+  .nav-link {
     color: $white;
   }
-  .nav-link:hover{
+
+  .nav-link:hover {
     color: $lightest-blue;
     text-decoration: inherit;
   }
