@@ -9,3 +9,14 @@ a:hover {
   color: $nittany-navy;
   text-decoration: underline;
 }
+
+.navbar {
+  .nav-link {
+    color: $white;
+  }
+
+  .nav-link:hover {
+    color: $lightest-blue;
+    text-decoration: inherit;
+  }
+}
