@@ -5,7 +5,7 @@ class FilePermissionsCheckJob < ApplicationJob
 
   def perform(file_id)
     file = ActivityInsightOAFile.find(file_id)
-    permissions = OABPermissionsService.new(file.doi_url_path, file.version)
+    permissions = OAWPermissionsService.new(file.doi_url_path, file.version)
 
     return unless permissions.permissions_found?
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OABPermissionsClient
+class OAWPermissionsClient
   class InvalidVersion < StandardError; end
   attr_reader :doi, :version
 
@@ -16,17 +16,17 @@ class OABPermissionsClient
     end
 
     def permissions_response
-      HttpService.get(oab_permissions_w_doi_url)
+      HttpService.get(oaw_permissions_w_doi_url)
     rescue Net::ReadTimeout, Net::OpenTimeout
       ''
     end
 
-    def oab_permissions_w_doi_url
-      oab_permissions_base_url + CGI.escape(doi.to_s)
+    def oaw_permissions_w_doi_url
+      oaw_permissions_base_url + CGI.escape(doi.to_s)
     end
 
-    def oab_permissions_base_url
-      'https://api.openaccessbutton.org/permissions/'
+    def oaw_permissions_base_url
+      'https://bg.api.oa.works/permissions/'
     end
 
     def accepted_version

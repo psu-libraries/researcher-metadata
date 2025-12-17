@@ -62,7 +62,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     def rights_hint
       link = link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank', rel: 'noopener'
       if licence_present?
-        I18n.t('simple_form.hints.rights.oab_permission_found')
+        I18n.t('simple_form.hints.rights.oaw_permission_found')
       else
         I18n.t('simple_form.hints.rights.default_html', link: link).html_safe
       end
@@ -79,9 +79,9 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     def embargo_hint
       if embargo_end_date_present?
         if @permissions.embargo_end_date < Date.today
-          I18n.t('simple_form.hints.embargoed_until.oab_permission_found_expired')
+          I18n.t('simple_form.hints.embargoed_until.oaw_permission_found_expired')
         else
-          I18n.t('simple_form.hints.embargoed_until.oab_permission_found')
+          I18n.t('simple_form.hints.embargoed_until.oaw_permission_found')
         end
       end
     end
@@ -106,7 +106,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
 
     def set_statement_hint
       if set_statement_present?
-        I18n.t('simple_form.hints.publisher_statement.oab_permission_found')
+        I18n.t('simple_form.hints.publisher_statement.oaw_permission_found')
       else
         I18n.t('simple_form.hints.publisher_statement.default')
       end
@@ -137,7 +137,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     end
 
     def other_version_text
-      version_text((OABPermissionsService::VALID_VERSIONS - [@permissions.version]).first)
+      version_text((OAWPermissionsService::VALID_VERSIONS - [@permissions.version]).first)
     end
 
     def version_text(version)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OABPreferredPermissionsService < OABPermissionsClient
+class OAWPreferredPermissionsService < OAWPermissionsClient
   def initialize(doi)
     super()
     @doi = doi
@@ -16,12 +16,12 @@ class OABPreferredPermissionsService < OABPermissionsClient
     else
       Publication::NO_VERSION
     end
-  rescue OABPermissionsSet::PermissionsUnknown
+  rescue OAWPermissionsSet::PermissionsUnknown
   end
 
   private
 
     def permissions
-      OABPermissionsSet.new(all_permissions.map { |p| OABPermission.new(p) })
+      OAWPermissionsSet.new(all_permissions.map { |p| OAWPermission.new(p) })
     end
 end

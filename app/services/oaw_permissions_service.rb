@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OABPermissionsService < OABPermissionsClient
+class OAWPermissionsService < OAWPermissionsClient
   def initialize(doi, version)
     raise InvalidVersion if VALID_VERSIONS.exclude?(version)
 

@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe OABPermissionsService do
+describe OAWPermissionsService do
   let(:service) { described_class.new(doi, version) }
 
   context 'when version is valid' do
@@ -222,7 +222,7 @@ describe OABPermissionsService do
     describe '#permissions_found?' do
       context 'when some permissions are found' do
         before do
-          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oab7.json').read)
+          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oaw7.json').read)
         end
 
         it 'returns true' do
@@ -232,7 +232,7 @@ describe OABPermissionsService do
 
       context 'when no permissions data is returned' do
         before do
-          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
+          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oaw5.json').read)
         end
 
         it 'returns false' do
@@ -247,7 +247,7 @@ describe OABPermissionsService do
     let(:doi) { '10.1231/abcd.54321' }
 
     it 'raises and error' do
-      expect { service }.to raise_error OABPermissionsService::InvalidVersion
+      expect { service }.to raise_error OAWPermissionsService::InvalidVersion
     end
   end
 end

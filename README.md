@@ -110,29 +110,13 @@ following types of records from NSF:
     - grants
     - researcher_funds
 
-1. **Open Access Button** - We import information about open access copies of publications that is provided by
-Open Access Button via their web [API](https://openaccessbutton.org/api). There are three different importers
-configured to run with cron.  One imports Open Access Button metadata for publications with DOIs using Open Access
-Button's DOI search endpoint.  The other gathers metadata using Open Access Button's title search endpoint.  Searching by DOI is
-faster, so the import with DOIs only takes several days to complete.  This process is run every Sunday at 8:00 AM.  Searching by title
-can be slow, so this process runs on the 1st and 15th day of every month at 8:00 AM.  It sometimes takes more than a week to complete.
-The final import only imports open access button info for new publications.  In other words, any publication without an `open_access_button_last_checked_at`
-timestamp.  This is fairly quick and run at 10:00 PM every Sunday. It is meant to run after all the latest Activity insight and Pure data has been imported,
-and before the weekly open access emails go out.  We import the following types of records from Open Access Button:
-    - open_access_locations
-
-1. **Unpaywall** - Very similarly to Open Access Button, we import metadata about open access copies of
-publications from Unpaywall's web [API](https://unpaywall.org/products/api). Like the Open Access Button
-import, we search Unpaywall by DOI or title (if the publication has no DOI).  However, this is not
-split into two imports like the Open Access Button import, since the title search for Unpaywall is much
-faster. Much of the data imported from Unpaywall overlaps with data imported from Open Access Button, but each
-source may provide some metadata that is not provided by the other. In general, Unpaywall provides richer
-metadata than Open Access Button. In addition to importing metadata about any open access copies of a
-publication, this import also updates the open access status on publication records in RMD. In production,
-a cron job automatically runs this import once per week beginning at 8:00 PM on Tuesdays. It can take
-multiple days to finish due to API rate limiting. Just like the Open Access Button import, the Unpaywall import
-has a second weekly import on Sunday at 10:00 PM where Unpaywall data is only imported for new publications.
-We import the following types of records from Unpaywall:
+1. **Unpaywall** - We import metadata about open access copies of publications from Unpaywall's web 
+[API](https://unpaywall.org/products/api). We search Unpaywall by DOI or title (if the publication has no DOI).
+In addition to importing metadata about any open access copies of a publication, this import also updates 
+the open access status on publication records in RMD. In production, a cron job automatically runs this import 
+once per week beginning at 8:00 PM on Tuesdays. It can take multiple days to finish due to API rate limiting. 
+The Unpaywall import has a second weekly import on Sunday at 10:00 PM where Unpaywall data is only imported 
+for new publications. We import the following types of records from Unpaywall:
     - open_access_locations
 
 1. **Penn State Law School repository - We import publication metadata from the repository maintained
@@ -441,13 +425,13 @@ policy including:
 
 Before notifying users in this way, we attempt to obtain as much open access status information as possible so
 that we're not bothering people about publications that are already open access. To do this, we use the DOIs that
-we have imported from various sources to query Open Access Button and Unpaywall and attempt to obtain a URL for an existing
+we have imported from various sources to query Unpaywall and attempt to obtain a URL for an existing
 open access version of the work. The task for sending the notifications is `rake email_notifications:send_all_open_access_reminders`.
 As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with
 a maximum limit to how many can be sent is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
 weekly on Monday at 3:00 AM.  Ideally, we want to have collected as much publication data throughout the week as possible.  Then,
-before the emails go out, make sure that any new publications have had their open access locations checked with Open Access Button
-and Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
+before the emails go out, make sure that any new publications have had their open access locations checked with
+Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
 There is also a task for sending a test email containing mock data to a specific email address for the
 purposes of testing/demonstration:  `rake email_notifications:test_open_access_reminder[email@example.com]`.
 
@@ -477,7 +461,7 @@ There are several steps to this process:
 1. The user uploads their files to be sent to ScholarSphere
 1. RMD analyzes those files to try to determine if the publication uploaded is a Published or Accepted version
 1. The user can confirm which version the uploaded publication is
-1. RMD then tries to grab permissions data for the publication from Open Access Button
+1. RMD then tries to grab permissions data for the publication from OA.Works
 1. The user is presented a form with prefilled fields using permissions data and data stored in RMD to be reviewed and/or editted
 1. The user submits the form and the files and metadata are sent to ScholarSphere
 

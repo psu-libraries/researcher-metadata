@@ -24,14 +24,14 @@ en:
       waiver:
         reason_for_waiver: Please explain why you are getting this waiver. This is optional but encouraged.
       rights:
-        oab_permission_found: We found the license for your work.
+        oaw_permission_found: We found the license for your work.
         default_html: For help determining License and Embargo, see this %{link}
       publisher_statement:
-        oab_permission_found: We found the set statement for your work.
+        oaw_permission_found: We found the set statement for your work.
         default: If the original publisher requires a set statement to upload this work to ScholarSphere, include it here.
       embargoed_until:
-        oab_permission_found: We found the embargo end date for your work.
-        oab_permission_found_expired: We found the embargo end date for your work but it is before the current date, so we left this blank.
+        oaw_permission_found: We found the embargo end date for your work.
+        oaw_permission_found_expired: We found the embargo end date for your work but it is before the current date, so we left this blank.
     labels:
       waiver:
         doi: Digital Object Identifier (DOI)

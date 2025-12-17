@@ -130,7 +130,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     else
       @cache_files = params[:scholarsphere_work_deposit][:cache_files]
       @authorship = Authorship.find_by(user: current_user, publication: publication)
-      @permissions = OABPermissionsService.new(@authorship.doi_url_path, params['file_version'])
+      @permissions = OAWPermissionsService.new(@authorship.doi_url_path, params['file_version'])
       @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
                                                               { rights: @permissions.licence,
                                                                 embargoed_until: @permissions.embargo_end_date,

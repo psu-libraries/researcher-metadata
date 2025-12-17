@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OABPermission
+class OAWPermission
   def initialize(data)
     @data = data
   end

@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe OABPermission do
+describe OAWPermission do
   let(:permission) { described_class.new(data) }
   let(:data) {
     {
