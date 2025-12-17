@@ -26,7 +26,7 @@ class OABPermissionsClient
     end
 
     def oab_permissions_base_url
-      'https://api.openaccessbutton.org/permissions/'
+      'https://bg.api.oa.works/permissions/'
     end
 
     def accepted_version

@@ -110,29 +110,13 @@ following types of records from NSF:
     - grants
     - researcher_funds
 
-1. **Open Access Button** - We import information about open access copies of publications that is provided by
-Open Access Button via their web [API](https://openaccessbutton.org/api). There are three different importers
-configured to run with cron.  One imports Open Access Button metadata for publications with DOIs using Open Access
-Button's DOI search endpoint.  The other gathers metadata using Open Access Button's title search endpoint.  Searching by DOI is
-faster, so the import with DOIs only takes several days to complete.  This process is run every Sunday at 8:00 AM.  Searching by title
-can be slow, so this process runs on the 1st and 15th day of every month at 8:00 AM.  It sometimes takes more than a week to complete.
-The final import only imports open access button info for new publications.  In other words, any publication without an `open_access_button_last_checked_at`
-timestamp.  This is fairly quick and run at 10:00 PM every Sunday. It is meant to run after all the latest Activity insight and Pure data has been imported,
-and before the weekly open access emails go out.  We import the following types of records from Open Access Button:
-    - open_access_locations
-
-1. **Unpaywall** - Very similarly to Open Access Button, we import metadata about open access copies of
-publications from Unpaywall's web [API](https://unpaywall.org/products/api). Like the Open Access Button
-import, we search Unpaywall by DOI or title (if the publication has no DOI).  However, this is not
-split into two imports like the Open Access Button import, since the title search for Unpaywall is much
-faster. Much of the data imported from Unpaywall overlaps with data imported from Open Access Button, but each
-source may provide some metadata that is not provided by the other. In general, Unpaywall provides richer
-metadata than Open Access Button. In addition to importing metadata about any open access copies of a
-publication, this import also updates the open access status on publication records in RMD. In production,
-a cron job automatically runs this import once per week beginning at 8:00 PM on Tuesdays. It can take
-multiple days to finish due to API rate limiting. Just like the Open Access Button import, the Unpaywall import
-has a second weekly import on Sunday at 10:00 PM where Unpaywall data is only imported for new publications.
-We import the following types of records from Unpaywall:
+1. **Unpaywall** - We import metadata about open access copies of publications from Unpaywall's web 
+[API](https://unpaywall.org/products/api). We search Unpaywall by DOI or title (if the publication has no DOI).
+In addition to importing metadata about any open access copies of a publication, this import also updates 
+the open access status on publication records in RMD. In production, a cron job automatically runs this import 
+once per week beginning at 8:00 PM on Tuesdays. It can take multiple days to finish due to API rate limiting. 
+The Unpaywall import has a second weekly import on Sunday at 10:00 PM where Unpaywall data is only imported 
+for new publications. We import the following types of records from Unpaywall:
     - open_access_locations
 
 1. **Penn State Law School repository - We import publication metadata from the repository maintained
