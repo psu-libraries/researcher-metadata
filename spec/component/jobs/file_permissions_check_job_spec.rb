@@ -30,7 +30,7 @@ describe FilePermissionsCheckJob, type: :job do
     context 'when some permissions data is returned' do
       context 'when all fields are present' do
         before do
-          allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+          allow(HTTParty).to receive(:get).with('https://bg.api.oa.works/permissions/10.1016%2FS0962-1849%2805%2980014-9')
             .and_return(Rails.root.join('spec', 'fixtures', 'oaw7.json').read)
         end
 
@@ -72,7 +72,7 @@ describe FilePermissionsCheckJob, type: :job do
         let(:version) { 'acceptedVersion' }
 
         before do
-          allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+          allow(HTTParty).to receive(:get).with('https://bg.api.oa.works/permissions/10.1016%2FS0962-1849%2805%2980014-9')
             .and_return(Rails.root.join('spec', 'fixtures', 'oaw10.json').read)
         end
 
@@ -93,7 +93,7 @@ describe FilePermissionsCheckJob, type: :job do
       let(:version) { 'acceptedVersion' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+        allow(HTTParty).to receive(:get).with('https://bg.api.oa.works/permissions/10.1016%2FS0962-1849%2805%2980014-9')
           .and_return(Rails.root.join('spec', 'fixtures', 'oaw5.json').read)
       end
 
