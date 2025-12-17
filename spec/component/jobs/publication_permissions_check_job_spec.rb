@@ -17,8 +17,8 @@ describe PublicationPermissionsCheckJob, type: :job do
                                 doi: 'https://doi.org/10.1016/S0962-1849(05)80014-9')}
 
     before do
-      allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
-        .and_return(Rails.root.join('spec', 'fixtures', 'oab6.json').read)
+      allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+        .and_return(Rails.root.join('spec', 'fixtures', 'oaw6.json').read)
     end
 
     it 'updates the publication permissions' do

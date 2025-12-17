@@ -24,6 +24,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'HR'
   inflect.acronym 'OAI'
   inflect.acronym 'OAB'
+  inflect.acronym 'OAW'
   inflect.acronym 'OA'
   inflect.acronym 'NSF'
   inflect.acronym 'LDAP'

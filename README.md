@@ -425,13 +425,13 @@ policy including:
 
 Before notifying users in this way, we attempt to obtain as much open access status information as possible so
 that we're not bothering people about publications that are already open access. To do this, we use the DOIs that
-we have imported from various sources to query Open Access Button and Unpaywall and attempt to obtain a URL for an existing
+we have imported from various sources to query Unpaywall and attempt to obtain a URL for an existing
 open access version of the work. The task for sending the notifications is `rake email_notifications:send_all_open_access_reminders`.
 As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with
 a maximum limit to how many can be sent is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
 weekly on Monday at 3:00 AM.  Ideally, we want to have collected as much publication data throughout the week as possible.  Then,
-before the emails go out, make sure that any new publications have had their open access locations checked with Open Access Button
-and Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
+before the emails go out, make sure that any new publications have had their open access locations checked with
+Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
 There is also a task for sending a test email containing mock data to a specific email address for the
 purposes of testing/demonstration:  `rake email_notifications:test_open_access_reminder[email@example.com]`.
 
@@ -461,7 +461,7 @@ There are several steps to this process:
 1. The user uploads their files to be sent to ScholarSphere
 1. RMD analyzes those files to try to determine if the publication uploaded is a Published or Accepted version
 1. The user can confirm which version the uploaded publication is
-1. RMD then tries to grab permissions data for the publication from Open Access Button
+1. RMD then tries to grab permissions data for the publication from OA.Works
 1. The user is presented a form with prefilled fields using permissions data and data stored in RMD to be reviewed and/or editted
 1. The user submits the form and the files and metadata are sent to ScholarSphere
 

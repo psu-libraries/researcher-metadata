@@ -2,20 +2,20 @@
 
 require 'component/component_spec_helper'
 
-describe OABPermissionsSet do
+describe OAWPermissionsSet do
   let(:ps) { described_class.new(permissions) }
   let(:permissions) { [] }
 
   describe '#can_deposit_accepted_version?' do
     context 'when the set has no permissions' do
       it 'raises an error' do
-        expect { ps.can_deposit_accepted_version? }.to raise_error OABPermissionsSet::PermissionsUnknown
+        expect { ps.can_deposit_accepted_version? }.to raise_error OAWPermissionsSet::PermissionsUnknown
       end
     end
 
     context 'when the set has a permission' do
       let(:permissions) { [permission] }
-      let(:permission) { instance_double OABPermission }
+      let(:permission) { instance_double OAWPermission }
 
       context 'when that permission is for the accepted version' do
         before { allow(permission).to receive(:version).and_return 'acceptedVersion' }
@@ -110,13 +110,13 @@ describe OABPermissionsSet do
   describe '#can_deposit_published_version?' do
     context 'when the set has no permissions' do
       it 'raises an error' do
-        expect { ps.can_deposit_published_version? }.to raise_error OABPermissionsSet::PermissionsUnknown
+        expect { ps.can_deposit_published_version? }.to raise_error OAWPermissionsSet::PermissionsUnknown
       end
     end
 
     context 'when the set has a permission' do
       let(:permissions) { [permission] }
-      let(:permission) { instance_double OABPermission }
+      let(:permission) { instance_double OAWPermission }
 
       context 'when that permission is for the published version' do
         before { allow(permission).to receive(:version).and_return 'publishedVersion' }

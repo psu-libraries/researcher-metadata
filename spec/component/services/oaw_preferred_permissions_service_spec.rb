@@ -2,20 +2,20 @@
 
 require 'component/component_spec_helper'
 
-describe OABPreferredPermissionsService do
+describe OAWPreferredPermissionsService do
   let(:service) { described_class.new(doi) }
 
   before do
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
-      .and_return(Rails.root.join('spec', 'fixtures', 'oab6.json').read)
+      .and_return(Rails.root.join('spec', 'fixtures', 'oaw6.json').read)
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1038%2Fs41598-023-28289-6')
-      .and_return(Rails.root.join('spec', 'fixtures', 'oab7.json').read)
+      .and_return(Rails.root.join('spec', 'fixtures', 'oaw7.json').read)
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1175%2FJCLI-D-14-00749.1')
-      .and_return(Rails.root.join('spec', 'fixtures', 'oab8.json').read)
+      .and_return(Rails.root.join('spec', 'fixtures', 'oaw8.json').read)
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1146%2Fannurev-earth-040610-133408')
-      .and_return(Rails.root.join('spec', 'fixtures', 'oab9.json').read)
+      .and_return(Rails.root.join('spec', 'fixtures', 'oaw9.json').read)
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1542%2Fpir.25-11-381')
-      .and_return(Rails.root.join('spec', 'fixtures', 'oab10.json').read)
+      .and_return(Rails.root.join('spec', 'fixtures', 'oaw10.json').read)
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/some_unknown_doi')
       .and_return(%{{"all_permissions": []}})
   end

@@ -3,8 +3,8 @@
 require 'component/component_spec_helper'
 
 RSpec.describe ScholarsphereDepositFormComponent, type: :component do
-  let(:oab_permissions) do
-    Struct.new('OABPermissionsService', :permissions,
+  let(:oaw_permissions) do
+    Struct.new('OAWPermissionsService', :permissions,
                :version,
                :this_version,
                :licence,
@@ -14,7 +14,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   end
   let!(:publication) { create(:sample_publication) }
   let(:op) do
-    op = oab_permissions.new
+    op = oaw_permissions.new
     op.version = I18n.t('file_versions.accepted_version')
     op.this_version = { 'version' => I18n.t('file_versions.accepted_version') }
     op.permissions = { 'version' => I18n.t('file_versions.accepted_version') }
@@ -56,7 +56,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     end
   end
 
-  context 'when our version is found from oab permissions api' do
+  context 'when our version is found from oaw permissions api' do
     context 'when an accepted version' do
       it 'renders an alert saying sharing rules have been found' do
         view_render

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OABPermissionsSet
+class OAWPermissionsSet
   class PermissionsUnknown < RuntimeError; end
 
   def initialize(permissions)

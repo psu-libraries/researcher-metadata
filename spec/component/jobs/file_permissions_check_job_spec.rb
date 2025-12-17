@@ -30,8 +30,8 @@ describe FilePermissionsCheckJob, type: :job do
     context 'when some permissions data is returned' do
       context 'when all fields are present' do
         before do
-          allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
-            .and_return(Rails.root.join('spec', 'fixtures', 'oab7.json').read)
+          allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+            .and_return(Rails.root.join('spec', 'fixtures', 'oaw7.json').read)
         end
 
         context "when the file's version is acceptedVersion" do
@@ -72,8 +72,8 @@ describe FilePermissionsCheckJob, type: :job do
         let(:version) { 'acceptedVersion' }
 
         before do
-          allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
-            .and_return(Rails.root.join('spec', 'fixtures', 'oab10.json').read)
+          allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+            .and_return(Rails.root.join('spec', 'fixtures', 'oaw10.json').read)
         end
 
         it 'sets alternate values for the missing fields' do
@@ -89,12 +89,12 @@ describe FilePermissionsCheckJob, type: :job do
       end
     end
 
-    context 'when OAB does not return any permissions data' do
+    context 'when OA.Works does not return any permissions data' do
       let(:version) { 'acceptedVersion' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
-          .and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
+        allow(HTTParty).to receive(:get).with('https://bg.api.oa.works.org/permissions/10.1016%2FS0962-1849%2805%2980014-9')
+          .and_return(Rails.root.join('spec', 'fixtures', 'oaw5.json').read)
       end
 
       it "doesn't update any fields" do
