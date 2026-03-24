@@ -21,7 +21,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.3.0"
+    default: "v4.6.2"
   CONFIG_REPO_NAME:
     type: string
     default: "researcher-metadata-config"
@@ -180,12 +180,12 @@ jobs:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
-    # executor:
-    #   name: ci-utils
-    #   image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
-    #   registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
     docker:
-      - image: cimg/ruby:3.4.1-node
+      - image: cimg/ruby:3.4.9-node
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
