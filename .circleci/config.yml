@@ -256,8 +256,10 @@ jobs:
     # A series of steps to run, some are similar to those in "build".
     steps:
       - run: sudo apt-get update
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+        - browser-tools/install-browser:
+          browser: chrome
+        - browser-tools/install-browser:
+          browser: chromedriver
       - checkout
       - run: bundle install
       - node/install:
