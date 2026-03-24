@@ -255,11 +255,11 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
-      - run: sudo apt-get update
+        - run: sudo apt-get update
         - browser-tools/install-browser:
-          browser: chrome
+          browser: "chrome"
         - browser-tools/install-browser:
-          browser: chromedriver
+          browser: "chromedriver"
       - checkout
       - run: bundle install
       - node/install:
