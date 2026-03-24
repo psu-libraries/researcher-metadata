@@ -40,8 +40,11 @@ FROM base AS dev
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+# Modern way to add Google Chrome signing key and repo
+RUN mkdir -p /etc/apt/keyrings \
+  && curl -fsSL https://dl.google.com/linux/linux_signing_key.pub -o /etc/apt/keyrings/google-linux-signing-key.gpg \
+  && chmod 644 /etc/apt/keyrings/google-linux-signing-key.gpg \
+  && echo "deb [signed-by=/etc/apt/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends\
