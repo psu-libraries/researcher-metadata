@@ -255,7 +255,6 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
-      - run: sudo apt-get update
       - checkout
       - run: bundle install
       - node/install:
