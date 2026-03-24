@@ -255,15 +255,15 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
-        - run: sudo apt-get update
-        - browser-tools/install-browser:
-          browser: "chrome"
-        - browser-tools/install-browser:
-          browser: "chromedriver"
+      - run: sudo apt-get update
+      - browser-tools/install-browser:
+        browser: "chrome"
+      - browser-tools/install-browser:
+        browser: "chromedriver"
       - checkout
       - run: bundle install
       - node/install:
-          node-version: '22'
+        node-version: '22'
       - run: node --version
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
