@@ -46,24 +46,25 @@ RUN mkdir -p /etc/apt/keyrings \
   && chmod 644 /etc/apt/keyrings/google-linux-signing-key.gpg \
   && echo "deb [signed-by=/etc/apt/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 
+
 # hadolint ignore=DL3008
-RUN apt-get update && apt-get install -y --no-install-recommends\
+RUN apt-get update && apt-get install -y --no-install-recommends \
   rsync \
   google-chrome-stable \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /app/node_modules/.cache/ \
+  && rm -rf /app/tmp/
 RUN chown -R app:app /app
 
 USER app
 RUN bundle config set path 'vendor/bundle' && bundle exec rails assets:precompile
-
-CMD ["/app/bin/start"]
-
-# Final Target
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 FROM base AS production
 
-RUN RAILS_ENV=production SECRET_KEY_BASE=secret\
+RUN RAILS_ENV=production SECRET_KEY_BASE=secret \
   bundle exec rails assets:precompile && \
-  rm -rf /app/.cache/ && \
   rm -rf /app/node_modules/.cache/ && \
   rm -rf /app/tmp/
 
