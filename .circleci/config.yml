@@ -188,9 +188,6 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
-      - run: ruby --version
-      - run: node --version
-      - run: bundle install
       - compute-docker-tag
       - docker/check:
           registry: $REGISTRY_HOST
