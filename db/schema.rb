@@ -504,14 +504,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_140741) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
-    t.datetime "oa_status_last_checked_at", precision: nil
     t.string "preferred_version"
     t.datetime "permissions_last_checked_at", precision: nil
+    t.datetime "oa_status_last_checked_at", precision: nil
     t.datetime "wrong_oa_version_notification_sent_at", precision: nil
     t.boolean "preferred_file_version_none_email_sent"
     t.boolean "doi_error"
     t.boolean "flagged_for_review"
-    t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
+    t.index "EXTRACT(year FROM published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
