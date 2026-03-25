@@ -31,7 +31,7 @@ gem 'factory_bot_rails'                 # For generating records in test, develo
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
-gem 'httparty'                          # HTTP client
+gem 'httparty', '>= 0.24.0'             # HTTP client (updated to resolve net-http/uri vulnerabilities)
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jsbundling-rails'                  # Bundle assets

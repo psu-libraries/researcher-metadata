@@ -1,9 +1,9 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@2.6.0
-  ruby: circleci/ruby@2.5.0
-  node: circleci/node@6.3.0
-  browser-tools: circleci/browser-tools@1.4.8
+  docker: circleci/docker@3.0.1
+  ruby: circleci/ruby@2.6.0
+  node: circleci/node@7.2.1
+  browser-tools: circleci/browser-tools@1.5.2
 
 parameters:
 
@@ -33,13 +33,13 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"    
+    default: "prod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"    
+    default: "harbor.k8s.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
-    default: "1.0.1"    
+    default: "1.0.1"
 
 commands:
 
@@ -64,7 +64,7 @@ commands:
               SLUG=$(slugify-branch "$CIRCLE_BRANCH")
               TAG="${SLUG}--$CIRCLE_SHA1"
             fi
-            echo "export TAG=$TAG" >> "$BASH_ENV"    
+            echo "export TAG=$TAG" >> "$BASH_ENV"
 
 executors:
 
@@ -75,7 +75,7 @@ executors:
       registry_host:
         type: string
     docker:
-      - image: << parameters.registry_host >>/library/ci-utils:<< parameters.image_tag >>            
+      - image: << parameters.registry_host >>/library/ci-utils:<< parameters.image_tag >>
 
 jobs:
   release-image:
@@ -115,7 +115,7 @@ jobs:
               export TARGET_CLUSTER="$cluster"
               echo "Processing cluster: $TARGET_CLUSTER"
               /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/$CIRCLE_PROJECT_REPONAME/prod.yaml"
-            done          
+            done
 
 
   deploy-application:
@@ -174,25 +174,20 @@ jobs:
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
-          tag: $TAG   
+          tag: $TAG
 
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
-    # executor:
-    #   name: ci-utils
-    #   image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
-    #   registry_host: << pipeline.parameters.REGISTRY_HOST >>
-    docker: 
-      - image: cimg/ruby:3.4.1-node
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
-      - run: ruby --version
-      - run: node --version
-      - run: bundle install      
       - compute-docker-tag
       - docker/check:
           registry: $REGISTRY_HOST
@@ -201,7 +196,6 @@ jobs:
           registry: $REGISTRY_HOST
           tag: $TAG
           extra_build_args: "--target production"
-          use-buildkit: true
       - run:
           name: Save Docker image
           command: |
@@ -256,13 +250,10 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
-      - run: sudo apt-get update
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       - checkout
       - run: bundle install
       - node/install:
-          node-version: '22'
+        node-version: '22'
       - run: node --version
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
@@ -295,7 +286,7 @@ workflows:
           context:
             - org-global
           filters:
-            branches:              
+            branches:
               only:
                 - main
                 - /preview\/.*/
@@ -320,7 +311,7 @@ workflows:
             - org-global
           filters:
             branches:
-              only: /.*/            
+              only: /.*/
       - deploy-application:
           name: deploy-application
           context:
@@ -339,7 +330,7 @@ workflows:
           name: "Release"
           clusters: << pipeline.parameters.CLUSTERS_PROD >>
           from_tag: "<< pipeline.git.revision >>"
-          to_tag: "<< pipeline.git.tag >>"          
+          to_tag: "<< pipeline.git.tag >>"
           filters:
             tags:
               only:
