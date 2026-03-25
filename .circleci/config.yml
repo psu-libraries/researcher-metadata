@@ -21,7 +21,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.6.2"
+    default: "v4.3.0"
   CONFIG_REPO_NAME:
     type: string
     default: "researcher-metadata-config"
