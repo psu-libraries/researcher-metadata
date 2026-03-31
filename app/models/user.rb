@@ -10,7 +10,7 @@ class User < ApplicationRecord
                     :convert_blank_pure_id_to_nil,
                     :convert_blank_ai_id_to_nil
 
-  devise :omniauthable, omniauth_providers: %i[azure_oauth]
+  devise :timeoutable, :omniauthable, omniauth_providers: %i[azure_oauth]
 
   validates :webaccess_id, presence: true, uniqueness: { case_sensitive: false }
   validates :activity_insight_identifier,
