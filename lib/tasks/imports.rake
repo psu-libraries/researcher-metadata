@@ -19,7 +19,7 @@ namespace :import do
   desc 'Import NSF grant data from local files'
   task :nsf_grants, [:dirname] => :environment do |_task, args|
     args.with_defaults(
-      dirname: dirname_for(:nsf_grants)
+      dirname: Rails.root.join('db/data/nsf_grants')
     )
     NSFGrantImporter.new(dirname: args.dirname).call
   end
@@ -63,7 +63,7 @@ namespace :import do
   desc 'Import ETDs'
   task :etds, [:filename] => :environment do |_task, args|
     args.with_defaults(
-      filename: filename_for(:etds)
+      filename: Rails.root.join('db/data/etds.csv')
     )
     ETDCSVImporter.new(filename: args.filename).call
   end
@@ -71,7 +71,7 @@ namespace :import do
   desc 'Import Committees'
   task :committees, [:filename] => :environment do |_task, args|
     args.with_defaults(
-      filename: filename_for(:committees)
+      filename: Rails.root.join('db/data/committees.csv')
     )
     CommitteeImporter.new(filename: args.filename).call
   end
@@ -108,18 +108,5 @@ namespace :import do
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
     PurePublicationImporter.new.call
-  end
-end
-
-def filename_for(key)
-  case key
-  when :etds then Rails.root.join('db/data/etds.csv')
-  when :committees then Rails.root.join('db/data/committees.csv')
-  end
-end
-
-def dirname_for(key)
-  case key
-  when :nsf_grants then Rails.root.join('db/data/nsf_grants')
   end
 end
