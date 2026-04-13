@@ -3,112 +3,112 @@
 require 'component/component_spec_helper'
 
 describe NSFGrantImporter do
-  let(:importer) { described_class.new(dirname: dirname) }
+  let(:importer) { described_class.new }
 
   describe '#call' do
     let!(:u1) { create(:user, first_name: 'Bethany', last_name: 'Testuser', webaccess_id: 'bat123') }
     let!(:u2) { create(:user, first_name: 'Jeff', last_name: 'Testresearcher', webaccess_id: 'jbt12') }
-    let!(:u3) { create(:user, first_name: 'Richard', last_name: 'Testuser', webaccess_id: 'rat') }
 
-    context 'when given XML files of grant data from the National Science Foundation' do
-      let(:dirname) { Rails.root.join('spec', 'fixtures', 'nsf_grants') }
+    let!(:pub1) { create(:publication, doi: 'https://doi.org/10.123/456') }
+    let!(:pub2) { create(:publication, doi: 'https://doi.org/10.654/321') }
+    let!(:pub3) { create(:publication, title: 'Test Award 3 Publication 1', published_on: Date.new(2026, 1, 1)) }
 
-      context 'when no grants matching the data in the given files already exist' do
-        it 'creates new grant records for each Penn State grant in the given data' do
-          expect { importer.call }.to change(Grant, :count).by 2
-        end
+    let(:empty_response) { instance_double HTTParty::Response, body: '{"response": {"award": []}}' }
+    let(:response) { instance_double HTTParty::Response, body: fixture_file_read('nsf_awards.json') }
 
-        it 'fills out new grant records with the available data' do
-          importer.call
-          g1 = Grant.find_by(identifier: '1934782')
-          g2 = Grant.find_by(identifier: '1057936')
-
-          expect(g1.title).to eq 'Example Grant 1'
-          expect(g1.start_date).to eq Date.new(2019, 7, 1)
-          expect(g1.end_date).to eq Date.new(2021, 6, 30)
-          expect(g1.abstract).to eq 'Description of example grant 1'
-          expect(g1.amount_in_dollars).to eq 300000
-          expect(g1.agency_name).to eq 'National Science Foundation'
-
-          expect(g2.title).to eq 'Example Grant 2'
-          expect(g2.start_date).to eq Date.new(2010, 1, 1)
-          expect(g2.end_date).to eq Date.new(2020, 12, 31)
-          expect(g2.abstract).to eq 'Abstract for example grant 2'
-          expect(g2.amount_in_dollars).to eq 5000000
-          expect(g2.agency_name).to eq 'National Science Foundation'
-        end
-
-        it 'creates associations between the new grants and users based on the given data' do
-          expect { importer.call }.to change(ResearcherFund, :count).by 3
-          g1 = Grant.find_by(identifier: '1934782')
-          g2 = Grant.find_by(identifier: '1057936')
-
-          expect(ResearcherFund.find_by(grant: g1, user: u1)).not_to be_nil
-          expect(ResearcherFund.find_by(grant: g1, user: u2)).not_to be_nil
-          expect(ResearcherFund.find_by(grant: g2, user: u3)).not_to be_nil
-        end
+    before do
+      (1965..(Date.current.year - 1)).each do |year|
+        allow(HTTParty).to receive(:get).with("https://api.nsf.gov/services/v1/awards.json?dateStart=01%2F01%2F#{year}&dateEnd=12%2F31%2F#{year}&rpp=3000&offset=0&awardeeName=%22Pennsylvania+State+Univ%22").and_return(empty_response)
       end
 
-      context 'when a grant matching the data in the given files already exists' do
-        let!(:existing_grant) { create(:grant,
-                                       agency_name: 'National Science Foundation',
-                                       identifier: '1934782',
-                                       title: 'Existing title',
-                                       start_date: Date.new(2018, 1, 1),
-                                       end_date: Date.new(2025, 1, 1),
-                                       abstract: 'Existing abstract',
-                                       amount_in_dollars: 20000) }
+      allow(HTTParty).to receive(:get).with("https://api.nsf.gov/services/v1/awards.json?dateStart=01%2F01%2F#{Date.current.year}&dateEnd=12%2F31%2F#{Date.current.year}&rpp=3000&offset=0&awardeeName=%22Pennsylvania+State+Univ%22").and_return(response)
+    end
 
-        it 'creates new grant records for each Penn State grant in the given data that does not match an existing grant' do
-          expect { importer.call }.to change(Grant, :count).by 1
-        end
+    it 'creates new Grant records for each award in the imported data' do
+      expect { importer.call }.to change(Grant, :count).by 3
+    end
 
-        it 'fills out new grant records with the available data' do
-          importer.call
-          g = Grant.find_by(identifier: '1057936')
+    it 'does not duplicate Grant records that already exist' do
+      expect { 2.times { importer.call } }.to change(Grant, :count).by 3
+    end
 
-          expect(g.title).to eq 'Example Grant 2'
-          expect(g.start_date).to eq Date.new(2010, 1, 1)
-          expect(g.end_date).to eq Date.new(2020, 12, 31)
-          expect(g.abstract).to eq 'Abstract for example grant 2'
-          expect(g.amount_in_dollars).to eq 5000000
-          expect(g.agency_name).to eq 'National Science Foundation'
-        end
+    it 'creates new ResearchFund records for each matching publication in the imported data' do
+      expect { importer.call }.to change(ResearchFund, :count).by 3
+    end
 
-        it 'updates the existing grant with the given data' do
-          importer.call
+    it 'does not duplicate ResearcFund records that already exist' do
+      expect { 2.times { importer.call } }.to change(ResearchFund, :count).by 3
+    end
 
-          expect(existing_grant.reload.title).to eq 'Example Grant 1'
-          expect(existing_grant.reload.start_date).to eq Date.new(2019, 7, 1)
-          expect(existing_grant.reload.end_date).to eq Date.new(2021, 6, 30)
-          expect(existing_grant.reload.abstract).to eq 'Description of example grant 1'
-          expect(existing_grant.reload.amount_in_dollars).to eq 300000
-          expect(existing_grant.reload.agency_name).to eq 'National Science Foundation'
-        end
+    it 'creates new ResearcherFund records for each matching researcher in the imported data' do
+      expect { importer.call }.to change(ResearcherFund, :count).by 2
+    end
 
-        context 'when no associations between the existing grant and users exist' do
-          it 'creates associations between the new grants and users based on the given data' do
-            expect { importer.call }.to change(ResearcherFund, :count).by 3
-            g1 = Grant.find_by(identifier: '1934782')
-            g2 = Grant.find_by(identifier: '1057936')
+    it 'does not duplicate ResearcherFund records that already exist' do
+      expect { 2.times { importer.call } }.to change(ResearcherFund, :count).by 2
+    end
 
-            expect(ResearcherFund.find_by(grant: g1, user: u1)).not_to be_nil
-            expect(ResearcherFund.find_by(grant: g1, user: u2)).not_to be_nil
-            expect(ResearcherFund.find_by(grant: g2, user: u3)).not_to be_nil
-          end
-        end
+    it 'populates the correct data in new records' do
+      importer.call
 
-        context 'when an association between the existing grant and a user already exists' do
-          before do
-            create(:researcher_fund,
-                   grant: existing_grant,
-                   user: u1)
-          end
+      g1 = Grant.find_by(identifier: '8467351')
+      g2 = Grant.find_by(identifier: '9710328')
+      g3 = Grant.find_by(identifier: '7233491')
 
-          it 'does not create a new association' do
-            expect { importer.call }.to change(ResearcherFund, :count).by 2
-          end
-        end
+      expect(g1.title).to eq 'Test Award 1'
+      expect(g1.start_date).to eq Date.new(2026, 1, 1)
+      expect(g1.end_date).to eq Date.new(2027, 12, 31)
+      expect(g1.abstract).to eq 'Test abstract 1'
+      expect(g1.amount_in_dollars).to eq 98756
+      expect(g1.agency_name).to eq 'National Science Foundation'
+
+      expect(ResearchFund.find_by(grant: g1, publication: pub1)).not_to be_nil
+      expect(ResearchFund.find_by(grant: g1, publication: pub2)).not_to be_nil
+      expect(ResearcherFund.find_by(grant: g1, user: u1)).not_to be_nil
+
+      expect(g2.title).to eq 'Test Award 2'
+      expect(g2.start_date).to eq Date.new(2026, 2, 1)
+      expect(g2.end_date).to eq Date.new(2026, 12, 31)
+      expect(g2.abstract).to eq 'Test abstract 2'
+      expect(g2.amount_in_dollars).to eq 50000
+      expect(g2.agency_name).to eq 'National Science Foundation'
+
+      expect(ResearcherFund.find_by(grant: g2, user: u2)).not_to be_nil
+
+      expect(g3.title).to eq 'Test Award 3'
+      expect(g3.start_date).to eq Date.new(2026, 3, 10)
+      expect(g3.end_date).to eq Date.new(2027, 1, 1)
+      expect(g3.abstract).to eq 'Test abstract 3'
+      expect(g3.amount_in_dollars).to eq 100000
+      expect(g3.agency_name).to eq 'National Science Foundation'
+
+      expect(ResearchFund.find_by(grant: g3, publication: pub3)).not_to be_nil
+    end
+
+    context 'when a Grant that matches the imported data already exists' do
+      let!(:existing_grant) {
+        create(
+          :grant,
+          identifier: '8467351',
+          agency_name: 'National Science Foundation',
+          title: 'Existing Award',
+          start_date: Date.new(2020, 7, 1),
+          end_date: Date.new(2021, 6, 30),
+          abstract: 'Existing abstract',
+          amount_in_dollars: 40000
+        )
+      }
+
+      it 'updates the data in the existing Grant' do
+        importer.call
+        g = existing_grant.reload
+
+        expect(g.title).to eq 'Test Award 1'
+        expect(g.start_date).to eq Date.new(2026, 1, 1)
+        expect(g.end_date).to eq Date.new(2027, 12, 31)
+        expect(g.abstract).to eq 'Test abstract 1'
+        expect(g.amount_in_dollars).to eq 98756
+        expect(g.agency_name).to eq 'National Science Foundation'
       end
     end
   end

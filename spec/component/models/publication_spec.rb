@@ -1418,11 +1418,15 @@ describe Publication, type: :model do
     end
   end
 
-  describe '.find_by_wos_pub' do
-    let(:wos_pub) { double 'WoS publication',
-                           doi: doi,
-                           title: title,
-                           publication_date: date }
+  describe '.find_by_metadata' do
+    let(:wos_pub) {
+      instance_double(
+        WebOfSciencePublication,
+        doi: doi,
+        title: title,
+        year: year
+      )
+    }
     let!(:pub1) { create(:publication,
                          doi: nil,
                          title: 'Another Publication',
@@ -1451,26 +1455,26 @@ describe Publication, type: :model do
         let(:title) { 'THE TITLE' }
 
         context 'when given data with no publication date' do
-          let(:date) { nil }
+          let(:year) { nil }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
 
         context 'when given data with a publication year that matches an existing publication' do
-          let(:date) { Date.new(2000, 1, 1) }
+          let(:year) { 2000 }
 
           it 'returns the publication that matches by title and date' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub2]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub2]
           end
         end
 
         context 'when given data with a publication year that does not match an existing publication' do
-          let(:date) { Date.new(2010, 1, 1) }
+          let(:year) { 2010 }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
       end
@@ -1479,26 +1483,26 @@ describe Publication, type: :model do
         let(:title) { 'Other Title' }
 
         context 'when given data with no publication date' do
-          let(:date) { nil }
+          let(:year) { nil }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
 
         context 'when given data with a publication year that matches an existing publication' do
-          let(:date) { Date.new(2000, 1, 1) }
+          let(:year) { 2000 }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
 
         context 'when given data with a publication year that does not match an existing publication' do
-          let(:date) { Date.new(2010, 1, 1) }
+          let(:year) { 2010 }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
       end
@@ -1511,26 +1515,26 @@ describe Publication, type: :model do
         let(:title) { 'THE TITLE' }
 
         context 'when given data with no publication date' do
-          let(:date) { nil }
+          let(:year) { nil }
 
           it 'returns the publication with the matching DOI' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub3]
           end
         end
 
         context 'when given data with a publication year that matches an existing publication' do
-          let(:date) { Date.new(2000, 1, 1) }
+          let(:year) { 2000 }
 
           it 'returns the publication with the matching DOI' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub3]
           end
         end
 
         context 'when given data with a publication year that does not match an existing publication' do
-          let(:date) { Date.new(2010, 1, 1) }
+          let(:year) { 2010 }
 
           it 'returns the publication with the matching DOI' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub3]
           end
         end
       end
@@ -1539,26 +1543,26 @@ describe Publication, type: :model do
         let(:title) { 'Other Title' }
 
         context 'when given data with no publication date' do
-          let(:date) { nil }
+          let(:year) { nil }
 
           it 'returns the publication with the matching DOI' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub3]
           end
         end
 
         context 'when given data with a publication year that matches an existing publication' do
-          let(:date) { Date.new(2000, 1, 1) }
+          let(:year) { 2000 }
 
           it 'returns the publication with the matching DOI' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub3]
           end
         end
 
         context 'when given data with a publication year that does not match an existing publication' do
-          let(:date) { Date.new(2010, 1, 1) }
+          let(:year) { 2010 }
 
           it 'returns the publication with the matching DOI' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub3]
           end
         end
       end
@@ -1571,26 +1575,26 @@ describe Publication, type: :model do
         let(:title) { 'THE TITLE' }
 
         context 'when given data with no publication date' do
-          let(:date) { nil }
+          let(:year) { nil }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
 
         context 'when given data with a publication year that matches an existing publication' do
-          let(:date) { Date.new(2000, 1, 1) }
+          let(:year) { 2000 }
 
           it 'returns the publication that matches by title and date' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub2]
+            expect(described_class.find_by_metadata(wos_pub)).to eq [pub2]
           end
         end
 
         context 'when given data with a publication year that does not match an existing publication' do
-          let(:date) { Date.new(2010, 1, 1) }
+          let(:year) { 2010 }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
       end
@@ -1599,26 +1603,26 @@ describe Publication, type: :model do
         let(:title) { 'Other Title' }
 
         context 'when given data with no publication date' do
-          let(:date) { nil }
+          let(:year) { nil }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
 
         context 'when given data with a publication year that matches an existing publication' do
-          let(:date) { Date.new(2000, 1, 1) }
+          let(:year) { 2000 }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
 
         context 'when given data with a publication year that does not match an existing publication' do
-          let(:date) { Date.new(2010, 1, 1) }
+          let(:year) { 2010 }
 
           it 'returns an empty array' do
-            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_metadata(wos_pub)).to eq []
           end
         end
       end

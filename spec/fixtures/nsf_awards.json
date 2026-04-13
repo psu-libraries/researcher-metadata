@@ -1,0 +1,59 @@
+{
+  "response": {
+    "award": [
+      {
+        "abstractText": "Test abstract 1",
+        "expDate": "12/31/2027",
+        "fundsObligatedAmt": "98756",
+        "id": "8467351",
+        "jrnl": [
+          {
+            "artTitl": "Test Award 1 Publication 1",
+            "dgtlObjId": "doi.org/10.123/456",
+            "jrnlYr": "2026"
+          },
+          {
+            "artTitl": "Test Award 1 Publication 2",
+            "dgtlObjId": "https://doi.org/10.654/321",
+            "jrnlYr": "2026"
+          }
+        ],
+        "piEmail": "bat123@psu.edu",
+        "piFirstName": "Bethany",
+        "piLastName": "TestUser",
+        "startDate": "01/01/2026",
+        "title": "Test Award 1"
+      },
+      {
+        "abstractText": "Test abstract 2",
+        "expDate": "12/31/2026",
+        "fundsObligatedAmt": "50000",
+        "id": "9710328",
+        "piEmail": "jeff123@psu.edu",
+        "piFirstName": "Jeff",
+        "piLastName": "Testresearcher",
+        "piMiddeInitial": "B",
+        "startDate": "02/01/2026",
+        "title": "Test Award 2"
+      },
+      {
+        "abstractText": "Test abstract 3",
+        "expDate": "01/01/2027",
+        "fundsObligatedAmt": "100000",
+        "id": "7233491",
+        "jrnl": [
+          {
+            "artTitl": "Test Award 3 Publication 1",
+            "jrnlYr": "2026"
+          }
+        ],
+        "piEmail": "ast7@psu.edu",
+        "piFirstName": "Anne",
+        "piLastName": "Tester",
+        "piMiddeInitial": "S",
+        "startDate": "03/10/2026",
+        "title": "Test Award 3"
+      }
+    ]
+  }
+}

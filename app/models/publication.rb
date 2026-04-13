@@ -375,8 +375,8 @@ class Publication < ApplicationRecord
   accepts_nested_attributes_for :taggings, allow_destroy: true
   accepts_nested_attributes_for :open_access_locations, allow_destroy: true
 
-  def self.find_by_wos_pub(pub)
-    by_doi = pub.doi ? where(doi: pub.doi) : Publication.none
+  def self.find_by_metadata(pub_metadata)
+    by_doi = pub_metadata.doi ? where(doi: pub_metadata.doi) : Publication.none
     if by_doi.any?
       by_doi
     else
@@ -384,8 +384,8 @@ class Publication < ApplicationRecord
       # on the title and sub-title in the same way that we do when we're finding
       # duplicate publications.
       where('title ILIKE ? AND EXTRACT(YEAR FROM published_on) = ?',
-            "%#{pub.title}%",
-            pub.publication_date.try(:year))
+            "%#{pub_metadata.title}%",
+            pub_metadata.year)
     end
   end
 
