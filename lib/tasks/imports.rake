@@ -16,12 +16,9 @@ namespace :import do
     WebOfScienceFileImporter.new(dirname: dirname).call
   end
 
-  desc 'Import NSF grant data from local files'
-  task :nsf_grants, [:dirname] => :environment do |_task, args|
-    args.with_defaults(
-      dirname: Rails.root.join('db/data/nsf_grants')
-    )
-    NSFGrantImporter.new(dirname: args.dirname).call
+  desc 'Import NSF award data'
+  task nsf_awards: :environment do
+    NSFGrantImporter.new.call
   end
 
   desc 'Import Unpaywall publication metadata'

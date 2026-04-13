@@ -413,16 +413,111 @@ describe User, type: :model do
 
   describe '.find_by_nsf_grant' do
     let!(:u1) { create(:user, first_name: 'Susan', last_name: 'Tester', webaccess_id: 'sat123') }
-    let!(:u2) { create(:user, first_name: 'Robert', last_name: 'Testuser', webaccess_id: 'rbt456') }
+    let!(:u2) { create(:user, first_name: 'Robert', middle_name: 'bernard', last_name: 'Testuser', webaccess_id: 'rbt456') }
     let!(:u3) { create(:user, first_name: 'Other', last_name: 'User', webaccess_id: 'ou111') }
 
-    context 'when given a grant with investigators that match existing users' do
-      let(:i1) { double 'investigator', first_name: 'Nick', last_name: 'Name', psu_email_name: 'rbt456' }
-      let(:i2) { double 'investigator', first_name: 'Susan', last_name: 'Tester', psu_email_name: nil }
-      let(:grant) { double 'grant', investigators: [i1, i2] }
+    let(:grant) {
+      instance_double(
+        NSFAward,
+        pi_first_name: first,
+        pi_middle_initial: middle,
+        pi_last_name: last,
+        pi_psu_email_name: email
+      )
+    }
 
-      it 'returns the existing users' do
-        expect(described_class.find_by_nsf_grant(grant)).to contain_exactly(u1, u2)
+    let(:first) { nil }
+    let(:middle) { nil }
+    let(:last) { nil }
+    let(:email) { nil }
+
+    context 'when given a grant with a PI email that matches a user and no name' do
+      let(:email) { 'rbt456' }
+
+      it 'returns the user with the matching email' do
+        expect(described_class.find_by_nsf_grant(grant)).to eq u2
+      end
+    end
+
+    context 'when given a grant with a PI name and email that each match different users' do
+      let(:first) { 'Other' }
+      let(:last) { 'User' }
+      let(:email) { 'rbt456' }
+
+      it 'returns the user with the matching email' do
+        expect(described_class.find_by_nsf_grant(grant)).to eq u2
+      end
+    end
+
+    context 'when given a grant with a PI first name, last name, and middle initial' do
+      context 'when the first and last name match a user with no middle name' do
+        let(:first) { 'Susan' }
+        let(:middle) { 'A' }
+        let(:last) { 'Tester' }
+
+        it 'returns the user with the matching name' do
+          expect(described_class.find_by_nsf_grant(grant)).to eq u1
+        end
+      end
+
+      context 'when the first name, last name, and middle initial match a user' do
+        let(:first) { 'Robert' }
+        let(:middle) { 'B' }
+        let(:last) { 'Testuser' }
+
+        it 'returns the user with the matching name' do
+          expect(described_class.find_by_nsf_grant(grant)).to eq u2
+        end
+      end
+
+      context 'when the first and last names match a user, but the middle initial does not' do
+        let(:first) { 'Robert' }
+        let(:middle) { 'D' }
+        let(:last) { 'Testuser' }
+
+        it 'returns nil' do
+          expect(described_class.find_by_nsf_grant(grant)).to be_nil
+        end
+      end
+    end
+
+    context 'when given a grant with only a PI first name and last name' do
+      context 'when the first and last name match a user with no middle name' do
+        let(:first) { 'Susan' }
+        let(:last) { 'Tester' }
+
+        it 'returns the user with the matching name' do
+          expect(described_class.find_by_nsf_grant(grant)).to eq u1
+        end
+      end
+
+      context 'when the first and last name match a user with a middle name' do
+        let(:first) { 'Robert' }
+        let(:last) { 'Testuser' }
+
+        it 'returns the user with the matching name' do
+          expect(described_class.find_by_nsf_grant(grant)).to eq u2
+        end
+      end
+    end
+
+    context 'when given a grant with only a PI first name' do
+      context 'when the first name matches a user' do
+        let(:first) { 'Susan' }
+
+        it 'returns nil' do
+          expect(described_class.find_by_nsf_grant(grant)).to be_nil
+        end
+      end
+    end
+
+    context 'when given a grant with only a PI last name' do
+      context 'when the last name matches a user' do
+        let(:last) { 'Tester' }
+
+        it 'returns nil' do
+          expect(described_class.find_by_nsf_grant(grant)).to be_nil
+        end
       end
     end
   end

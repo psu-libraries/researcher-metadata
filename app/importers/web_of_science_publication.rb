@@ -58,6 +58,10 @@ class WebOfSciencePublication
     Date.parse(pub_info.attribute('sortdate').value) if pub_info.attribute('sortdate')
   end
 
+  def year
+    publication_date.try(:year)
+  end
+
   def author_names
     parsed_pub.css('summary > names > name[role="author"]').map do |n|
       WOSAuthorName.new(n.css('full_name').text)

@@ -100,18 +100,22 @@ class User < ApplicationRecord
   end
 
   def self.find_by_nsf_grant(grant)
-    users = []
-    grant.investigators.each do |i|
-      if i.psu_email_name
-        user_by_email = find_by(webaccess_id: i.psu_email_name)
-        users << user_by_email if user_by_email
-      end
-      if i.first_name && i.last_name
-        user_by_name = find_by(first_name: i.first_name, last_name: i.last_name)
-        users << user_by_name if user_by_name
+    if grant.pi_psu_email_name
+      user_by_email = find_by(webaccess_id: grant.pi_psu_email_name)
+      return user_by_email if user_by_email
+    end
+    if grant.pi_first_name && grant.pi_last_name
+      user_by_name = find_by(first_name: grant.pi_first_name, last_name: grant.pi_last_name)
+      if user_by_name
+        if user_by_name.middle_name.present? && grant.pi_middle_initial
+          if grant.pi_middle_initial.downcase == user_by_name.middle_name[0].downcase
+            user_by_name
+          end
+        else
+          user_by_name
+        end
       end
     end
-    users.uniq
   end
 
   def self.needs_open_access_notification

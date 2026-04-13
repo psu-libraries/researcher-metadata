@@ -386,6 +386,31 @@ describe WebOfSciencePublication do
     end
   end
 
+  describe '#year' do
+    let(:info_element) { double 'pub info element' }
+
+    before do
+      allow(parsed_pub).to receive(:css).with('pub_info').and_return info_element
+      allow(info_element).to receive(:attribute).with('sortdate').and_return date_attr
+    end
+
+    context 'when the given data contains a date of publication' do
+      let(:date_attr) { double 'date attribute', value: '2003-05-27' }
+
+      it "returns the publication's year" do
+        expect(pub.year).to eq 2003
+      end
+    end
+
+    context 'when the given data does not contain a date of publication' do
+      let(:date_attr) { nil }
+
+      it 'returns nil' do
+        expect(pub.year).to be_nil
+      end
+    end
+  end
+
   describe '#author_names' do
     let(:name_element) { double 'name element' }
     let(:wos_name) { double 'WOS author name' }

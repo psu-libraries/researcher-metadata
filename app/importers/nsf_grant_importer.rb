@@ -1,49 +1,49 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-
 class NSFGrantImporter
-  def initialize(dirname:)
-    @dirname = dirname
-  end
-
   def call
-    import_dirs = Dir.children(dirname).select { |f| File.directory?(dirname.join(f)) }.sort
+    (1965..Date.current.year).each do |year|
+      # This request only returns the first 3000 matching awards, which is the maximum number
+      # that the API will return at one time. However, since we're filtering for only Penn State
+      # related awards and we're only requesting one year at a time, the results never contain
+      # more than a few hundred awards.
+      query_url = "https://api.nsf.gov/services/v1/awards.json?dateStart=01%2F01%2F#{year}&dateEnd=12%2F31%2F#{year}&rpp=3000&offset=0&awardeeName=%22Pennsylvania+State+Univ%22"
+      response = HTTParty.get(query_url)
+      awards = NSFAwards.new(response.body)
+      pbar = Utilities::ProgressBarTTY.create(title: "Importing NSF Awards Data from #{year}", total: awards.count)
+      awards.each do |a|
+        g = Grant.find_by(agency_name: a.agency_name, identifier: a.identifier) || Grant.new
+        g.identifier = a.identifier
+        g.title = a.title
+        g.start_date = a.start_date
+        g.end_date = a.end_date
+        g.abstract = a.abstract
+        g.amount_in_dollars = a.amount_in_dollars
+        g.agency_name = a.agency_name
+        g.save!
+        pbar.increment
 
-    import_dirs.each do |d|
-      import_files = Dir.children(dirname.join(d)).select { |f| File.extname(f) == '.xml' }
-      pbar = Utilities::ProgressBarTTY.create(title: "Importing NSF Grant Data for #{d}", total: import_files.count)
-      import_files.each do |file|
-        nsf_grant = NSFGrant.new(File.open(dirname.join(d).join(file)) { |f| Nokogiri::XML(f) })
+        user = User.find_by_nsf_grant(a)
+        if user && !ResearcherFund.find_by(user: user, grant: g)
+          rf = ResearcherFund.new
+          rf.user = user
+          rf.grant = g
+          rf.save!
+        end
 
-        if nsf_grant.importable?
-          g = Grant.find_by(agency_name: nsf_grant.agency_name, identifier: nsf_grant.identifier) || Grant.new
-          g.identifier = nsf_grant.identifier
-          g.title = nsf_grant.title
-          g.start_date = nsf_grant.start_date
-          g.end_date = nsf_grant.end_date
-          g.abstract = nsf_grant.abstract
-          g.amount_in_dollars = nsf_grant.amount_in_dollars
-          g.agency_name = nsf_grant.agency_name
-          g.save!
-
-          users = User.find_by_nsf_grant(nsf_grant)
-          users.each do |u|
-            unless ResearcherFund.find_by(user: u, grant: g)
-              rf = ResearcherFund.new
-              rf.user = u
+        a.publications.each do |pub_from_nsf|
+          pubs = Publication.find_by_metadata(pub_from_nsf)
+          pubs.each do |rmd_pub|
+            unless ResearchFund.find_by(publication: rmd_pub, grant: g)
+              rf = ResearchFund.new
+              rf.publication = rmd_pub
               rf.grant = g
               rf.save!
             end
           end
         end
-        pbar.increment
       end
       pbar.finish
     end
   end
-
-  private
-
-    attr_reader :dirname
 end

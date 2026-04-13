@@ -8,6 +8,10 @@ def fixture_file_open(filename)
   File.open(fixture_path(filename))
 end
 
+def fixture_file_read(filename)
+  File.read(fixture_path(filename))
+end
+
 def fixture_file_upload(filename, mime_type)
   Rack::Test::UploadedFile.new(fixture_path(filename), mime_type)
 end
