@@ -3,12 +3,8 @@
 class PureAPIClient
   private
 
-    def api_version
-      '524'
-    end
-
     def base_url
-      "https://pure.psu.edu/ws/api/#{api_version}"
+      'https://pure.psu.edu/ws/api'
     end
 
     def pure_api_key

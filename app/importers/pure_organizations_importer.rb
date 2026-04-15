@@ -12,7 +12,7 @@ class PureOrganizationsImporter < PureImporter
 
         o.pure_uuid = item['uuid'] if o.new_record?
         o.name = extract_name(item)
-        o.pure_external_identifier = item['externalId']
+        o.pure_external_identifier = item['identifiers'].first['value'] # apimigrate check this in console
         o.organization_type = extract_organization_type(item)
         o.save!
       rescue StandardError => e
@@ -65,16 +65,16 @@ class PureOrganizationsImporter < PureImporter
   end
 
   def record_type
-    'organisational-units'
+    'organizations'
   end
 
   private
 
     def extract_name(org)
-      org['name']['text'].find { |text| text['locale'] == 'en_US' }['value']
+      org['name']['en_US']
     end
 
     def extract_organization_type(org)
-      org['type']['term']['text'].find { |text| text['locale'] == 'en_US' }['value']
+      org['type']['term']['en_US']
     end
 end

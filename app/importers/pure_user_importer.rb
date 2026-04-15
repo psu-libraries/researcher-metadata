@@ -9,15 +9,14 @@ class PureUserImporter < PureImporter
       persons = get_records(type: record_type, page_size: page_size, offset: offset)
 
       persons['items'].each do |item|
-        if item['externalId'].present?
+        if item['identifiers']&.first&.[]('value').present?
           first_and_middle_name = item['name']['firstName']
           first_name = first_and_middle_name.split[0].try(:strip)
           middle_name = first_and_middle_name.split[1].try(:strip)
-          webaccess_id = item['externalId'].downcase
+          webaccess_id = item['identifiers'].first['value'].downcase
 
           u = User.find_by(webaccess_id: webaccess_id) || User.new
 
-          u.scopus_h_index = item['scopusHIndex']
           u.pure_uuid = item['uuid']
 
           # The identity service imports should be the authority on
@@ -31,8 +30,8 @@ class PureUserImporter < PureImporter
 
           u.save!
 
-          item['staffOrganisationAssociations']&.each do |a|
-            o_uuid = a['organisationalUnit']['uuid']
+          item['staffOrganizationAssociations']&.each do |a|
+            o_uuid = a['organization']['uuid']
 
             o = o_uuid ? Organization.find_by(pure_uuid: o_uuid) : nil
 
@@ -45,7 +44,7 @@ class PureUserImporter < PureImporter
               m.source_identifier = a['pureId']
               m.organization = o
               m.user = u
-              m.primary = a['isPrimaryAssociation']
+              m.primary = a['primaryAssociation']
               m.position_title = position_title(a)
               m.started_on = a['period']['startDate']
               m.ended_on = a['period']['endDate']
@@ -79,6 +78,6 @@ class PureUserImporter < PureImporter
   private
 
     def position_title(association)
-      association['jobDescription'] && association['jobDescription']['text'].find { |text| text['locale'] == 'en_US' }['value']
+      association['jobDescription']['en_US'] if association['jobDescription']
     end
 end

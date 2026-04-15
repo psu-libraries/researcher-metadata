@@ -7,110 +7,85 @@
   "items": [
     {
       "pureId": 8288514,
-      "externalId": "EXT-ID-1",
-      "externalIdSource": "synchronisedOrganisation",
-      "externallyManaged": true,
       "uuid": "pure-uuid-001",
-      "period": {
-        "startDate": "1855-02-22T12:00:00.000+0000"
-      },
-      "info": {
-        "createdBy": "atira",
-        "createdDate": "2016-12-23T14:06:26.067+0000",
-        "modifiedBy": "raz5056@psu.edu",
-        "modifiedDate": "2019-07-23T18:50:11.168+0000",
-        "portalUrl": "https://pure.psu.edu/en/organisations/692237a4-e66a-413f-8ea9-40e0d30229c1",
-        "prettyURLIdentifiers": [
-          "penn-state-clinical-and-translational-science-institute-ctsi",
-          "penn-state-clinical-and-translational-science-institute",
-          "the-clinical-and-translational-science-institute",
-          "clinical-and-translational-science-institute"
-        ]
-      },
+      "createdBy": "atira",
+      "createdDate": "2016-12-23T14:06:26.067+0000",
+      "modifiedBy": "raz5056@psu.edu",
+      "modifiedDate": "2019-07-23T18:50:11.168+0000",
+      "portalUrl": "https://pure.psu.edu/en/organisations/692237a4-e66a-413f-8ea9-40e0d30229c1",
+      "prettyUrlIdentifiers": [
+        "penn-state-clinical-and-translational-science-institute-ctsi",
+        "penn-state-clinical-and-translational-science-institute",
+        "the-clinical-and-translational-science-institute",
+        "clinical-and-translational-science-institute"
+      ],
+      "version": "ba25bde10261ffeba2574cd7e9b813421a5248eb",
       "name": {
-        "formatted": false,
-        "text": [
-          {
-            "locale": "en_US",
-            "value": "Biology"
-          }
-        ]
+        "en_US": "Biology"
       },
       "type": {
-        "pureId": 8288457,
         "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/institute",
         "term": {
-          "formatted": false,
-          "text": [
-            {
-              "locale": "en_US",
-              "value": "Department"
-            }
-          ]
+          "en_US": "Department"
         }
       },
-      "visibility": {
-        "key": "FREE",
-        "value": {
-          "formatted": false,
-          "text": [
-            {
-              "locale": "en_US",
-              "value": "Public - No restriction"
-            }
-          ]
-        }
-      },
-      "profileInformations": [
+      "identifiers": [
         {
-          "pureId": 8288520,
-          "externalId": "organisation_profile",
-          "externalIdSource": "synchronisedOrganisation",
-          "externallyManaged": true,
-          "value": {
-            "formatted": true,
-            "text": [
-              {
-                "locale": "en_US",
-                "value": "<p>Penn State Clinical and Translational Science Institute accelerates discoveries to benefit human health.</p>\n<p>It is a bridge between basic scientists and clinical researchers and promotes collaboration to discover new treatments, medical procedures and ways to diagnose disease. It helps the Penn State community move its health research more efficiently and effectively out of the science laboratories and into use by the people who need it.</p>"
-              }
-            ]
-          },
+          "typeDiscriminator": "PrimaryId",
+          "idSource": "synchronisedOrganisation",
+          "value": "EXT-ID-1"
+        },
+        {
+          "typeDiscriminator": "ClassifiedId",
+          "pureId": 8288521,
+          "id": "INSTITUTE-CTSI",
           "type": {
-            "pureId": 864,
-            "uri": "/dk/atira/pure/organisation/customfields/organisation_profile",
+            "uri": "/dk/atira/pure/organisation/organisationsources/organisationid",
             "term": {
-              "formatted": false,
-              "text": [
-                {
-                  "locale": "en_US",
-                  "value": "Organization profile"
-                }
-              ]
+              "en_US": "Organization ID"
             }
           }
         }
       ],
-      "ids": [
+      "nameVariants": [
         {
-          "pureId": 8288521,
-          "externalId": "organisationid:INSTITUTE-CTSI",
-          "externalIdSource": "synchronisedOrganisation",
+          "pureId": 8288517,
+          "type": {
+            "uri": "/dk/atira/pure/organisation/namevariants/shortname",
+            "term": {
+              "en_US": "Short name"
+            }
+          }
+        },
+        {
+          "pureId": 8288518,
+          "type": {
+            "uri": "/dk/atira/pure/organisation/namevariants/sortname",
+            "term": {
+              "en_US": "Sort name"
+            }
+          }
+        },
+        {
+          "pureId": 8288519,
+          "type": {
+            "uri": "/dk/atira/pure/organisation/namevariants/webname",
+            "term": {
+              "en_US": "Web name"
+            }
+          }
+        }
+      ],
+      "profileInformations": [
+        {
+          "pureId": 8288520,
           "value": {
-            "formatted": false,
-            "value": "INSTITUTE-CTSI"
+            "en_US": "<p>Penn State Clinical and Translational Science Institute accelerates discoveries to benefit human health.</p>\n<p>It is a bridge between basic scientists and clinical researchers and promotes collaboration to discover new treatments, medical procedures and ways to diagnose disease. It helps the Penn State community move its health research more efficiently and effectively out of the science laboratories and into use by the people who need it.</p>"
           },
           "type": {
-            "pureId": 80,
-            "uri": "/dk/atira/pure/organisation/organisationsources/organisationid",
+            "uri": "/dk/atira/pure/organisation/customfields/organisation_profile",
             "term": {
-              "formatted": false,
-              "text": [
-                {
-                  "locale": "en_US",
-                  "value": "Organization ID"
-                }
-              ]
+              "en_US": "Organization profile"
             }
           }
         }
@@ -118,33 +93,17 @@
       "addresses": [
         {
           "pureId": 8288516,
-          "externalId": "postal",
-          "externalIdSource": "synchronisedOrganisation",
-          "addressLines": "Penn State Clinical and Translational Science Institute\r\n500 University Dr.\r\nP.O. Box 850\r\nHershey, PA 17033",
           "addressType": {
-            "pureId": 56,
             "uri": "/dk/atira/pure/organisation/organisationaddresstype/postal",
             "term": {
-              "formatted": false,
-              "text": [
-                {
-                  "locale": "en_US",
-                  "value": "Postal address"
-                }
-              ]
+              "en_US": "Postal address"
             }
           },
+          "addressLines": "Penn State Clinical and Translational Science Institute\r\n500 University Dr.\r\nP.O. Box 850\r\nHershey, PA 17033",
           "country": {
-            "pureId": 577,
             "uri": "/dk/atira/pure/core/countries/us",
             "term": {
-              "formatted": false,
-              "text": [
-                {
-                  "locale": "en_US",
-                  "value": "United States"
-                }
-              ]
+              "en_US": "United States"
             }
           }
         }
@@ -153,59 +112,33 @@
         {
           "pureId": 63026704,
           "value": {
-            "formatted": false,
-            "text": [
-              {
-                "locale": "en_US",
-                "value": "https://ctsi.psu.edu"
-              }
-            ]
+            "en_US": "https://ctsi.psu.edu"
           },
           "type": {
-            "pureId": 70,
             "uri": "/dk/atira/pure/organisation/organisationwebaddresstype/web",
             "term": {
-              "formatted": false,
-              "text": [
-                {
-                  "locale": "en_US",
-                  "value": "Web"
-                }
-              ]
+              "en_US": "Web"
             }
           }
         }
       ],
+      "lifecycle": {
+        "startDate": "1855-02-22"
+      },
       "parents": [
         {
-          "uuid": "pure-uuid-002",
-          "externalId": "ADMIN-INSTITUTES",
-          "externalIdSource": "synchronisedOrganisation",
-          "externallyManaged": true,
-          "name": {
-            "formatted": false,
-            "text": [
-              {
-                "locale": "en_US",
-                "value": "Interdisciplinary Institutes and Units"
-              }
-            ]
-          },
-          "type": {
-            "pureId": 8288457,
-            "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/institute",
-            "term": {
-              "formatted": false,
-              "text": [
-                {
-                  "locale": "en_US",
-                  "value": "Interdisciplinary Research Unit"
-                }
-              ]
-            }
-          }
+          "systemName": "Organization",
+          "uuid": "pure-uuid-002"
         }
-      ]
+      ],
+      "visibility": {
+        "key": "FREE",
+        "description": {
+          "en_US": "Public - No restriction"
+        }
+      },
+      "customDefinedFields": {},
+      "systemName": "Organization"
     }
   ]
 }
