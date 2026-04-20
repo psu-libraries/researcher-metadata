@@ -42,8 +42,11 @@ describe OrcidAPIClient do
     let(:employments_hash) { JSON.parse(get_employments) }
     let(:json_resource) { JSON.parse(resource.to_json) }
     let(:employment_path) do
-      employments_hash['affiliation-group'].max_by { |l| l['summaries'].last['employment-summary']['path'] }['summaries'].last['employment-summary']['path']
+      employments_hash['affiliation-group']
+        .max_by { |l| l['summaries'].last['employment-summary']['put-code'].to_i }['summaries']
+        .last['employment-summary']['path']
     end
+
     let(:employment_summary) { employments_hash['affiliation-group'].last['summaries'].last['employment-summary'] }
 
     after do
