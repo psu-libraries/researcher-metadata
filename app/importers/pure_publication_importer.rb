@@ -67,6 +67,8 @@ class PurePublicationImporter < PureImporter
 
           pi.save!
 
+          PublicationGrantMatcherService.new.match_from_pure(publication['fundingDetails'], pi.publication)
+
           if p.updated_by_user_at.blank?
             p.contributor_names.delete_all
 
@@ -127,7 +129,6 @@ class PurePublicationImporter < PureImporter
   private
 
     def pub_attrs(publication)
-      funding(publication)
       {
         title: title(publication),
         secondary_title: nil,
@@ -178,15 +179,6 @@ class PurePublicationImporter < PureImporter
     def abstract(publication)
       if publication['abstract']
         publication['abstract']['en_US']
-      end
-    end
-
-    def funding(publication)
-      if publication['fundingDetails']
-        # details has multiple entires
-        # each may have a fundingOrganizationAcronym
-        # each may have an array with one or more fundingNumbers
-        # id 9477924 a good example of this variety
       end
     end
 

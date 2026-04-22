@@ -1103,6 +1103,58 @@
       },
       "journalNumber": "5",
       "numberOfPages": 3,
+      "fundingDetails" : [
+        {
+          "pureId": 1296177059,
+          "fundingOrganizations" : [
+            {"externalOrganizationRef" : {
+              "systemName" : "ExternalOrganization",
+              "uuid" : "da3a18c2-7079-418c-b61c-4264d4e2d0f1"
+              }
+            }
+          ]
+        },
+        {
+          "pureId" : 1296177061,
+          "fundingOrganizations" : [
+            {
+              "externalOrganizationRef" : {
+                "systemName" : "ExternalOrganization",
+                "uuid" : "ed54231a-47d7-4dfd-805a-f82979d7d92c"
+              }
+            }
+          ],
+          "fundingOrganizationAcronym" : "NIH",
+          "fundingNumbers" : [
+            "M01 RR 10732"
+          ]
+        },
+        {
+          "pureId" : 1296177063,
+          "fundingOrganizations" : [
+            {
+              "externalOrganizationRef" : {
+                "systemName" : "ExternalOrganization",
+                "uuid" : "5779320e-610f-4bb2-9cec-96b602722758"
+              }
+            }
+          ],
+          "fundingOrganizationAcronym" : "NSF",
+          "fundingNumbers" : ["R01MH058393", "RO1 58393-03"]
+        },
+        {
+          "pureId" : 1296177065,
+          "fundingOrganizations" : [
+            {
+              "externalOrganizationRef" : {
+                "systemName" : "ExternalOrganization",
+                "uuid" : "ffb1873a-f621-4383-8b92-03e9d529868a"
+              }
+            }
+          ],
+          "fundingOrganizationAcronym" : "PSU"
+        }
+      ],
       "systemName": "ResearchOutput"
     },
     {

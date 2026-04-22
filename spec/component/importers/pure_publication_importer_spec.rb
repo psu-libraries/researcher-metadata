@@ -113,6 +113,9 @@ describe PurePublicationImporter do
         end
 
         it 'saves the correct data for each publication' do
+          g1 = create(:grant, agency_name: 'National Science Foundation', identifier: 'R01MH058393')
+          g2 = create(:grant, wos_agency_name: 'National Science Foundation (NSF)', wos_identifier: 'RO1 58393-03')
+
           importer.call
 
           p1 = found_pub1.publication
@@ -170,6 +173,8 @@ describe PurePublicationImporter do
           expect(p1.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
           expect(p2.doi).to be_nil
           expect(p3.doi).to eq 'https://doi.org/10.1016/j.jvir.2013.01.004'
+
+          expect(p3.grants).to contain_exactly(g1, g2)
         end
 
         it 'saves the correct data for each contributor name' do
