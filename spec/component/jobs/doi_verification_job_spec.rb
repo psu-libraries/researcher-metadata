@@ -89,6 +89,28 @@ describe DOIVerificationJob, type: :job do
       end
     end
 
+    context 'when an error is raised during unpaywall lookup' do
+      let(:pub_doi) { nil }
+
+      before do
+        allow(UnpaywallClient).to receive(:query_unpaywall).and_raise(RuntimeError)
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error to ImporterErrorLog' do
+        job.perform_now(publication.id)
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(RuntimeError),
+          metadata: hash_including(publication_id: publication.id)
+        )
+      end
+
+      it 'does not re-raise the error' do
+        expect { job.perform_now(publication.id) }.not_to raise_error
+      end
+    end
+
     context 'when the publication has already been verified' do
       let(:doi_verified) { true }
       let(:pub_title) { 'Psychotherapy integration' }

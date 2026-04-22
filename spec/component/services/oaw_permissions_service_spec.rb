@@ -222,7 +222,7 @@ describe OAWPermissionsService do
     describe '#permissions_found?' do
       context 'when some permissions are found' do
         before do
-          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oaw7.json').read)
+          allow(HttpService).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oaw7.json').read)
         end
 
         it 'returns true' do
@@ -232,7 +232,7 @@ describe OAWPermissionsService do
 
       context 'when no permissions data is returned' do
         before do
-          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oaw5.json').read)
+          allow(HttpService).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oaw5.json').read)
         end
 
         it 'returns false' do
