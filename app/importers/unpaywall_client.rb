@@ -8,7 +8,8 @@ class UnpaywallClient
       json = JSON.parse(HttpService.get(find_url))
     else
       find_url = "https://api.unpaywall.org/v2/search/?query=#{CGI.escape(publication.title)}&email=openaccess@psu.edu"
-      json = JSON.parse(HttpService.get(find_url))['results'].blank? ? '' : JSON.parse(HttpService.get(find_url))['results'].first['response']
+      result = JSON.parse(HttpService.get(find_url))
+      json = result['results'].blank? ? '' : result['results'].first['response']
     end
 
     UnpaywallResponse.new(json)
