@@ -11,12 +11,12 @@ describe PurePersonFinder do
 
     before do
       allow(HTTParty).to receive(:get).with(
-        'https://pure.psu.edu/ws/api/524/persons/abc123',
+        'https://pure.psu.edu/ws/api/persons/abc123',
         headers: { 'api-key' => Settings.pure.api_key }
       ).and_return response1
 
       allow(HTTParty).to receive(:get).with(
-        'https://pure.psu.edu/ws/api/524/persons/def456',
+        'https://pure.psu.edu/ws/api/persons/def456',
         headers: { 'api-key' => Settings.pure.api_key }
       ).and_return response2
     end
