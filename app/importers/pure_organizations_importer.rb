@@ -12,7 +12,7 @@ class PureOrganizationsImporter < PureImporter
 
         o.pure_uuid = item['uuid'] if o.new_record?
         o.name = extract_name(item)
-        o.pure_external_identifier = item['identifiers'].first['value'] # apimigrate check this in console
+        o.pure_external_identifier = item['identifiers'].first['value']
         o.organization_type = extract_organization_type(item)
         o.save!
       rescue StandardError => e
