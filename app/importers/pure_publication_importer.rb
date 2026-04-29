@@ -32,12 +32,11 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
-          pi.source_updated_at = publication['info']['modifiedDate']
+          pi.source_updated_at = publication['modifiedDate']
 
           if pi.persisted?
             if p.updated_by_user_at.present?
               attrs = {}
-              attrs[:total_scopus_citations] = publication['totalScopusCitations']
               attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
               if !p.published?
                 attrs[:status] = status_value(publication)
@@ -68,12 +67,13 @@ class PurePublicationImporter < PureImporter
 
           pi.save!
 
+          PublicationGrantMatcherService.new.match_from_pure(publication['fundingDetails'], pi.publication)
+
           if p.updated_by_user_at.blank?
             p.contributor_names.delete_all
 
-            authorships = publication['personAssociations'].select do |a|
-              a['authorCollaboration'].blank? &&
-                a['personRole']['term']['text'].find { |t| t['locale'] == 'en_US' }['value'] == 'Author'
+            authorships = publication['contributors'].select do |a|
+              a['role']['term']['en_US'] == 'Author'
             end
 
             authorships.each_with_index do |a, i|
@@ -132,8 +132,7 @@ class PurePublicationImporter < PureImporter
       {
         title: title(publication),
         secondary_title: nil,
-        publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
-                                                  .find { |t| t['locale'] == 'en_US' }['value']),
+        publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['en_US']),
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
@@ -143,7 +142,6 @@ class PurePublicationImporter < PureImporter
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                                published_month(publication),
                                published_day(publication)),
-        total_scopus_citations: publication['totalScopusCitations'],
         abstract: abstract(publication),
         visible: true,
         doi: doi(publication)
@@ -159,7 +157,7 @@ class PurePublicationImporter < PureImporter
     end
 
     def issn(publication)
-      publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
+      publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['issn'] : nil
     end
 
     def status(publication)
@@ -167,7 +165,7 @@ class PurePublicationImporter < PureImporter
     end
 
     def status_value(publication)
-      status(publication)['publicationStatus']['term']['text'].find { |t| t['locale'] == 'en_US' }['value']
+      status(publication)['publicationStatus']['term']['en_US']
     end
 
     def published_month(publication)
@@ -180,7 +178,7 @@ class PurePublicationImporter < PureImporter
 
     def abstract(publication)
       if publication['abstract']
-        publication['abstract']['text'].find { |t| t['locale'] == 'en_US' }['value']
+        publication['abstract']['en_US']
       end
     end
 
@@ -188,7 +186,7 @@ class PurePublicationImporter < PureImporter
       if publication['electronicVersions']
         v = publication['electronicVersions'].find do |ev|
           if ev['versionType']
-            ev['versionType']['term']['text'].find { |t| t['locale'] == 'en_US' }['value'] == 'Final published version'
+            ev['versionType']['term']['en_US'] == 'Final published version'
           end
         end
         raw_doi = v.try('[]', 'doi')

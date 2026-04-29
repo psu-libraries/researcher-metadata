@@ -12,10 +12,10 @@ describe PureUserImporter do
   let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
 
   before do
-    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=1&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/persons?size=1&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_1
 
-    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=100&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/persons?size=100&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
   end
 
@@ -33,19 +33,16 @@ describe PureUserImporter do
           expect(u1.middle_name).to eq 'A'
           expect(u1.last_name).to eq 'Tester'
           expect(u1.pure_uuid).to eq '9530a014-c29f-4081-88ae-b923dc919001'
-          expect(u1.scopus_h_index).to eq 15
 
           expect(u2.first_name).to eq 'Bob'
           expect(u2.middle_name).to eq 'B'
           expect(u2.last_name).to eq 'Testuser'
           expect(u2.pure_uuid).to eq 'a9ea5e62-9b39-4281-a759-e1c58f0ec582'
-          expect(u2.scopus_h_index).to eq 21
 
           expect(u3.first_name).to eq 'Jill'
           expect(u3.middle_name).to be_nil
           expect(u3.last_name).to eq 'Test'
           expect(u3.pure_uuid).to eq '0177f1b1-bf3c-4f8d-af2a-10fe0034754c'
-          expect(u3.scopus_h_index).to eq 2
         end
 
         context 'when no organizations exist in the database' do
@@ -193,8 +190,7 @@ describe PureUserImporter do
                                       middle_name: 'B',
                                       last_name: 'Testuser',
                                       penn_state_identifier: '987654321',
-                                      pure_uuid: '12345678',
-                                      scopus_h_index: 79) }
+                                      pure_uuid: '12345678') }
 
         it 'creates new records for the new users and does not update user data for existing records' do
           expect { importer.call }.to change(User, :count).by 2
@@ -207,29 +203,26 @@ describe PureUserImporter do
           expect(u1.middle_name).to eq 'A'
           expect(u1.last_name).to eq 'Tester'
           expect(u1.pure_uuid).to eq '9530a014-c29f-4081-88ae-b923dc919001'
-          expect(u1.scopus_h_index).to eq 15
 
           expect(u2.first_name).to eq 'Robert'
           expect(u2.middle_name).to eq 'B'
           expect(u2.last_name).to eq 'Testuser'
           expect(u2.pure_uuid).to eq 'a9ea5e62-9b39-4281-a759-e1c58f0ec582'
-          expect(u2.scopus_h_index).to eq 21
 
           expect(u3.first_name).to eq 'Jill'
           expect(u3.middle_name).to be_nil
           expect(u3.last_name).to eq 'Test'
           expect(u3.pure_uuid).to eq '0177f1b1-bf3c-4f8d-af2a-10fe0034754c'
-          expect(u3.scopus_h_index).to eq 2
         end
       end
     end
 
     context 'when the API endpoint is not found' do
       before do
-        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=1&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/persons?size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
-        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=100&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/persons?size=100&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(ImporterErrorLog).to receive(:log_error)

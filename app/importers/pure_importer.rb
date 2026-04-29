@@ -9,7 +9,7 @@ class PureImporter < PureAPIClient
       response = get_records(type: record_type, page_size: 1, offset: 0)
       if response['status'] == 404
         AdminNotificationsMailer.pure_import_error.deliver_now
-        raise ServiceNotFound.new("The requested Pure API endpoint was not found. The version #{api_version} may no longer be supported. Consider using a newer version.")
+        raise ServiceNotFound.new('The requested Pure API endpoint was not found.')
       else
         response['count']
       end
@@ -20,7 +20,7 @@ class PureImporter < PureAPIClient
     end
 
     def get_records(type:, page_size:, offset:)
-      JSON.parse(HTTParty.get("#{base_url}/#{type}?navigationLink=false&size=#{page_size}&offset=#{offset}",
+      JSON.parse(HTTParty.get("#{base_url}/#{type}?size=#{page_size}&offset=#{offset}",
                               headers: { 'api-key' => pure_api_key,
                                          'Accept' => 'application/json' }).to_s)
     end

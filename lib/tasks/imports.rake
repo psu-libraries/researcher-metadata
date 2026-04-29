@@ -57,11 +57,6 @@ namespace :import do
     PurePublicationImporter.new.call
   end
 
-  desc 'Import Pure publication tags'
-  task pure_publication_tags: :environment do
-    PurePublicationTagImporter.new.call
-  end
-
   desc 'Import ETDs'
   task :etds, [:filename] => :environment do |_task, args|
     args.with_defaults(
@@ -110,6 +105,5 @@ namespace :import do
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
     PurePublicationImporter.new.call
-    PurePublicationTagImporter.new.call
   end
 end

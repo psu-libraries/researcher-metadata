@@ -7,109 +7,79 @@
   "items": [
     {
       "pureId": 3452034,
-      "externalId": "5243",
-      "externalIdSource": "Scopus",
       "uuid": "435826f4-a25d-4005-b9da-47d3507834ff",
+      "createdBy": "root",
+      "createdDate": "2016-06-23T00:00:28.306-04:00",
+      "modifiedBy": "root",
+      "modifiedDate": "2016-06-23T00:00:28.306-04:00",
+      "version": "3875a6c63e7d4e0f9ced9fd2761adfe58e509960",
       "name": "Maik Nauka-Interperiodica Publishing",
+      "countries": [
+        {
+          "uri": "/dk/atira/pure/core/countries/ru",
+          "term": {
+            "en_US": "Russian Federation"
+          }
+        }
+      ],
+      "identifiers": [
+        {
+          "typeDiscriminator": "PrimaryId",
+          "idSource": "Scopus",
+          "value": "5243"
+        }
+      ],
       "type": {
-        "pureId": 920,
         "uri": "/dk/atira/pure/publisher/publishertypes/publisher/publisher",
         "term": {
-          "formatted": false,
-          "text": [
-            {
-              "locale": "en_US",
-              "value": "Publisher"
-            }
-          ]
+          "en_US": "Publisher"
         }
       },
       "workflow": {
-        "workflowStep": "approved",
-        "value": {
-          "formatted": false,
-          "text": [
-            {
-              "locale": "en_US",
-              "value": "Approved"
-            }
-          ]
+        "step": "approved",
+        "description": {
+          "en_US": "Approved"
         }
       },
-      "info": {
-        "createdBy": "root",
-        "createdDate": "2016-06-23T00:00:28.306+0000",
-        "modifiedBy": "root",
-        "modifiedDate": "2016-06-23T00:00:28.306+0000"
-      },
-      "countries": [
-        {
-          "pureId": 493,
-          "uri": "/dk/atira/pure/core/countries/ru",
-          "term": {
-            "formatted": false,
-            "text": [
-              {
-                "locale": "en_US",
-                "value": "Russian Federation"
-              }
-            ]
-          }
-        }
-      ]
+      "systemName": "Publisher"
     },
     {
       "pureId": 3452098,
-      "externalId": "7054",
-      "externalIdSource": "Scopus",
       "uuid": "24d7ee7c-7d06-4808-a3a0-8e9178f1da3f",
+      "createdBy": "root",
+      "createdDate": "2016-06-23T00:00:28.84-04:00",
+      "modifiedBy": "root",
+      "modifiedDate": "2016-06-23T00:00:28.84-04:00",
+      "version": "044cbb3dbe7227457d26f1fd0fcbbb939eb4c1e1",
       "name": "Verlag Eugen Ulmer",
+      "countries": [
+        {
+          "uri": "/dk/atira/pure/core/countries/de",
+          "term": {
+            "en_US": "Germany"
+          }
+        }
+      ],
+      "identifiers": [
+        {
+          "typeDiscriminator": "PrimaryId",
+          "idSource": "Scopus",
+          "value": "7054"
+        }
+      ],
       "type": {
-        "pureId": 920,
         "uri": "/dk/atira/pure/publisher/publishertypes/publisher/publisher",
         "term": {
-          "formatted": false,
-          "text": [
-            {
-              "locale": "en_US",
-              "value": "Publisher"
-            }
-          ]
+          "en_US": "Publisher"
         }
       },
       "workflow": {
-        "workflowStep": "approved",
-        "value": {
-          "formatted": false,
-          "text": [
-            {
-              "locale": "en_US",
-              "value": "Approved"
-            }
-          ]
+        "step": "approved",
+        "description": {
+          "en_US": "Approved"
         }
       },
-      "info": {
-        "createdBy": "root",
-        "createdDate": "2016-06-23T00:00:28.840+0000",
-        "modifiedBy": "root",
-        "modifiedDate": "2016-06-23T00:00:28.840+0000"
-      },
-      "countries": [
-        {
-          "pureId": 225,
-          "uri": "/dk/atira/pure/core/countries/de",
-          "term": {
-            "formatted": false,
-            "text": [
-              {
-                "locale": "en_US",
-                "value": "Germany"
-              }
-            ]
-          }
-        }
-      ]
+      "systemName": "Publisher"
     }
   ]
 }

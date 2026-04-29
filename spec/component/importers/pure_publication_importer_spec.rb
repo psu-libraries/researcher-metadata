@@ -26,10 +26,10 @@ describe PurePublicationImporter do
                           pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f') }
 
   before do
-    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/research-outputs?navigationLink=false&size=1&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/research-outputs?size=1&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_1
 
-    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/research-outputs?navigationLink=false&size=500&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/research-outputs?size=500&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
 
     allow(DOIVerificationJob).to receive(:perform_later)
@@ -113,6 +113,9 @@ describe PurePublicationImporter do
         end
 
         it 'saves the correct data for each publication' do
+          g1 = create(:grant, agency_name: 'National Science Foundation', identifier: 'R01MH058393')
+          g2 = create(:grant, wos_agency_name: 'National Science Foundation (NSF)', wos_identifier: 'RO1 58393-03')
+
           importer.call
 
           p1 = found_pub1.publication
@@ -159,10 +162,6 @@ describe PurePublicationImporter do
           expect(p2.published_on).to eq Date.new(2010, 5, 1)
           expect(p3.published_on).to eq Date.new(2013, 5, 1)
 
-          expect(p1.total_scopus_citations).to eq 2
-          expect(p2.total_scopus_citations).to eq 32
-          expect(p3.total_scopus_citations).to eq 6
-
           expect(p1.abstract).to be_nil
           expect(p2.abstract).to eq 'This is the third abstract.'
           expect(p3.abstract).to be_nil
@@ -174,6 +173,8 @@ describe PurePublicationImporter do
           expect(p1.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
           expect(p2.doi).to be_nil
           expect(p3.doi).to eq 'https://doi.org/10.1016/j.jvir.2013.01.004'
+
+          expect(p3.grants).to contain_exactly(g1, g2)
         end
 
         it 'saves the correct data for each contributor name' do
@@ -326,7 +327,6 @@ describe PurePublicationImporter do
                                     issn: 'existing issn',
                                     status: 'In Press',
                                     published_on: Date.new(2018, 8, 22),
-                                    total_scopus_citations: 1,
                                     abstract: 'existing abstract',
                                     visible: false,
                                     doi: doi) }
@@ -342,7 +342,6 @@ describe PurePublicationImporter do
                                      issn: 'existing issn2',
                                      status: 'Published',
                                      published_on: Date.new(2018, 9, 22),
-                                     total_scopus_citations: 1,
                                      abstract: 'existing abstract2',
                                      visible: false,
                                      doi: doi2) }
@@ -501,7 +500,6 @@ describe PurePublicationImporter do
             expect(updated_pub.issn).to eq '0962-1849'
             expect(updated_pub.status).to eq 'Published'
             expect(updated_pub.published_on).to eq Date.new(1997, 1, 1)
-            expect(updated_pub.total_scopus_citations).to eq 2
             expect(updated_pub.abstract).to be_nil
             expect(updated_pub.visible).to be true
             expect(updated_pub.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
@@ -522,7 +520,6 @@ describe PurePublicationImporter do
             expect(new_pub.issn).to eq '0272-4634'
             expect(new_pub.status).to eq 'In Press'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
-            expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq 'This is the third abstract.'
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
@@ -694,7 +691,6 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
               expect(existing_pub_reloaded.status).to eq 'Published'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
-              expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
               expect(existing_pub_reloaded.visible).to be false
               expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.000/existing'
@@ -721,7 +717,6 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
               expect(existing_pub_reloaded.status).to eq 'Published'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
-              expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
               expect(existing_pub_reloaded.visible).to be false
               expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
@@ -743,7 +738,6 @@ describe PurePublicationImporter do
             expect(new_pub.issn).to eq '0272-4634'
             expect(new_pub.status).to eq 'In Press'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
-            expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq 'This is the third abstract.'
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
@@ -790,10 +784,10 @@ describe PurePublicationImporter do
       let(:email) { spy 'notification email' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/research-outputs?navigationLink=false&size=1&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/research-outputs?size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
-        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/research-outputs?navigationLink=false&size=500&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/research-outputs?size=500&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
         allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
         allow(ImporterErrorLog).to receive(:log_error)

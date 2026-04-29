@@ -467,12 +467,12 @@ describe PublicationCleanupService do
         create(:authorship, user: pub3_author, publication: pub3)
 
         allow(HTTParty).to receive(:get).with(
-          'https://pure.psu.edu/ws/api/524/persons/qwertyui',
+          'https://pure.psu.edu/ws/api/persons/qwertyui',
           headers: { 'api-key' => Settings.pure.api_key }
         ).and_return(instance_double(HTTParty::Response, code: 200))
 
         allow(HTTParty).to receive(:get).with(
-          'https://pure.psu.edu/ws/api/524/persons/zxcvbnm',
+          'https://pure.psu.edu/ws/api/persons/zxcvbnm',
           headers: { 'api-key' => Settings.pure.api_key }
         ).and_return(instance_double(HTTParty::Response, code: 404))
       end

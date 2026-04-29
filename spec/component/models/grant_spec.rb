@@ -399,6 +399,38 @@ describe Grant, type: :model do
     end
   end
 
+  describe '.find_by_acronym' do
+    context 'when a matching Web of Science grants exists' do
+      let!(:matching_grant) { create(:grant, wos_agency_name: 'National Science Foundation', wos_identifier: '12345') }
+
+      it 'returns the matching grant' do
+        expect(described_class.find_by_acronym('NSF', '12345')).to eq matching_grant
+      end
+    end
+
+    context 'when a matching canonical agency name and identifier exists' do
+      let!(:matching_grant) { create(:grant, agency_name: 'National Science Foundation', identifier: '12345') }
+
+      it 'returns the matching grant' do
+        expect(described_class.find_by_acronym('NSF', '12345')).to eq matching_grant
+      end
+    end
+
+    context 'when no grant exists with a matching Web of Science agency name and identifier or a matching canonical agency name and identifier' do
+      let!(:non_matching_grant) { create(:grant, wos_agency_name: 'National Science Foundation', wos_identifier: '12345') }
+
+      it 'returns nil' do
+        expect(described_class.find_by_acronym('NSF', '67890')).to be_nil
+      end
+    end
+
+    context 'when the acronym does not have any associated agency names' do
+      it 'returns nil' do
+        expect(described_class.find_by_acronym('UNKNOWN', '12345')).to be_nil
+      end
+    end
+  end
+
   describe 'deleting a grant with research funds' do
     let(:g) { create(:grant) }
     let!(:rf) { create(:research_fund, grant: g) }
