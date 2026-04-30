@@ -89,25 +89,25 @@ describe WebOfScienceFileImporter do
             new_pub2 = Publication.find_by(title: 'Another Publication')
 
             expect(ContributorName.find_by(publication: new_pub1,
-                                            first_name: 'Jennifer',
-                                            middle_name: 'A',
-                                            last_name: 'Testauthor',
-                                            position: 1)).not_to be_nil
+                                           first_name: 'Jennifer',
+                                           middle_name: 'A',
+                                           last_name: 'Testauthor',
+                                           position: 1)).not_to be_nil
             expect(ContributorName.find_by(publication: new_pub1,
-                                            first_name: 'Arthur',
-                                            middle_name: nil,
-                                            last_name: 'Author',
-                                            position: 2)).not_to be_nil
+                                           first_name: 'Arthur',
+                                           middle_name: nil,
+                                           last_name: 'Author',
+                                           position: 2)).not_to be_nil
             expect(ContributorName.find_by(publication: new_pub2,
-                                            first_name: 'P',
-                                            middle_name: nil,
-                                            last_name: 'Testerson',
-                                            position: 1)).not_to be_nil
+                                           first_name: 'P',
+                                           middle_name: nil,
+                                           last_name: 'Testerson',
+                                           position: 1)).not_to be_nil
             expect(ContributorName.find_by(publication: new_pub2,
-                                            first_name: 'Elizabeth',
-                                            middle_name: 'Mary',
-                                            last_name: 'Testresearcher',
-                                            position: 2)).not_to be_nil
+                                           first_name: 'Elizabeth',
+                                           middle_name: 'Mary',
+                                           last_name: 'Testresearcher',
+                                           position: 2)).not_to be_nil
           end
         end
       end
