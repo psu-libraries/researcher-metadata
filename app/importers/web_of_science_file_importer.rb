@@ -18,43 +18,7 @@ class WebOfScienceFileImporter
 
             existing_pubs = Publication.find_by_metadata(wos_pub)
 
-            if existing_pubs.any?
-              wos_pub.grants.each do |g|
-                ActiveRecord::Base.transaction do
-                  if g.wos_agency.present?
-                    g.ids.each do |id|
-                      existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
-                      matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
-
-                      if !existing_grant && !matching_grant
-                        grant = Grant.new
-                        grant.wos_agency_name = g.wos_agency
-                        grant.agency_name = g.agency
-                        grant.wos_identifier = id.wos_value
-                        grant.identifier = id.value
-                        grant.save!
-
-                        existing_pubs.each do |p|
-                          fund = ResearchFund.new
-                          fund.publication = p
-                          fund.grant = grant
-                          fund.save!
-                        end
-                      elsif matching_grant
-                        existing_pubs.each do |p|
-                          unless ResearchFund.find_by(publication: p, grant: matching_grant)
-                            fund = ResearchFund.new
-                            fund.publication = p
-                            fund.grant = matching_grant
-                            fund.save!
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            else
+            unless existing_pubs.any?
               users = User.find_all_by_wos_pub(wos_pub)
               if users.any?
                 ActiveRecord::Base.transaction do
@@ -78,29 +42,6 @@ class WebOfScienceFileImporter
                   pi.source = 'Web of Science'
                   pi.source_identifier = wos_pub.wos_id
                   pi.save!
-
-                  wos_pub.grants.each do |g|
-                    if g.wos_agency.present?
-                      g.ids.each do |id|
-                        existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
-                        matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
-
-                        grant = existing_grant || matching_grant || Grant.new
-
-                        if grant.new_record?
-                          grant.wos_agency_name = g.wos_agency
-                          grant.agency_name = g.agency
-                          grant.wos_identifier = id.wos_value
-                          grant.identifier = id.value
-                          grant.save!
-                        end
-                        fund = ResearchFund.new
-                        fund.publication = p
-                        fund.grant = grant
-                        fund.save!
-                      end
-                    end
-                  end
 
                   users.each_with_index do |u, i|
                     a = Authorship.new
