@@ -35,11 +35,11 @@ describe Grant, type: :model do
   it { is_expected.to have_many(:researcher_funds) }
   it { is_expected.to have_many(:users).through(:researcher_funds) }
 
-  it { is_expected.to validate_inclusion_of(:agency_name).in_array(['National Science Foundation']).allow_nil }
+  it { is_expected.to validate_inclusion_of(:agency_name).in_array(['NSF', 'NIH']).allow_nil }
 
   describe '.agency_names' do
     it 'returns the list of possible canonical agency names for a grant' do
-      expect(described_class.agency_names).to eq ['National Science Foundation']
+      expect(described_class.agency_names).to eq ['NSF', 'NIH']
     end
   end
 
@@ -409,7 +409,7 @@ describe Grant, type: :model do
     end
 
     context 'when a matching canonical agency name and identifier exists' do
-      let!(:matching_grant) { create(:grant, agency_name: 'National Science Foundation', identifier: '12345') }
+      let!(:matching_grant) { create(:grant, agency_name: 'NSF', identifier: '12345') }
 
       it 'returns the matching grant' do
         expect(described_class.find_by_acronym('NSF', '12345')).to eq matching_grant

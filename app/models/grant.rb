@@ -2,7 +2,7 @@
 
 class Grant < ApplicationRecord
   def self.agency_names
-    ['National Science Foundation']
+    ['NSF', 'NIH']
   end
 
   AGENCY_NAME_MAPPING = {
@@ -93,9 +93,12 @@ class Grant < ApplicationRecord
   rails_admin do
     list do
       field(:id)
-      field(:agency)
-      field(:name) do
-        label 'Identifier'
+      field(:title)
+      field(:agency_name)
+      field(:identifier)
+      field(:start_date)
+      field(:amount_in_dollars) do
+        label 'Amount'
       end
       field(:created_at)
       field(:updated_at)

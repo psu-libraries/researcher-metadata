@@ -30,7 +30,7 @@ class NSFAward
   end
 
   def agency_name
-    'National Science Foundation'
+    parsed_award['agency']
   end
 
   def pi_first_name

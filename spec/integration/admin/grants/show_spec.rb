@@ -7,7 +7,7 @@ describe 'Admin grant detail page', type: :feature do
   let!(:grant) { create(:grant,
                         wos_agency_name: 'Test Agency',
                         wos_identifier: 'GRANT-ID-123',
-                        agency_name: 'National Science Foundation',
+                        agency_name: 'NSF',
                         identifier: '123',
                         title: 'Test Grant',
                         abstract: 'A description of the grant.',
@@ -37,7 +37,7 @@ describe 'Admin grant detail page', type: :feature do
         expect(page).to have_content 'Test Agency'
         expect(page).to have_content 'GRANT-ID-123'
         expect(page).to have_content '123'
-        expect(page).to have_content 'National Science Foundation'
+        expect(page).to have_content 'NSF'
         expect(page).to have_content 'Test Grant'
         expect(page).to have_content 'A description of the grant.'
         expect(page).to have_content 'January 01, 2000'
