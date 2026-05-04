@@ -80,7 +80,7 @@ describe 'Profile page', :js, type: :feature do
   let!(:org) { create(:organization, name: 'Test Organization') }
   let!(:grant1) { create(:grant,
                          title: 'First Grant',
-                         agency_name: 'National Science Foundation',
+                         agency_name: 'NSF',
                          start_date: Date.new(2001, 2, 3),
                          end_date: Date.new(2004, 5, 6)) }
   let!(:grant2) { create(:grant,
@@ -278,7 +278,7 @@ describe 'Profile page', :js, type: :feature do
       click_link 'Grants'
       within '#grants' do
         expect(page).to have_content 'Grants'
-        expect(page).to have_content 'First Grant, National Science Foundation, 2/2001 - 5/2004'
+        expect(page).to have_content 'First Grant, NSF, 2/2001 - 5/2004'
         expect(page).to have_content 'Grant123, Agency 2, 1/2010 - 2/2015'
       end
     end

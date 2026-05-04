@@ -841,7 +841,7 @@ describe API::V1::UsersController do
                                end_date: Date.new(2016, 1, 1)) }
         let!(:grant3) { create(:grant,
                                title: 'Grant Three',
-                               agency_name: 'National Science Foundation',
+                               agency_name: 'NSF',
                                start_date: Date.new(2018, 1, 1),
                                end_date: nil) }
 
@@ -908,7 +908,7 @@ describe API::V1::UsersController do
                 <div id="md-grants">
                   <h3>Grants</h3>
                   <ul>
-                      <li>Grant Three, National Science Foundation</li>
+                      <li>Grant Three, NSF</li>
                       <li>Grant Two, Other Agency, 2/2015 - 1/2016</li>
                       <li>Grant One, Test Agency, 1/2010 - 5/2010</li>
                   </ul>

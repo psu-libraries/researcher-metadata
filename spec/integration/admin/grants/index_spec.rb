@@ -8,8 +8,26 @@ describe 'Admin grants list', type: :feature do
     before { authenticate_admin_user }
 
     describe 'the page content' do
-      let!(:grant1) { create(:grant, wos_agency_name: 'Test Grant Agency') }
-      let!(:grant2) { create(:grant, wos_agency_name: 'Another Grant Agency') }
+      let!(:grant1) {
+        create(
+          :grant,
+          agency_name: 'NSF',
+          title: 'First Grant',
+          identifier: 'abc123',
+          start_date: Date.new(2025, 1, 1),
+          amount_in_dollars: 58398
+        )
+      }
+      let!(:grant2) {
+        create(
+          :grant,
+          agency_name: 'NIH',
+          title: 'Second Grant',
+          identifier: 'def456',
+          start_date: Date.new(2026, 6, 30),
+          amount_in_dollars: 72894
+        )
+      }
 
       before { visit rails_admin.index_path(model_name: :grant) }
 
@@ -19,10 +37,18 @@ describe 'Admin grants list', type: :feature do
 
       it 'shows information about each grant' do
         expect(page).to have_content grant1.id
-        expect(page).to have_content 'Test Grant Agency'
+        expect(page).to have_content 'First Grant'
+        expect(page).to have_content 'NSF'
+        expect(page).to have_content 'abc123'
+        expect(page).to have_content 'January 01, 2025'
+        expect(page).to have_content '58398'
 
         expect(page).to have_content grant2.id
-        expect(page).to have_content 'Another Grant Agency'
+        expect(page).to have_content 'Second Grant'
+        expect(page).to have_content 'NIH'
+        expect(page).to have_content 'def456'
+        expect(page).to have_content 'June 30, 2026'
+        expect(page).to have_content '72894'
       end
     end
 

@@ -10,6 +10,7 @@ describe NSFAward do
       'startDate' => start_date,
       'expDate' => end_date,
       'abstractText' => 'test abstract',
+      'agency' => 'NSF',
       'fundsObligatedAmt' => amount,
       'id' => '12345',
       'piFirstName' => first_name,
@@ -95,8 +96,8 @@ describe NSFAward do
   end
 
   describe '#agency_name' do
-    it "returns 'National Science Foundation'" do
-      expect(award.agency_name).to eq 'National Science Foundation'
+    it 'returns the agency from the given data' do
+      expect(award.agency_name).to eq 'NSF'
     end
   end
 

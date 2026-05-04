@@ -416,7 +416,7 @@ RSpec.describe 'api/v1/users' do
                     agency: {
                       type: :string,
                       nullable: true,
-                      example: 'National Science Foundation',
+                      example: 'NSF',
                       description: 'The name of the organization that awarded the grant'
                     },
                     abstract: {

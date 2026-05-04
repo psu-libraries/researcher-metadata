@@ -60,7 +60,7 @@ describe NSFGrantImporter do
       expect(g1.end_date).to eq Date.new(2027, 12, 31)
       expect(g1.abstract).to eq 'Test abstract 1'
       expect(g1.amount_in_dollars).to eq 98756
-      expect(g1.agency_name).to eq 'National Science Foundation'
+      expect(g1.agency_name).to eq 'NSF'
 
       expect(ResearchFund.find_by(grant: g1, publication: pub1)).not_to be_nil
       expect(ResearchFund.find_by(grant: g1, publication: pub2)).not_to be_nil
@@ -71,7 +71,7 @@ describe NSFGrantImporter do
       expect(g2.end_date).to eq Date.new(2026, 12, 31)
       expect(g2.abstract).to eq 'Test abstract 2'
       expect(g2.amount_in_dollars).to eq 50000
-      expect(g2.agency_name).to eq 'National Science Foundation'
+      expect(g2.agency_name).to eq 'NSF'
 
       expect(ResearcherFund.find_by(grant: g2, user: u2)).not_to be_nil
 
@@ -80,7 +80,7 @@ describe NSFGrantImporter do
       expect(g3.end_date).to eq Date.new(2027, 1, 1)
       expect(g3.abstract).to eq 'Test abstract 3'
       expect(g3.amount_in_dollars).to eq 100000
-      expect(g3.agency_name).to eq 'National Science Foundation'
+      expect(g3.agency_name).to eq 'NSF'
 
       expect(ResearchFund.find_by(grant: g3, publication: pub3)).not_to be_nil
     end
@@ -90,7 +90,7 @@ describe NSFGrantImporter do
         create(
           :grant,
           identifier: '8467351',
-          agency_name: 'National Science Foundation',
+          agency_name: 'NSF',
           title: 'Existing Award',
           start_date: Date.new(2020, 7, 1),
           end_date: Date.new(2021, 6, 30),
@@ -108,7 +108,7 @@ describe NSFGrantImporter do
         expect(g.end_date).to eq Date.new(2027, 12, 31)
         expect(g.abstract).to eq 'Test abstract 1'
         expect(g.amount_in_dollars).to eq 98756
-        expect(g.agency_name).to eq 'National Science Foundation'
+        expect(g.agency_name).to eq 'NSF'
       end
     end
   end
