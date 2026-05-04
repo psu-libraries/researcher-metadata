@@ -90,7 +90,7 @@ describe NSFGrantImporter do
         create(
           :grant,
           identifier: '8467351',
-          agency_name: 'NSF',
+          agency_name: 'NIH',
           title: 'Existing Award',
           start_date: Date.new(2020, 7, 1),
           end_date: Date.new(2021, 6, 30),
