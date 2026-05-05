@@ -427,23 +427,6 @@ describe WebOfSciencePublication do
     end
   end
 
-  describe '#grants' do
-    let(:grant_element1) { double 'grant element 1' }
-    let(:grant_element2) { double 'grant element 2' }
-    let(:grant1) { double 'grant 1' }
-    let(:grant2) { double 'grant 2' }
-
-    before do
-      allow(WOSGrant).to receive(:new).with(grant_element1).and_return(grant1)
-      allow(WOSGrant).to receive(:new).with(grant_element2).and_return(grant2)
-      allow(parsed_pub).to receive(:css).with('grants > grant').and_return([grant_element1, grant_element2])
-    end
-
-    it 'returns an array of the grants associated with the publication' do
-      expect(pub.grants).to eq [grant1, grant2]
-    end
-  end
-
   describe '#contributors' do
     let(:cont_element1) { double 'contributor element 1' }
     let(:cont_element2) { double 'contributor element 2' }

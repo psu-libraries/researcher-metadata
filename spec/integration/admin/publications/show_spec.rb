@@ -55,12 +55,12 @@ describe 'Admin publication detail page', type: :feature do
                        publication: pub) }
 
   let!(:grant1) { create(:grant,
-                         wos_agency_name: 'Test Agency1',
-                         wos_identifier: 'GRANT-ID-123')}
+                         agency_name: 'NSF',
+                         identifier: 'GRANT-ID-123')}
 
   let!(:grant2) { create(:grant,
-                         wos_agency_name: 'Test Agency2',
-                         wos_identifier: 'GRANT-ID-456')}
+                         agency_name: 'NIH',
+                         identifier: 'GRANT-ID-456')}
 
   let!(:rf1) { create(:research_fund,
                       grant: grant1,

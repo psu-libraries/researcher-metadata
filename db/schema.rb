@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_05_154511) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_05_155738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -248,8 +248,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_05_154511) do
   end
 
   create_table "grants", force: :cascade do |t|
-    t.text "wos_agency_name"
-    t.string "wos_identifier"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.text "title"
@@ -262,8 +260,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_05_154511) do
     t.index ["agency_name"], name: "index_grants_on_agency_name"
     t.index ["identifier", "agency_name"], name: "index_grants_on_identifier_and_agency_name", unique: true
     t.index ["identifier"], name: "index_grants_on_identifier"
-    t.index ["wos_agency_name"], name: "index_grants_on_wos_agency_name"
-    t.index ["wos_identifier"], name: "index_grants_on_wos_identifier"
   end
 
   create_table "importer_error_logs", force: :cascade do |t|
@@ -505,14 +501,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_05_154511) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
+    t.datetime "oa_status_last_checked_at", precision: nil
     t.string "preferred_version"
     t.datetime "permissions_last_checked_at", precision: nil
-    t.datetime "oa_status_last_checked_at", precision: nil
     t.datetime "wrong_oa_version_notification_sent_at", precision: nil
     t.boolean "preferred_file_version_none_email_sent"
     t.boolean "doi_error"
     t.boolean "flagged_for_review"
-    t.index "EXTRACT(year FROM published_on)", name: "index_publications_on_published_on_year"
+    t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
