@@ -460,11 +460,11 @@ describe UserProfile do
                              end_date: Date.new(1990, 2, 2)) }
       let!(:grant2) { create(:grant,
                              identifier: 'Grant 2',
-                             wos_agency_name: 'Agency 2',
+                             agency_name: 'NIH',
                              start_date: Date.new(1985, 1, 1),
                              end_date: Date.new(1986, 2, 2)) }
       let!(:grant3) { create(:grant,
-                             wos_identifier: 'Grant 3',
+                             identifier: 'Grant 3',
                              agency_name: 'NSF',
                              start_date: Date.new(2000, 1, 1),
                              end_date: Date.new(2002, 2, 2)) }
@@ -498,7 +498,7 @@ describe UserProfile do
           'Grant 6, NSF, 1/2010 - 2/2015',
           'Grant 3, NSF, 1/2000 - 2/2002',
           'Grant 4, NSF',
-          'Grant 2, Agency 2, 1/1985 - 2/1986',
+          'Grant 2, NIH, 1/1985 - 2/1986',
           'Grant 1, NSF, 1/1980 - 2/1990',
           'Grant 5, NSF'
         ]

@@ -831,12 +831,12 @@ describe API::V1::UsersController do
 
         let!(:grant1) { create(:grant,
                                title: 'Grant One',
-                               wos_agency_name: 'Test Agency',
+                               agency_name: 'NSF',
                                start_date: Date.new(2010, 1, 1),
                                end_date: Date.new(2010, 5, 1)) }
         let!(:grant2) { create(:grant,
                                title: 'Grant Two',
-                               wos_agency_name: 'Other Agency',
+                               agency_name: 'NIH',
                                start_date: Date.new(2015, 2, 1),
                                end_date: Date.new(2016, 1, 1)) }
         let!(:grant3) { create(:grant,
@@ -909,8 +909,8 @@ describe API::V1::UsersController do
                   <h3>Grants</h3>
                   <ul>
                       <li>Grant Three, NSF</li>
-                      <li>Grant Two, Other Agency, 2/2015 - 1/2016</li>
-                      <li>Grant One, Test Agency, 1/2010 - 5/2010</li>
+                      <li>Grant Two, NIH, 2/2015 - 1/2016</li>
+                      <li>Grant One, NSF, 1/2010 - 5/2010</li>
                   </ul>
                 </div>
                 <div id="md-presentations">

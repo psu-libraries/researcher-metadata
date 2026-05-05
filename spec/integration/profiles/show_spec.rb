@@ -85,7 +85,7 @@ describe 'Profile page', :js, type: :feature do
                          end_date: Date.new(2004, 5, 6)) }
   let!(:grant2) { create(:grant,
                          identifier: 'Grant123',
-                         wos_agency_name: 'Agency 2',
+                         agency_name: 'NIH',
                          start_date: Date.new(2010, 1, 1),
                          end_date: Date.new(2015, 2, 2)) }
 
@@ -279,7 +279,7 @@ describe 'Profile page', :js, type: :feature do
       within '#grants' do
         expect(page).to have_content 'Grants'
         expect(page).to have_content 'First Grant, NSF, 2/2001 - 5/2004'
-        expect(page).to have_content 'Grant123, Agency 2, 1/2010 - 2/2015'
+        expect(page).to have_content 'Grant123, NIH, 1/2010 - 2/2015'
       end
     end
 

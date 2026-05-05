@@ -30,9 +30,9 @@ describe PublicationGrantMatcherService do
       let(:grant2) { create(:grant) }
 
       before do
-        allow(Grant).to receive(:find_by_acronym).with('NSF', '12345').and_return grant1
-        allow(Grant).to receive(:find_by_acronym).with('NSF', '54321').and_return grant2
-        allow(Grant).to receive(:find_by_acronym).with('NIMH', '67890').and_return nil
+        allow(Grant).to receive(:find_by).with(agency_name: 'NSF', identifier: '12345').and_return grant1
+        allow(Grant).to receive(:find_by).with(agency_name: 'NSF', identifier: '54321').and_return grant2
+        allow(Grant).to receive(:find_by).with(agency_name: 'NIMH', identifier: '67890').and_return nil
       end
 
       it 'creates a ResearchFund record for each grant found in the database matching the given funding data' do

@@ -114,7 +114,7 @@ describe PurePublicationImporter do
 
         it 'saves the correct data for each publication' do
           g1 = create(:grant, agency_name: 'NSF', identifier: 'R01MH058393')
-          g2 = create(:grant, wos_agency_name: 'National Science Foundation (NSF)', wos_identifier: 'RO1 58393-03')
+          g2 = create(:grant, agency_name: 'NSF', identifier: 'RO1 58393-03')
 
           importer.call
 

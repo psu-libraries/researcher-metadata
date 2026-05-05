@@ -68,12 +68,6 @@ class WebOfSciencePublication
     end
   end
 
-  def grants
-    parsed_pub.css('grants > grant').map do |g|
-      WOSGrant.new(g)
-    end
-  end
-
   def contributors
     parsed_pub.css('contributors > contributor').map do |c|
       WOSContributor.new(c)
