@@ -10,7 +10,7 @@ describe NSFAward do
       'startDate' => start_date,
       'expDate' => end_date,
       'abstractText' => 'test abstract',
-      'agency' => 'NSF',
+      'agency' => agency,
       'fundsObligatedAmt' => amount,
       'id' => '12345',
       'piFirstName' => first_name,
@@ -22,6 +22,7 @@ describe NSFAward do
   }
   let(:start_date) { nil }
   let(:end_date) { nil }
+  let(:agency) { 'Test Agency' }
   let(:amount) { nil }
   let(:first_name) { nil }
   let(:last_name) { nil }
@@ -96,8 +97,26 @@ describe NSFAward do
   end
 
   describe '#agency_name' do
-    it 'returns the agency from the given data' do
-      expect(award.agency_name).to eq 'NSF'
+    context 'when there is an agency in the given data' do
+      it 'returns the agency from the given data' do
+        expect(award.agency_name).to eq 'Test Agency'
+      end
+    end
+
+    context 'when the agency in the given data is blank' do
+      let(:agency) { '' }
+
+      it "returns 'NSF'" do
+        expect(award.agency_name).to eq 'NSF'
+      end
+    end
+
+    context 'when there is no agency in the given data' do
+      let(:agency) { nil }
+
+      it "returns 'NSF'" do
+        expect(award.agency_name).to eq 'NSF'
+      end
     end
   end
 

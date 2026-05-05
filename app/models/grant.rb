@@ -71,7 +71,8 @@ class Grant < ApplicationRecord
   has_many :researcher_funds
   has_many :users, through: :researcher_funds
 
-  validates :agency_name, inclusion: { in: agency_names, allow_nil: true }
+  validates :identifier, presence: true
+  validates :agency_name, inclusion: { in: agency_names }
 
   def name
     title.presence || identifier.presence || wos_identifier.presence
