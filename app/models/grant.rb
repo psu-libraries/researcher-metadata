@@ -72,6 +72,7 @@ class Grant < ApplicationRecord
   has_many :users, through: :researcher_funds
 
   validates :identifier, presence: true
+  validates :identifier, uniqueness: { scope: :agency_name }
   validates :agency_name, inclusion: { in: agency_names }
 
   def name
