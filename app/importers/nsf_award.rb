@@ -30,7 +30,12 @@ class NSFAward
   end
 
   def agency_name
-    parsed_award['agency']
+    # There are, inexplicably, a subset of award records in the NSF dataset from the year 2004
+    # where the agency is blank (and many of these records also lack a title). Since all of the
+    # other records in the dataset have an `agency` value of 'NSF' and since these records with
+    # blank agency values all appear to have NSF identifiers, we're going to assume that the
+    # agency should be recorded as 'NSF' for them as well.
+    parsed_award['agency'].presence || 'NSF'
   end
 
   def pi_first_name
