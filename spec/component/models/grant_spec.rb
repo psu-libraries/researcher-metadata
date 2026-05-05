@@ -36,6 +36,7 @@ describe Grant, type: :model do
   it { is_expected.to have_many(:users).through(:researcher_funds) }
 
   it { is_expected.to validate_presence_of(:identifier) }
+  it { is_expected.to validate_uniqueness_of(:identifier).scoped_to(:agency_name) }
   it { is_expected.to validate_inclusion_of(:agency_name).in_array(['NSF', 'NIH']) }
 
   describe '.agency_names' do

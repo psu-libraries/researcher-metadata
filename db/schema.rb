@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_17_140741) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_05_154511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -260,6 +260,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_140741) do
     t.string "identifier"
     t.text "agency_name"
     t.index ["agency_name"], name: "index_grants_on_agency_name"
+    t.index ["identifier", "agency_name"], name: "index_grants_on_identifier_and_agency_name", unique: true
     t.index ["identifier"], name: "index_grants_on_identifier"
     t.index ["wos_agency_name"], name: "index_grants_on_wos_agency_name"
     t.index ["wos_identifier"], name: "index_grants_on_wos_identifier"
