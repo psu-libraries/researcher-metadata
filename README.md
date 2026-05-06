@@ -71,6 +71,7 @@ may take multiple hours to finish. We import the following types of records from
     - publications
     - publication_taggings
     - publishers
+    - research_funds
     - tags
     - user_organization_memberships
     - users
@@ -100,14 +101,13 @@ Web of Science for publications that were published from 2013 to 2018. We obtain
 a physical disk. We import the following types of records from Web of Science:
     - authorships
     - contributor_names
-    - grants
     - publications
-    - research_funds
 
 1. **National Science Foundation** - We import grant data that we download from the National Science
 Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files. We import the
 following types of records from NSF:
     - grants
+    - research_funds
     - researcher_funds
 
 1. **Unpaywall** - We import metadata about open access copies of publications from Unpaywall's web 
