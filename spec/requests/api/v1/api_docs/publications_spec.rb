@@ -50,7 +50,7 @@ RSpec.describe 'api/v1/publications' do
                                         },
                                         attributes: {
                                           type: :object,
-                                          required: [:title, :agency, :abstract,
+                                          required: [:title, :agency_name, :abstract,
                                                      :amount_in_dollars, :start_date,
                                                      :end_date, :identifier],
                                           properties: {
@@ -60,7 +60,7 @@ RSpec.describe 'api/v1/publications' do
                                               example: 'A Research Project Proposal',
                                               description: 'The title of the grant'
                                             },
-                                            agency: {
+                                            agency_name: {
                                               type: :string,
                                               nullable: true,
                                               example: 'National Science Foundation',
