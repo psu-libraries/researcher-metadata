@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class NSFGrantImporter
+  SOURCE = 'NSF'
+
   def call
     (1965..Date.current.year).each do |year|
       # This request only returns the first 3000 matching awards, which is the maximum number
@@ -20,6 +22,7 @@ class NSFGrantImporter
         g.abstract = a.abstract
         g.amount_in_dollars = a.amount_in_dollars
         g.agency_name = a.agency_name
+        g.import_source = SOURCE
         g.save!
         pbar.increment
 
@@ -28,6 +31,7 @@ class NSFGrantImporter
           rf = ResearcherFund.new
           rf.user = user
           rf.grant = g
+          rf.import_source = SOURCE
           rf.save!
         end
 
@@ -38,6 +42,7 @@ class NSFGrantImporter
               rf = ResearchFund.new
               rf.publication = rmd_pub
               rf.grant = g
+              rf.import_source = SOURCE
               rf.save!
             end
           end

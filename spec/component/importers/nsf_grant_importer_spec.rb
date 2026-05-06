@@ -61,10 +61,11 @@ describe NSFGrantImporter do
       expect(g1.abstract).to eq 'Test abstract 1'
       expect(g1.amount_in_dollars).to eq 98756
       expect(g1.agency_name).to eq 'NSF'
+      expect(g1.import_source).to eq 'NSF'
 
-      expect(ResearchFund.find_by(grant: g1, publication: pub1)).not_to be_nil
-      expect(ResearchFund.find_by(grant: g1, publication: pub2)).not_to be_nil
-      expect(ResearcherFund.find_by(grant: g1, user: u1)).not_to be_nil
+      expect(ResearchFund.find_by(grant: g1, publication: pub1, import_source: 'NSF')).not_to be_nil
+      expect(ResearchFund.find_by(grant: g1, publication: pub2, import_source: 'NSF')).not_to be_nil
+      expect(ResearcherFund.find_by(grant: g1, user: u1, import_source: 'NSF')).not_to be_nil
 
       expect(g2.title).to eq 'Test Award 2'
       expect(g2.start_date).to eq Date.new(2026, 2, 1)
@@ -72,8 +73,9 @@ describe NSFGrantImporter do
       expect(g2.abstract).to eq 'Test abstract 2'
       expect(g2.amount_in_dollars).to eq 50000
       expect(g2.agency_name).to eq 'NSF'
+      expect(g2.import_source).to eq 'NSF'
 
-      expect(ResearcherFund.find_by(grant: g2, user: u2)).not_to be_nil
+      expect(ResearcherFund.find_by(grant: g2, user: u2, import_source: 'NSF')).not_to be_nil
 
       expect(g3.title).to eq 'Test Award 3'
       expect(g3.start_date).to eq Date.new(2026, 3, 10)
@@ -81,8 +83,9 @@ describe NSFGrantImporter do
       expect(g3.abstract).to eq 'Test abstract 3'
       expect(g3.amount_in_dollars).to eq 100000
       expect(g3.agency_name).to eq 'NSF'
+      expect(g3.import_source).to eq 'NSF'
 
-      expect(ResearchFund.find_by(grant: g3, publication: pub3)).not_to be_nil
+      expect(ResearchFund.find_by(grant: g3, publication: pub3, import_source: 'NSF')).not_to be_nil
     end
 
     context 'when a Grant that matches the imported data already exists' do
