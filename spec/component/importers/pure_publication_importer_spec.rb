@@ -175,6 +175,8 @@ describe PurePublicationImporter do
           expect(p3.doi).to eq 'https://doi.org/10.1016/j.jvir.2013.01.004'
 
           expect(p3.grants).to contain_exactly(g1, g2)
+          expect(ResearchFund.find_by(publication: p3, grant: g1, import_source: 'Pure')).not_to be_nil
+          expect(ResearchFund.find_by(publication: p3, grant: g2, import_source: 'Pure')).not_to be_nil
         end
 
         it 'saves the correct data for each contributor name' do

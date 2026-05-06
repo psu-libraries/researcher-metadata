@@ -5,6 +5,10 @@ class Grant < ApplicationRecord
     ['NSF', 'NIH']
   end
 
+  def self.import_sources
+    ['NSF', 'NIH']
+  end
+
   has_many :research_funds
   has_many :publications, through: :research_funds
   has_many :researcher_funds
@@ -14,6 +18,7 @@ class Grant < ApplicationRecord
   validates :identifier, uniqueness: { scope: :agency_name }
   validates :agency_name, presence: true
   validates :agency_name, inclusion: { in: agency_names }
+  validates :import_source, inclusion: { in: import_sources, allow_nil: true }
 
   def name
     title.presence || identifier.presence
@@ -29,6 +34,7 @@ class Grant < ApplicationRecord
       field(:amount_in_dollars) do
         label 'Amount'
       end
+      field(:import_source)
       field(:created_at)
       field(:updated_at)
     end
@@ -44,6 +50,7 @@ class Grant < ApplicationRecord
       field(:end_date)
       field(:publications)
       field(:users)
+      field(:import_source)
       field(:created_at)
       field(:updated_at)
     end

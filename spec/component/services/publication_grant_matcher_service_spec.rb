@@ -41,6 +41,7 @@ describe PublicationGrantMatcherService do
         rf = ResearchFund.last
         expect(rf.publication).to eq pub
         expect(rf.grant).to eq grant2
+        expect(rf.import_source).to eq 'Pure'
         expect(pub.grants).to contain_exactly(grant1, grant2)
       end
 

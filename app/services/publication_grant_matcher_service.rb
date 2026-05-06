@@ -9,6 +9,7 @@ class PublicationGrantMatcherService
           research_fund = ResearchFund.new
           research_fund.publication = pub
           research_fund.grant = grant
+          research_fund.import_source = 'Pure'
           research_fund.save!
         end
       end
