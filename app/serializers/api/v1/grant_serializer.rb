@@ -4,7 +4,7 @@ module API::V1
   class GrantSerializer
     include JSONAPI::Serializer
 
-    attributes :identifier, :title, :agency, :abstract, :amount_in_dollars
+    attributes :identifier, :title, :agency_name, :abstract, :amount_in_dollars
 
     attribute :start_date do |object|
       object.start_date.try(:iso8601)
