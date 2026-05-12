@@ -36,7 +36,7 @@ describe Grant, type: :model do
   it { is_expected.to validate_uniqueness_of(:identifier).scoped_to(:agency_name) }
   it { is_expected.to validate_presence_of(:agency_name) }
   it { is_expected.to validate_inclusion_of(:agency_name).in_array(['NSF', 'NIH']) }
-  it { is_expected.to validate_inclusion_of(:import_source).in_array(['NSF', 'NIH'])}
+  it { is_expected.to validate_inclusion_of(:import_source).in_array(['NSF', 'NIH']) }
   it { is_expected.to validate_presence_of(:import_source) }
 
   describe '.agency_names' do
