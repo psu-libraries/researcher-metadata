@@ -89,29 +89,54 @@ describe NSFGrantImporter do
     end
 
     context 'when a Grant that matches the imported data already exists' do
-      let!(:existing_grant) {
+      let!(:existing_grant_1) {
         create(
           :grant,
           identifier: '8467351',
           agency_name: 'NIH',
-          title: 'Existing Award',
+          title: 'Existing Award 1',
           start_date: Date.new(2020, 7, 1),
           end_date: Date.new(2021, 6, 30),
           abstract: 'Existing abstract',
-          amount_in_dollars: 40000
+          amount_in_dollars: 40000,
+          import_source: 'NIH'
+        )
+      }
+
+      let!(:existing_grant_2) {
+        create(
+          :grant,
+          identifier: '8467351',
+          agency_name: 'NSF',
+          title: 'Existing Award 2',
+          start_date: Date.new(2020, 7, 1),
+          end_date: Date.new(2021, 6, 30),
+          abstract: 'Existing abstract',
+          amount_in_dollars: 40000,
+          import_source: 'NSF'
         )
       }
 
       it 'updates the data in the existing Grant' do
         importer.call
-        g = existing_grant.reload
+        g1 = existing_grant_1.reload
+        g2 = existing_grant_2.reload
 
-        expect(g.title).to eq 'Test Award 1'
-        expect(g.start_date).to eq Date.new(2026, 1, 1)
-        expect(g.end_date).to eq Date.new(2027, 12, 31)
-        expect(g.abstract).to eq 'Test abstract 1'
-        expect(g.amount_in_dollars).to eq 98756
-        expect(g.agency_name).to eq 'NSF'
+        expect(g1.title).to eq 'Existing Award 1'
+        expect(g1.start_date).to eq Date.new(2020, 7, 1)
+        expect(g1.end_date).to eq Date.new(2021, 6, 30)
+        expect(g1.abstract).to eq 'Existing abstract'
+        expect(g1.amount_in_dollars).to eq 40000
+        expect(g1.agency_name).to eq 'NIH'
+        expect(g1.import_source).to eq 'NIH'
+
+        expect(g2.title).to eq 'Test Award 1'
+        expect(g2.start_date).to eq Date.new(2026, 1, 1)
+        expect(g2.end_date).to eq Date.new(2027, 12, 31)
+        expect(g2.abstract).to eq 'Test abstract 1'
+        expect(g2.amount_in_dollars).to eq 98756
+        expect(g2.agency_name).to eq 'NSF'
+        expect(g2.import_source).to eq 'NSF'
       end
     end
   end
