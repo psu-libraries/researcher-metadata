@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_06_182338) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_12_183334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -257,7 +257,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_06_182338) do
     t.integer "amount_in_dollars"
     t.string "identifier"
     t.text "agency_name"
-    t.string "import_source"
+    t.string "import_source", null: false
     t.index ["agency_name"], name: "index_grants_on_agency_name"
     t.index ["identifier", "agency_name"], name: "index_grants_on_identifier_and_agency_name", unique: true
     t.index ["identifier"], name: "index_grants_on_identifier"
@@ -530,7 +530,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_06_182338) do
     t.integer "publication_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.string "import_source"
+    t.string "import_source", null: false
     t.index ["grant_id"], name: "index_research_funds_on_grant_id"
     t.index ["publication_id"], name: "index_research_funds_on_publication_id"
   end
@@ -540,7 +540,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_06_182338) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.string "import_source"
+    t.string "import_source", null: false
     t.index ["grant_id"], name: "index_researcher_funds_on_grant_id"
     t.index ["user_id"], name: "index_researcher_funds_on_user_id"
   end

@@ -9,5 +9,6 @@ class ResearcherFund < ApplicationRecord
   belongs_to :user, inverse_of: :researcher_funds
 
   validates :grant_id, :user_id, presence: true
-  validates :import_source, inclusion: { in: import_sources, allow_nil: true }
+  validates :import_source, inclusion: { in: import_sources }
+  validates :import_source, presence: true
 end

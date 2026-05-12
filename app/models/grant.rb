@@ -18,7 +18,8 @@ class Grant < ApplicationRecord
   validates :identifier, uniqueness: { scope: :agency_name }
   validates :agency_name, presence: true
   validates :agency_name, inclusion: { in: agency_names }
-  validates :import_source, inclusion: { in: import_sources, allow_nil: true }
+  validates :import_source, inclusion: { in: import_sources }
+  validates :import_source, presence: true
 
   def name
     title.presence || identifier.presence

@@ -9,5 +9,6 @@ class ResearchFund < ApplicationRecord
   belongs_to :publication, inverse_of: :research_funds
 
   validates :grant_id, :publication_id, presence: true
-  validates :import_source, inclusion: { in: import_sources, allow_nil: true }
+  validates :import_source, inclusion: { in: import_sources }
+  validates :import_source, presence: true
 end
