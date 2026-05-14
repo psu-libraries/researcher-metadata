@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.2].define(version: 2026_05_12_183334) do
-=======
 ActiveRecord::Schema[7.2].define(version: 2026_05_14_111227) do
->>>>>>> bc012cf0 (Add open access scholarly work publish webhook)
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
