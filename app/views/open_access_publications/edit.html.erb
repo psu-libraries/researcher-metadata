@@ -46,6 +46,7 @@
       <div class="open-access-actions">
         <div class="open-access-action">
           <h5>Upload to ScholarSphere</h5>
+          <!-- TODO confirm with new text -->
           <p>
             If there isn't already an open access version of your work available on the web, please
             consider uploading the <a href="https://psu.libanswers.com/faq/279953" target="_blank">Accepted
@@ -57,19 +58,7 @@
             rules, you will have a chance to change this file. With questions, please contact the Office of Scholarly
             Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>.
           </p>
-          <%= simple_form_for @deposit, url: scholarsphere_file_version_path, method: :post do |f| %>
-            <div class="file-uploads">
-              <%= f.simple_fields_for :file_uploads do |sfu| %>
-                <%= render 'file_upload_fields', f: sfu %>
-              <% end %>
-
-              <div class="cocoon-links">
-                <%= link_to_add_association 'Add Another File', f, :file_uploads, association: :file_uploads,
-                                            class: 'button-default add-button' %>
-              </div>
-            </div>
-            <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
-          <% end %>
+          <%= render ExportMetadataLinkComponent.new(publication:) %>
         </div>
         <div class="action-separator">-- or --</div>
         <div class="open-access-action">

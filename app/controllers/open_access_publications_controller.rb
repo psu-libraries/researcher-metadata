@@ -16,6 +16,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def update
+    # Todo: Lose this?
     @form = OpenAccessURLForm.new(form_params)
 
     if @form.valid?
@@ -145,29 +146,13 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    extra_params = { authorship: @authorship,
-                     deputy_user_id: current_user.deputy.id,
-                     deposit_workflow: 'Standard OA Workflow' }
-    @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
-    @deposit.file_uploads = []
-
-    files = params.dig(:scholarsphere_work_deposit, :file_uploads_attributes)
-    files&.each_value do |file|
-      if file.present? && file[:cache_path].present?
-        ss_file_upload = ScholarsphereFileUpload.new
-        ss_file_upload.file = File.new(file[:cache_path])
-        ss_file_upload.save!
-        @deposit.file_uploads << ss_file_upload
-      end
-    end
-
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
+    @deposit.deposit_workflow = 'Standard OA Workflow'
     ActiveRecord::Base.transaction do
       @deposit.save!
       @authorship.update!(updated_by_owner_at: Time.current)
     end
-
     ScholarsphereUploadJob.perform_later(@deposit.id, current_user.id)
-
     flash[:notice] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid
