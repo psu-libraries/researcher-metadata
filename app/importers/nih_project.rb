@@ -29,14 +29,16 @@ class NIHProject
     project_data['project_num']
   end
 
+  # In very rare instances, the project metadata from NIH does not contain an agency code.
+  # In these cases, we'll assume that the awarding agency is NIH.
   def agency_name
-    project_data['agency_code']
+    project_data['agency_code'] || 'NIH'
   end
 
   def principal_investigators
-    project_data['principal_investigators'].map do |pi_data|
+    project_data['principal_investigators']&.map do |pi_data|
       NIHProjectInvestigator.new(pi_data)
-    end
+    end || []
   end
 
   def publications
@@ -51,6 +53,8 @@ class NIHProject
 
     def parse_date(date)
       Date.iso8601(date)
+    rescue Date::Error
+      nil
     end
 
     def core_project_number

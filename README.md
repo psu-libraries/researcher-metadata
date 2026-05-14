@@ -110,6 +110,11 @@ following types of records from NSF:
     - research_funds
     - researcher_funds
 
+1. **National Institutes of Health** -
+    - grants
+    - research_funds
+    - researcher_funds
+
 1. **Unpaywall** - We import metadata about open access copies of publications from Unpaywall's web 
 [API](https://unpaywall.org/products/api). We search Unpaywall by DOI or title (if the publication has no DOI).
 In addition to importing metadata about any open access copies of a publication, this import also updates 
@@ -119,7 +124,7 @@ The Unpaywall import has a second weekly import on Sunday at 10:00 PM where Unpa
 for new publications. We import the following types of records from Unpaywall:
     - open_access_locations
 
-1. **Penn State Law School repository - We import publication metadata from the repository maintained
+1. **Penn State Law School repository** - We import publication metadata from the repository maintained
 by Dickinson Law via the Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). 
 This is the repository maintained by Dickinson Law: [INSIGHT repository](https://insight.dickinsonlaw.psu.edu/).
 Part of our reason for importing metadata from this source is to facilitate onboarding the law school faculty 

@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "total": 2
+  },
+  "results": [
+    {
+      "project_num": "ABCD1234-01",
+      "award_amount": 425667,
+      "principal_investigators": [
+        {
+          "first_name": "TEST",
+          "middle_name": "SCIENTIFIC",
+          "last_name": "RESEARCHER"
+        }
+      ],
+      "core_project_num": "ABCD1234",
+      "abstract_text": "description of research",
+      "project_title": "Test Research Proposal",
+      "agency_code": "NIH",
+      "budget_start": "2026-03-01T00:00:00",
+      "budget_end": "2027-01-31T00:00:00"
+    },
+    {
+      "project_num": "WXYZ6789-02",
+      "award_amount": 104372,
+      "principal_investigators": [
+        {
+          "first_name": "Another",
+          "middle_name": "",
+          "last_name": "Scientist"
+        },
+        {
+          "first_name": "Third",
+          "middle_name": "B.",
+          "last_name": "Testperson"
+        },
+        {
+          "first_name": "Notta",
+          "middle_name": "PSU",
+          "last_name": "Person"
+        }
+      ],
+      "core_project_num": "WXYZ6789",
+      "abstract_text": "another abstract",
+      "project_title": "Another project",
+      "agency_code": "FDA",
+      "budget_start": "2020-10-15T00:00:00",
+      "budget_end": "2023-01-01T00:00:00"
+    }
+  ]
+}

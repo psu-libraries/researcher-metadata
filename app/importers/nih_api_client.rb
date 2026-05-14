@@ -4,14 +4,18 @@ class NIHAPIClient
   REQUEST_RECORD_LIMIT = 500
 
   def projects_pages_count
-    projects = NIHProjects.new(request_projects(offset: 0, limit: 1))
-    total_count = projects.total_count
+    total_count = projects_count
     pages = total_count / REQUEST_RECORD_LIMIT
     if (total_count % REQUEST_RECORD_LIMIT).zero?
       pages
     else
       pages + 1
     end
+  end
+
+  def projects_count
+    projects = NIHProjects.new(request_projects(offset: 0, limit: 1))
+    projects.total_count
   end
 
   def projects(page)

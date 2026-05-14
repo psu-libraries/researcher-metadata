@@ -24,7 +24,6 @@ class NSFGrantImporter
         g.agency_name = a.agency_name
         g.import_source = SOURCE
         g.save!
-        pbar.increment
 
         user = User.find_by_nsf_grant(a)
         if user && !ResearcherFund.find_by(user: user, grant: g)
@@ -47,6 +46,8 @@ class NSFGrantImporter
             end
           end
         end
+
+        pbar.increment
       end
       pbar.finish
     end
