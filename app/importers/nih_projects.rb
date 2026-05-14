@@ -14,6 +14,10 @@ class NIHProjects
     end
   end
 
+  def self.count
+    NIHAPIClient.new.projects_count
+  end
+
   def each(&)
     projects_data['results'].each do |result|
       yield NIHProject.new(result)

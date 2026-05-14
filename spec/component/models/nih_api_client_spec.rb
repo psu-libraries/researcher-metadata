@@ -72,6 +72,14 @@ describe NIHAPIClient do # rubocop:disable RSpec/SpecFilePathFormat
     end
   end
 
+  describe '#projects_count' do
+    let(:projects_count) { 100 }
+
+    it 'returns the total number of NIH projects' do
+      expect(client.projects_count).to eq 100
+    end
+  end
+
   describe '#projects' do
     context 'when given 1' do
       it 'returns the first page of projects' do

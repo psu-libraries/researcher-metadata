@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<eSummaryResult>
+  <DocSum>
+    <Item Name="PubDate" Type="Date">2021 Oct</Item>
+    <Item Name="Title" Type="String">First Test Publication</Item>
+    <Item Name="DOI" Type="String">10.1234/abc123</Item>
+  </DocSum>
+
+</eSummaryResult>

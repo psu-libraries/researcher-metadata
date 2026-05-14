@@ -118,6 +118,28 @@ class User < ApplicationRecord
     end
   end
 
+  def self.find_by_nih_investigator(investigator)
+    if investigator.middle_initial
+      where(
+        %{LOWER(first_name) = ? AND LOWER(LEFT(middle_name, 1)) = ? AND LOWER(last_name) = ?},
+        investigator.first_name,
+        investigator.middle_initial,
+        investigator.last_name
+      ).first ||
+        where(
+          %{LOWER(first_name) = ? AND LOWER(last_name) = ? AND (middle_name IS NULL OR middle_name = '')},
+          investigator.first_name,
+          investigator.last_name
+        ).first
+    else
+      where(
+        %{LOWER(first_name) = ? AND LOWER(last_name) = ?},
+        investigator.first_name,
+        investigator.last_name
+      ).first
+    end
+  end
+
   def self.needs_open_access_notification
     joins(:authorships, :user_organization_memberships, :publications)
       .joins('LEFT OUTER JOIN open_access_locations ON open_access_locations.publication_id = publications.id')

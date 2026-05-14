@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class NIHProjectPublication
+  class MissingMetadata < RuntimeError; end
+
   def initialize(publication_data)
     @publication_data = publication_data
   end
@@ -10,7 +12,10 @@ class NIHProjectPublication
   end
 
   def year
-    item_content('PubDate').split.first.to_i
+    date = item_content('PubDate')
+    raise MissingMetadata.new('Publication date is missing.') unless date
+
+    date.split.first.to_i
   end
 
   def doi
@@ -26,6 +31,6 @@ class NIHProjectPublication
     end
 
     def item_content(name)
-      parsed_data.at_xpath("//eSummaryResult//DocSum//Item[@Name='#{name}']").content
+      parsed_data.at_xpath("//eSummaryResult//DocSum//Item[@Name='#{name}']")&.content
     end
 end

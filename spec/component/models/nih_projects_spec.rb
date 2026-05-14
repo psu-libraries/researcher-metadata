@@ -6,7 +6,7 @@ describe NIHProjects do
   let(:projects) { described_class.new(page_1_data) }
   let(:page_1_data) { { 'meta' => { 'total' => 3 }, 'results' => [p_data_1, p_data_2] } }
   let(:page_2_data) { { 'results' => [p_data_3] } }
-  let(:api_client) { instance_double NIHAPIClient, projects_pages_count: 2 }
+  let(:api_client) { instance_double NIHAPIClient, projects_pages_count: 2, projects_count: 3 }
   let(:p_data_1) { double 'project data 1' }
   let(:p_data_2) { double 'project data 2' }
   let(:p_data_3) { double 'project data 3' }
@@ -26,6 +26,12 @@ describe NIHProjects do
   describe '.find_in_batches' do
     it 'yields an NIHProject to the given block for each project result from the NIH API request' do
       expect { |b| described_class.find_in_batches(&b) }.to yield_successive_args(p1, p2, p3)
+    end
+  end
+
+  describe '.count' do
+    it 'returns the total number of NIH projects' do
+      expect(described_class.count).to eq 3
     end
   end
 

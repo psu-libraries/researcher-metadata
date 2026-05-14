@@ -2,7 +2,7 @@
 
 class Grant < ApplicationRecord
   def self.agency_names
-    ['NSF', 'NIH']
+    ['AHRQ', 'ALLCDC', 'FDA', 'HRSA', 'NIH', 'NSF', 'SAMSHA']
   end
 
   def self.import_sources
