@@ -124,4 +124,5 @@ Rails.application.routes.draw do
   put 'education_history_items/:id' => 'education_history_items#update', as: :education_history_item
 
   post 'webhooks/scholarsphere_events' => 'webhooks#scholarsphere_events', as: :scholarsphere_events_webhook
+  post 'webhooks/open_access_works' => 'webhooks#open_access_works', as: :open_access_works_webhook
 end
