@@ -88,7 +88,7 @@ describe NIHGrantImporter do
     it 'populates the correct data in new records' do
       importer.call
 
-      g1 = Grant.find_by(identifier: 'WXYZ6789-02')
+      g1 = Grant.find_by(identifier: 'ABCD1234-01')
       g2 = Grant.find_by(identifier: 'WXYZ6789-02')
 
       expect(g1).not_to be_nil
