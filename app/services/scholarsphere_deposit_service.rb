@@ -14,19 +14,27 @@ class ScholarsphereDepositService
     ingest = Scholarsphere::Client::Ingest.new(
       metadata: deposit.metadata,
       files: deposit.files,
-      depositor: user.webaccess_id
+      depositor: user.webaccess_id,
+      publish: deposit.standard_oa_workflow?
     )
 
     response = ingest.publish
     response_body = JSON.parse(response.body)
+    if response.status == 201
+      edit_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['edit_url']}"
+      cache_key = "deposit:#{deposit.id}"
+      Rails.cache.write(
+        cache_key,
+        { status: 'completed', user_id: current_user.id, edit_url: edit_url },
+        expires_in: 15.minutes
+      )
+    end
 
     if response.status == 200
       scholarsphere_publication_uri = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['url']}"
       deposit.record_success(scholarsphere_publication_uri)
       profile = UserProfile.new(user)
-      if deposit.standard_oa_workflow?
-        FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
-      else
+      unless deposit.standard_oa_workflow?
         FacultyConfirmationsMailer.ai_oa_workflow_scholarsphere_deposit_confirmation(profile, deposit).deliver_now
         AiOAStatusExportJob.perform_later(deposit.activity_insight_oa_file_id, 'Deposited to ScholarSphere')
       end

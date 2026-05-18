@@ -152,13 +152,44 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       @deposit.save!
       @authorship.update!(updated_by_owner_at: Time.current)
     end
+    deposit_id = @deposit.id TODO replace line below with this
+    cache_key = "deposit:#{deposit_id}"
+    Rails.cache.write(cache_key, { status: 'pending', user_id: current_user.id }, expires_in: 1.hour)
+    # Rails.cache.write(cache_key, { status: 'completed', user_id: current_user.id, edit_url: 'http://www.google.com' }, expires_in: 1.hour)
+    render json: { deposit_id: deposit_id, check_url: check_scholarsphere_deposit_path(deposit_id)}, status: :accepted
+
     ScholarsphereUploadJob.perform_later(@deposit.id, current_user.id)
-    flash[:notice] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
-    redirect_to edit_profile_publications_path
+    # flash[:notice] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
+
+    # redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid
     @form = OpenAccessURLForm.new
     flash.now[:alert] = @deposit.errors.full_messages.join(', ')
     render :edit
+  end
+
+  def check_scholarsphere_deposit
+    deposit_id = params[:id]
+    cache_key = "deposit:#{deposit_id}"
+
+    data = Rails.cache.read(cache_key)
+
+    return render json: { error: 'Job not found' }, status: :not_found unless data
+    return render json: { error: 'Unauthorized' }, status: :forbidden unless data[:user_id] == current_user.id
+    case data[:status]
+    when 'completed'
+      render json: {
+        status: 'completed',
+        edit_url: data[:edit_url]
+      }
+    when 'failed'
+      render json: {
+        status: 'failed',
+        error: data['error']
+      }, status: :unprocessable_entity
+    else
+      render json: { status: data[:status] }, status: :accepted
+    end
   end
 
   helper_method :publication

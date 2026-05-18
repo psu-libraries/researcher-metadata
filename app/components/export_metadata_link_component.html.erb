@@ -1,4 +1,17 @@
-<%= button_to "Deposit to ScholarSphere dood",
-  scholarsphere_deposit_path(@publication.id),
-                        class: 'btn btn-primary'
-                        %>
+<div data-controller="scholarsphere-edit-link" data-action="submit->scholarsphere-edit-link#submit">
+
+  <%= form_with url: scholarsphere_deposit_path(@publication.id), method: :post, data: { 
+                  controller: "scholarsphere-edit-link",
+                  action: "submit->scholarsphere-edit-link#submit" 
+                }, local: true do |f| %>
+
+    <button type="submit" 
+            class="btn btn-primary">
+      Deposit to ScholarSphere
+    </button>
+  <% end %>
+
+  <div data-scholarsphere-edit-link-target="status" style="display: none;" class="mt-4 p-4 bg-gray-100 rounded">
+    <p>Waiting for job to start...</p>
+  </div>
+</div>

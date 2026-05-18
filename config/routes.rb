@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     get 'publications/:id/open_access/scholarsphere_file_serve/*filename' => 'open_access_publications#file_serve', as: :scholarsphere_file_serve, constraints: { filename: /.*/ }
     patch 'publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
     post 'publications/:id/open_access/scholarsphere_deposit' => 'open_access_publications#create_scholarsphere_deposit', as: :scholarsphere_deposit
+    get 'publications/:id/open_access/check_scholarsphere_deposit' => 'open_access_publications#check_scholarsphere_deposit', as: :check_scholarsphere_deposit
     get 'publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver
     post 'publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
     get 'publications/open_access_waivers/new' => 'external_publication_waivers#new', as: :new_external_publication_waiver
