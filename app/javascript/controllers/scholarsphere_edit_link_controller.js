@@ -6,18 +6,18 @@ export default class extends Controller {
     checkUrl: String 
   }
 
+  static targets = [ "loading" ]
+
   connect() {
-    this.pollCount = 60;
-    this.maxPolls = 3;
+    this.pollCount = 0;
+    this.maxPolls = 60;
   }
 
   submit(event) {
     event.preventDefault();
-
     const form = this.element;
 
-    // Show a loading state immediately
-    // this.setLoadingState(true);
+    this.setLoadingState(true);
 
     fetch(form.action, {
       method: 'post',
@@ -31,8 +31,6 @@ export default class extends Controller {
       return response.json();
     })
     .then(data => {
-      console.log('Deposit id: ' + data.deposit_id)
-      console.log('check_url: ' + data.check_url)
       if (!data.deposit_id || !data.check_url) {
         throw new Error('Invalid response from server');
       }
@@ -61,7 +59,7 @@ export default class extends Controller {
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.error || 'Request failed');
+        this.showFailureMessage()
       }
       
       switch (data.status) {
@@ -75,10 +73,12 @@ export default class extends Controller {
           break;
         default:
           this.handlePending(data);
+
           break;
       }
     } catch (error) {
-      this.handleError(error);
+      console.error('Polling error:', error);
+      this.showFailureMessage();
     }
   }
 
@@ -94,7 +94,7 @@ export default class extends Controller {
     if (this.pollTimer) clearTimeout(this.pollTimer);
     
     this.dispatch('error', { detail: data.error });
-    console.log('error' + data.error)
+    console.log('Error: ' + data.error)
     this.showFailureMessage();
   }
 
@@ -110,10 +110,6 @@ export default class extends Controller {
     const delay = this.calculateBackoffDelay();
     this.pollTimer = setTimeout(() => this.poll(), delay);
   }
-
-  handleError(error) {
-    console.error('Polling error:', error);
-  }
   
   calculateBackoffDelay() {
     if (this.pollCount < 10) return 1000;
@@ -123,5 +119,13 @@ export default class extends Controller {
 
   showFailureMessage() {
     alert('Something went in creating a Scholarsphere deposit. Please navigate to https://scholarsphere.psu.edu/');
+  }
+
+  setLoadingState(loading) {
+    const submitBtn = this.element.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = loading;
+    }
+    this.loadingTarget.classList.remove('d-none')
   }
 }

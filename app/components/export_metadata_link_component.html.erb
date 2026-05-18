@@ -1,4 +1,4 @@
-<div data-controller="scholarsphere-edit-link" data-action="submit->scholarsphere-edit-link#submit">
+<div>
 
   <%= form_with url: scholarsphere_deposit_path(@publication.id), method: :post, data: { 
                   controller: "scholarsphere-edit-link",
@@ -9,9 +9,8 @@
             class="btn btn-primary">
       Deposit to ScholarSphere
     </button>
+    <div data-scholarsphere-edit-link-target="loading" class="d-none mt-4 p-4 bg-gray-100 rounded">
+      <p>Redirecting to Scholarsphere...</p>
+    </div>
   <% end %>
-
-  <div data-scholarsphere-edit-link-target="status" style="display: none;" class="mt-4 p-4 bg-gray-100 rounded">
-    <p>Waiting for job to start...</p>
-  </div>
 </div>
