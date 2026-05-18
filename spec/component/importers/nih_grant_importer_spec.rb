@@ -73,7 +73,7 @@ describe NIHGrantImporter do
       expect { importer.call }.to change(ResearchFund, :count).by 2
     end
 
-    it 'does not duplicate ResearcFund records that already exist' do
+    it 'does not duplicate ResearchFund records that already exist' do
       expect { 2.times { importer.call } }.to change(ResearchFund, :count).by 2
     end
 
@@ -91,8 +91,96 @@ describe NIHGrantImporter do
       g1 = Grant.find_by(identifier: 'ABCD1234-01')
       g2 = Grant.find_by(identifier: 'WXYZ6789-02')
 
-      expect(g1).not_to be_nil
-      expect(g2).not_to be_nil
+      expect(g1.agency_name).to eq 'NIH'
+      expect(g1.title).to eq 'Test Research Proposal'
+      expect(g1.start_date).to eq Date.new(2026, 3, 1)
+      expect(g1.end_date).to eq Date.new(2027, 1, 31)
+      expect(g1.abstract).to eq 'description of research'
+      expect(g1.amount_in_dollars).to eq 425667
+      expect(g1.import_source).to eq 'NIH'
+
+      expect(ResearchFund.find_by(grant: g1, publication: pub_1, import_source: 'NIH')).not_to be_nil
+      expect(ResearcherFund.find_by(grant: g1, user: user_1, import_source: 'NIH')).not_to be_nil
+
+      expect(g2.agency_name).to eq 'FDA'
+      expect(g2.title).to eq 'Another project'
+      expect(g2.start_date).to eq Date.new(2020, 10, 15)
+      expect(g2.end_date).to eq Date.new(2023, 1, 1)
+      expect(g2.abstract).to eq 'another abstract'
+      expect(g2.amount_in_dollars).to eq 104372
+      expect(g2.import_source).to eq 'NIH'
+
+      expect(ResearchFund.find_by(grant: g2, publication: pub_2, import_source: 'NIH')).not_to be_nil
+      expect(ResearcherFund.find_by(grant: g2, user: user_2, import_source: 'NIH')).not_to be_nil
+      expect(ResearcherFund.find_by(grant: g2, user: user_3, import_source: 'NIH')).not_to be_nil
+    end
+
+    context 'when a Grant that matches the imported data already exists' do
+      let!(:existing_grant_1) {
+        create(
+          :grant,
+          identifier: 'ABCD1234-01',
+          agency_name: 'NSF',
+          title: 'Existing Award 1',
+          start_date: Date.new(2020, 7, 1),
+          end_date: Date.new(2021, 6, 30),
+          abstract: 'Existing abstract',
+          amount_in_dollars: 40000,
+          import_source: 'NSF'
+        )
+      }
+
+      let!(:existing_grant_2) {
+        create(
+          :grant,
+          identifier: 'ABCD1234-01',
+          agency_name: 'NIH',
+          title: 'Existing Award 2',
+          start_date: Date.new(2020, 7, 1),
+          end_date: Date.new(2021, 6, 30),
+          abstract: 'Existing abstract',
+          amount_in_dollars: 40000,
+          import_source: 'NSF'
+        )
+      }
+
+      it 'updates the data in the existing Grant' do
+        importer.call
+        g1 = existing_grant_1.reload
+        g2 = existing_grant_2.reload
+
+        expect(g1.title).to eq 'Existing Award 1'
+        expect(g1.start_date).to eq Date.new(2020, 7, 1)
+        expect(g1.end_date).to eq Date.new(2021, 6, 30)
+        expect(g1.abstract).to eq 'Existing abstract'
+        expect(g1.amount_in_dollars).to eq 40000
+        expect(g1.agency_name).to eq 'NSF'
+        expect(g1.import_source).to eq 'NSF'
+
+        expect(g2.title).to eq 'Test Research Proposal'
+        expect(g2.start_date).to eq Date.new(2026, 3, 1)
+        expect(g2.end_date).to eq Date.new(2027, 1, 31)
+        expect(g2.abstract).to eq 'description of research'
+        expect(g2.amount_in_dollars).to eq 425667
+        expect(g2.agency_name).to eq 'NIH'
+        expect(g2.import_source).to eq 'NIH'
+      end
+    end
+
+    context 'when an associated publication in the imported metadata is missing key information' do
+      let(:publication_body_3) { fixture_file_read('nih/incomplete_publication_3.xml') }
+
+      it 'creates new Grant records for each award in the imported data' do
+        expect { importer.call }.to change(Grant, :count).by 2
+      end
+
+      it 'creates new ResearchFund records for each matching publication in the imported data with complete metadata' do
+        expect { importer.call }.to change(ResearchFund, :count).by 1
+      end
+
+      it 'creates new ResearcherFund records for each matching researcher in the imported data' do
+        expect { importer.call }.to change(ResearcherFund, :count).by 3
+      end
     end
   end
 end
