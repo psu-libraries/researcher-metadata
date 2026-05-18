@@ -103,14 +103,12 @@ a physical disk. We import the following types of records from Web of Science:
     - contributor_names
     - publications
 
-1. **National Science Foundation** - We import grant data that we download from the National Science
-Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files. We import the
-following types of records from NSF:
+1. **National Science Foundation** - We import metadata about NSF grants that have been awarded to Penn State researchers via the [NSF Awards API](https://resources.research.gov/common/webapi/awardapisearch-v1.htm). This includes metadata about the grants themselves and associations with researchers and publications which are stored in the following types of records:
     - grants
     - research_funds
     - researcher_funds
 
-1. **National Institutes of Health** -
+1. **National Institutes of Health** - We import metadata about NIH grants that have been awarded to Penn State researchers via the [NIH RePORTER API](https://api.reporter.nih.gov/) and the [E-utilities API](https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary). This includes metadata about the grants themselves and associations with researchers and publications which are stored in the following types of records:
     - grants
     - research_funds
     - researcher_funds
