@@ -588,6 +588,7 @@ describe OpenAccessPublicationsController, type: :controller do
     end
   end
 
+  # TODO: Delete this? make sure it's not used anywhere
   describe '#scholarsphere_deposit_form' do
     let(:perform_request) { post :scholarsphere_deposit_form, params: { id: 1 } }
 
@@ -778,27 +779,17 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(found_deposit).not_to be_nil
           end
 
-          it 'saves the uploaded file to the new scholarsphere work deposit' do
-            post :create_scholarsphere_deposit, params: params
-
-            expect(found_deposit.file_uploads.count).to eq 1
-            expect(found_deposit.status).to eq 'Pending'
-            expect(found_deposit.file_uploads.first.file.identifier).to eq file.original_filename
-          end
-
           it "sets the modification timestamp on the user's authorship of the publication" do
             post :create_scholarsphere_deposit, params: params
             expect(auth.reload.updated_by_owner_at).to eq now
           end
 
-          it "redirects to the publication management page for the user's profile" do
+          it "renders json with the deposit id and a check path" do
             post :create_scholarsphere_deposit, params: params
-            expect(response).to redirect_to edit_profile_publications_path
-          end
-
-          it 'sets a success message' do
-            post :create_scholarsphere_deposit, params: params
-            expect(flash[:notice]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
+            id = ScholarsphereWorkDeposit.last.id
+            expect(response.body).to include("{\"deposit_id\":#{id},\"check_url\":\"#{
+              check_scholarsphere_deposit_path(id)
+              }\"}")
           end
 
           it 'schedules a job to send the publication to ScholarSphere' do
@@ -816,42 +807,79 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(found_deposit.deputy_user_id).to eq(deputy.id)
           end
         end
+      end
+    end
+  end
 
-        context 'when given no cache_path for the scholarsphere work deposit' do
-          let(:cache_path) { '' }
+  describe '#check_scholarsphere_deposit' do
+    let(:now) { Time.new 2019, 1, 1, 0, 0, 0 }
+    let(:perform_request) { get :check_scholarsphere_deposit, params: { id: "#{user.id}" } }
 
-          it 'does not create a new scholarsphere work deposit' do
-            expect do
-              post :create_scholarsphere_deposit, params: params
-            end.not_to change(ScholarsphereWorkDeposit, :count)
-          end
+    before do
+      allow(Time).to receive(:current).and_return(now)
+      allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+      allow(controller).to receive(:current_user).and_return(user)
+    end
 
-          it 'does not create any new file upload records' do
-            expect do
-              post :create_scholarsphere_deposit, params: params
-            end.not_to change(ScholarsphereFileUpload, :count)
-          end
+    after do
+      Rails.cache.clear
+    end
 
-          it "does not set the modification timestamp on the user's authorship of the publication" do
-            post :create_scholarsphere_deposit, params: params
-            expect(auth.reload.updated_by_owner_at).to be_nil
-          end
+    context 'when a deposit is not found' do
+      before do
+        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(nil)
+      end
+      it 'renders Json deposit not found' do
+        response = perform_request
+        expect(response.body).to include('Deposit not found')
+      end
+    end
 
-          it 'does not schedule a job to send the publication to ScholarSphere' do
-            post :create_scholarsphere_deposit, params: params
-            expect(ScholarsphereUploadJob).not_to have_received(:perform_later)
-          end
+    context 'when the deposit does not belong to the current user' do
+      before do
+        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
+          {status: 'pending', user_id: '912847353293'}
+        )
+      end
+      it 'renders Json unauthorized' do
+        response = perform_request
+        expect(response.body).to include('Unauthorized')
+      end
+    end
 
-          it 'sets an error message' do
-            post :create_scholarsphere_deposit, params: params
-            expect(flash.now[:alert]).not_to be_empty
-          end
+    context 'when the deposit has been completed' do
+      before do
+        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
+          {status: 'completed', user_id: "#{user.id}", edit_url: 'http://www.test.com'}
+        )
+      end
+      it 'renders Json containing the edit url' do
+        response = perform_request
+        expect(response.body).to include('"edit_url":"http://www.test.com"')
+      end
+    end
 
-          it 'rerenders the form' do
-            post :create_scholarsphere_deposit, params: params
-            expect(response).to render_template :edit
-          end
-        end
+    context 'when the deposit has failed' do
+      before do
+        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
+          {status: 'failed', user_id: "#{user.id}", error: 'Some error'}
+        )
+      end
+      it 'renders Json containing the error message' do
+        response = perform_request
+        expect(response.body).to include('"error":"Some error"')
+      end
+    end
+
+    context 'when the deposit is neither completed nor failed' do
+      before do
+        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
+          {status: 'pending', user_id: "#{user.id}"}
+        )
+      end
+      it 'renders json passing on the status' do
+        response = perform_request
+        expect(response.body).to include('"status":"pending"')
       end
     end
   end
