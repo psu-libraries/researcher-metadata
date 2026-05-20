@@ -111,4 +111,16 @@ namespace :import do
     PureJournalsImporter.new.call
     PurePublicationImporter.new.call
   end
+
+  namespace :google_scholar do
+    desc 'Scrape Google Scholar data for configured faculty'
+    task scrape: :environment do
+      GoogleScholarScraper.new.call
+    end
+  end
+
+  desc 'Fetch Scholar profiles and enrich Publication/User records with metrics'
+  task google_scholar: :environment do
+    GoogleScholarImporter.new.call
+  end
 end

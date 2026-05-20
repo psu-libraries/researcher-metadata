@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_12_183334) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_18_180941) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -509,7 +509,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_12_183334) do
     t.boolean "preferred_file_version_none_email_sent"
     t.boolean "doi_error"
     t.boolean "flagged_for_review"
+    t.integer "google_scholar_citation_count"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
+    t.index ["google_scholar_citation_count"], name: "index_publications_on_google_scholar_citation_count"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
@@ -686,7 +688,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_12_183334) do
     t.jsonb "psu_identity"
     t.datetime "psu_identity_updated_at", precision: nil
     t.boolean "suppress_oa_reminders", default: false
+    t.string "google_scholar_id"
+    t.integer "google_scholar_h_index"
+    t.integer "google_scholar_citation_total"
+    t.datetime "google_scholar_imported_at", precision: nil
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
+    t.index ["google_scholar_id"], name: "index_users_on_google_scholar_id", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"
     t.index ["middle_name"], name: "index_users_on_middle_name"

@@ -63,3 +63,4 @@ config/environments/*.local.yml
 .bash_history
 .env
 .envrc
+.envrcdocs/superpowers/
