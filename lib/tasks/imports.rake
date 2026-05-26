@@ -113,13 +113,21 @@ namespace :import do
   end
 
   namespace :google_scholar do
-    desc 'Scrape Google Scholar data for configured faculty'
-    task scrape: :environment do
-      GoogleScholarScraper.new.call
+    desc 'Import Google Scholar profile IDs, total citations, and h-indexes'
+    task profiles: :environment do
+      GoogleScholarProfileImporter.new.call
+    end
+
+    desc 'Alias for import:google_scholar:profiles'
+    task scrape: :profiles
+
+    desc 'Import Google Scholar publication citation counts by DOI'
+    task publication_citations: :environment do
+      GoogleScholarPublicationCitationImporter.new.call
     end
   end
 
-  desc 'Fetch Scholar profiles and enrich Publication/User records with metrics'
+  desc 'Fetch Google Scholar profile and publication citation metrics'
   task google_scholar: :environment do
     GoogleScholarImporter.new.call
   end

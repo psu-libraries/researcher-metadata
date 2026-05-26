@@ -1,0 +1,73 @@
+# frozen_string_literal: true
+
+require 'utilities/google_scholar_scraper'
+
+class GoogleScholarProfileImporter
+  def initialize(scraper: GoogleScholarScraper.new, matcher_class: GoogleScholarProfileMatcher)
+    @scraper = scraper
+    @matcher_class = matcher_class
+  end
+
+  def call
+    users = User.active
+    pbar = Utilities::ProgressBarTTY.create(
+      title: 'Importing Google Scholar Profile Data',
+      total: users.count
+    )
+
+    users.find_each do |user|
+      import_user(user)
+      pbar.increment
+    end
+
+    pbar.finish
+  end
+
+  private
+
+    attr_reader :scraper, :matcher_class
+
+    def import_user(user)
+      profile = if user.google_scholar_id.present?
+                  scraper.fetch_profile(user.google_scholar_id)
+                else
+                  discover_profile(user)
+                end
+      return unless profile
+
+      update_user(user, profile)
+    rescue StandardError => e
+      Rails.logger.warn("GoogleScholarProfileImporter: failed to import user #{user.id}: #{e.message}")
+    end
+
+    def discover_profile(user)
+      scraper.search_profiles(profile_search_name(user)).each do |candidate|
+        profile = scraper.fetch_profile(candidate[:scholar_id])
+        next unless profile
+
+        result = matcher_class.new(user, profile).match
+        if result.matched?
+          Rails.logger.info("GoogleScholarProfileImporter: #{result.message}")
+          return profile
+        end
+
+        Rails.logger.info("GoogleScholarProfileImporter: #{result.message}")
+      end
+
+      Rails.logger.info("GoogleScholarProfileImporter: no Google Scholar profile match for user #{user.id}")
+      nil
+    end
+
+    def update_user(user, profile)
+      user.update!(
+        google_scholar_id: user.google_scholar_id.presence || profile[:scholar_id],
+        google_scholar_h_index: profile[:h_index],
+        google_scholar_citation_total: profile[:citation_total],
+        google_scholar_imported_at: Time.current
+      )
+    end
+
+    def profile_search_name(user)
+      [user.first_name, user.middle_name, user.last_name].compact_blank.join(' ')
+    end
+end
