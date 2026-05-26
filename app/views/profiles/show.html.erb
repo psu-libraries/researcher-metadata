@@ -60,6 +60,18 @@
                     <td><%= @profile.total_scopus_citations %></td>
                   </tr>
                 <% end %>
+                <% if @profile.google_scholar_h_index %>
+                  <tr>
+                    <td>Google Scholar H-index</td>
+                    <td><%= @profile.google_scholar_h_index %></td>
+                  </tr>
+                <% end %>
+                <% if @profile.google_scholar_citation_total.present? && @profile.google_scholar_citation_total > 0 %>
+                  <tr>
+                    <td>Google Scholar Citations</td>
+                    <td><%= @profile.google_scholar_citation_total %></td>
+                  </tr>
+                <% end %>
               </tbody>
             </table>
             <% if @profile.pure_profile_url %>
