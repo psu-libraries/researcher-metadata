@@ -83,7 +83,7 @@ class GoogleScholarScraper
 
     def fetch_author_search_html(name)
       scholar_url = 'https://scholar.google.com/citations?' \
-        "view_op=search_authors&mauthors=#{URI.encode_www_form_component(name)}&hl=en"
+                    "view_op=search_authors&mauthors=#{URI.encode_www_form_component(name)}&hl=en"
 
       fetch_scraperapi_html(scholar_url, "Google Scholar author search for #{name}")
     end
@@ -96,7 +96,7 @@ class GoogleScholarScraper
 
     def fetch_page_html(user_id, cstart)
       scholar_url = 'https://scholar.google.com/citations?' \
-        "user=#{user_id}&hl=en&sortby=citations&cstart=#{cstart}&pagesize=#{PAGE_SIZE}"
+                    "user=#{user_id}&hl=en&sortby=citations&cstart=#{cstart}&pagesize=#{PAGE_SIZE}"
 
       fetch_scraperapi_html(scholar_url, "Scholar profile for #{user_id}")
     end
@@ -193,7 +193,7 @@ class GoogleScholarScraper
         title = title_el ? title_el.text.strip : 'N/A'
         citations = cited_el ? cited_el.text.strip.to_i : 0
         detail_url = absolute_google_url(title_el&.[]('href'))
-        year = year_el&.text&.strip&.to_i
+        year = year_el ? year_el.text.strip.to_i : nil
 
         papers << {
           title: title,
@@ -226,7 +226,9 @@ class GoogleScholarScraper
 
     def citation_count_from_result(result)
       cited_by_link = result.css('.gs_fl a').find { |link| link.text.match?(/Cited by \d+/i) }
-      cited_by_link&.text.to_s[/\d+/]&.to_i || 0
+      return 0 unless cited_by_link
+
+      cited_by_link.text[/\d+/].to_i
     end
 
     def absolute_google_url(href)

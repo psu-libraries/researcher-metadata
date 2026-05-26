@@ -66,10 +66,11 @@ describe GoogleScholarProfileImporter do
       let!(:user) { create(:user, google_scholar_id: 'inactive-scholar-id') }
 
       it 'does not import the user' do
-        expect(scraper).not_to receive(:fetch_profile)
+        allow(scraper).to receive(:fetch_profile)
 
         importer.call
 
+        expect(scraper).not_to have_received(:fetch_profile)
         expect(user.reload.google_scholar_imported_at).to be_nil
       end
     end

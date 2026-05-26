@@ -13,10 +13,10 @@ describe GoogleScholarImporter do
         publication_citation_importer: publication_citation_importer
       )
 
-      expect(profile_importer).to receive(:call).ordered
-      expect(publication_citation_importer).to receive(:call).ordered
-
       importer.call
+
+      expect(profile_importer).to have_received(:call).ordered
+      expect(publication_citation_importer).to have_received(:call).ordered
     end
   end
 end
