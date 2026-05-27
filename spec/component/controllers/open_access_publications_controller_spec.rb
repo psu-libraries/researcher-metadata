@@ -588,7 +588,6 @@ describe OpenAccessPublicationsController, type: :controller do
     end
   end
 
-  # TODO: Delete this? make sure it's not used anywhere
   describe '#scholarsphere_deposit_form' do
     let(:perform_request) { post :scholarsphere_deposit_form, params: { id: 1 } }
 
@@ -668,8 +667,6 @@ describe OpenAccessPublicationsController, type: :controller do
   describe '#create_scholarsphere_deposit' do
     let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
     let(:perform_request) { post :create_scholarsphere_deposit, params: { id: 1 } }
-
-    before { allow(ScholarsphereUploadJob).to receive(:perform_later) }
 
     it_behaves_like 'an unauthenticated controller'
 
@@ -772,6 +769,14 @@ describe OpenAccessPublicationsController, type: :controller do
         end
 
         context 'when given valid params' do
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
+
+          before do
+            allow(service).to receive(:create_draft).and_return(test_url)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+          end
+
           it 'creates a new scholarsphere work deposit' do
             expect do
               post :create_scholarsphere_deposit, params: params
@@ -784,17 +789,14 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(auth.reload.updated_by_owner_at).to eq now
           end
 
-          it "renders json with the deposit id and a check path" do
+          it 'calls ScholarsphereDepositService' do
             post :create_scholarsphere_deposit, params: params
-            id = ScholarsphereWorkDeposit.last.id
-            expect(response.body).to include("{\"deposit_id\":#{id},\"check_url\":\"#{
-              check_scholarsphere_deposit_path(id)
-              }\"}")
+            expect(service).to have_received(:create_draft)
           end
 
-          it 'schedules a job to send the publication to ScholarSphere' do
+          it 'redirects to the url returned by the deposit service' do
             post :create_scholarsphere_deposit, params: params
-            expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)
+            expect(response).to redirect_to(test_url)
           end
         end
 
@@ -807,79 +809,6 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(found_deposit.deputy_user_id).to eq(deputy.id)
           end
         end
-      end
-    end
-  end
-
-  describe '#check_scholarsphere_deposit' do
-    let(:now) { Time.new 2019, 1, 1, 0, 0, 0 }
-    let(:perform_request) { get :check_scholarsphere_deposit, params: { id: "#{user.id}" } }
-
-    before do
-      allow(Time).to receive(:current).and_return(now)
-      allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-      allow(controller).to receive(:current_user).and_return(user)
-    end
-
-    after do
-      Rails.cache.clear
-    end
-
-    context 'when a deposit is not found' do
-      before do
-        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(nil)
-      end
-      it 'renders Json deposit not found' do
-        response = perform_request
-        expect(response.body).to include('Deposit not found')
-      end
-    end
-
-    context 'when the deposit does not belong to the current user' do
-      before do
-        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
-          {status: 'pending', user_id: '912847353293'}
-        )
-      end
-      it 'renders Json unauthorized' do
-        response = perform_request
-        expect(response.body).to include('Unauthorized')
-      end
-    end
-
-    context 'when the deposit has been completed' do
-      before do
-        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
-          {status: 'completed', user_id: "#{user.id}", edit_url: 'http://www.test.com'}
-        )
-      end
-      it 'renders Json containing the edit url' do
-        response = perform_request
-        expect(response.body).to include('"edit_url":"http://www.test.com"')
-      end
-    end
-
-    context 'when the deposit has failed' do
-      before do
-        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
-          {status: 'failed', user_id: "#{user.id}", error: 'Some error'}
-        )
-      end
-      it 'renders Json containing the error message' do
-        response = perform_request
-        expect(response.body).to include('"error":"Some error"')
-      end
-    end
-
-    context 'when the deposit is neither completed nor failed' do
-      before do
-        allow(Rails.cache).to receive(:read).with("deposit:#{user.id}").and_return(
-          {status: 'pending', user_id: "#{user.id}"}
-        )
-      end
-      it 'renders json passing on the status' do
-        response = perform_request
-        expect(response.body).to include('"status":"pending"')
       end
     end
   end

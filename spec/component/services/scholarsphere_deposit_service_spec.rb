@@ -23,10 +23,39 @@ describe ScholarsphereDepositService do
       {
         metadata: metadata,
         files: files,
-        depositor: 'abc123',
-        publish: true
+        depositor: 'abc123'
       }
     ).and_return ingest
+  end
+
+  describe '#create_draft' do
+    let(:response_body) { %{{"url": "/the-url", "edit_url":"/the-edit-url"}} }
+    let(:status) { 201 }
+
+    before do
+      allow(Scholarsphere::Client::Ingest).to receive(:new).with(
+        {
+          metadata: metadata,
+          files: files,
+          depositor: 'abc123',
+          publish: false
+        }
+      ).and_return ingest
+    end
+
+    it 'returns the edit_url from the body' do
+      resp = service.create_draft
+      expect(resp).to eq('https://scholarsphere.test/the-edit-url')
+    end
+
+    context 'if the scholarsphere client does not return successfully' do
+      let(:status) { 500 }
+      let(:response_body) { %{{"error": "some error"}} }
+
+      it 'raises a Deposit Failed error' do
+        expect { service.create_draft }.to raise_error ScholarsphereDepositService::DepositFailed, response_body
+      end
+    end
   end
 
   describe '#create' do
@@ -41,27 +70,21 @@ describe ScholarsphereDepositService do
       allow(UserProfile).to receive(:new).with(user).and_return(profile)
     end
 
-    context 'when the ScholarSphere client returns a 201 response' do
-      let(:response_body) { %{{"edit_url": "/the-edit-url"}} }
-      let(:status) { 201 }
-      it 'writes the edit url to Rails cache' do
-        expect(deposit).not_to receive(:record_success).with('https://scholarsphere.test/the-url')
-        service.create
-      end
-    end
-
-
     context 'when the ScholarSphere client returns a 200 response' do
       it 'records the successful response with the URI that is returned' do
         expect(deposit).to receive(:record_success).with('https://scholarsphere.test/the-url')
         service.create
       end
 
-      it 'sends a confirmation email to the user and enqueues a job to export post print status to Activity Insight' do
-        expect(ai_oa_email).to receive(:deliver_now)
-        expect(standard_email).not_to receive(:deliver_now)
-        expect(AiOAStatusExportJob).to receive(:perform_later).with(1, 'Deposited to ScholarSphere')
-        service.create
+      context "when deposit's #standard_oa_workflow? is false" do
+        before { allow(deposit).to receive(:standard_oa_workflow?).and_return false }
+
+        it 'sends a confirmation email to the user and enqueues a job to export post print status to Activity Insight' do
+          expect(ai_oa_email).to receive(:deliver_now)
+          expect(standard_email).not_to receive(:deliver_now)
+          expect(AiOAStatusExportJob).to receive(:perform_later).with(1, 'Deposited to ScholarSphere')
+          service.create
+        end
       end
     end
 
