@@ -9,7 +9,7 @@ describe 'the researcher_funds table', type: :model do
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:grant_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:user_id).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:import_source).of_type(:string) }
+  it { is_expected.to have_db_column(:import_source).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -30,7 +30,8 @@ describe ResearcherFund, type: :model do
 
   it { is_expected.to validate_presence_of(:grant_id) }
   it { is_expected.to validate_presence_of(:user_id) }
-  it { is_expected.to validate_inclusion_of(:import_source).in_array(['NSF', 'NIH']).allow_nil }
+  it { is_expected.to validate_inclusion_of(:import_source).in_array(['NSF', 'NIH']) }
+  it { is_expected.to validate_presence_of(:import_source) }
 
   describe '.import_sources' do
     it 'returns the list of possible import data sources for a researcher fund' do

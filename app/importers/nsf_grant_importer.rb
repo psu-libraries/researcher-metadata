@@ -14,7 +14,7 @@ class NSFGrantImporter
       awards = NSFAwards.new(response.body)
       pbar = Utilities::ProgressBarTTY.create(title: "Importing NSF Awards Data from #{year}", total: awards.count)
       awards.each do |a|
-        g = Grant.find_by(identifier: a.identifier) || Grant.new
+        g = Grant.find_by(agency_name: a.agency_name, identifier: a.identifier) || Grant.new
         g.identifier = a.identifier
         g.title = a.title
         g.start_date = a.start_date
@@ -24,7 +24,6 @@ class NSFGrantImporter
         g.agency_name = a.agency_name
         g.import_source = SOURCE
         g.save!
-        pbar.increment
 
         user = User.find_by_nsf_grant(a)
         if user && !ResearcherFund.find_by(user: user, grant: g)
@@ -47,6 +46,8 @@ class NSFGrantImporter
             end
           end
         end
+
+        pbar.increment
       end
       pbar.finish
     end

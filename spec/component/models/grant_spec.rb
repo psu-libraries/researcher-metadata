@@ -14,7 +14,7 @@ describe 'the grants table', type: :model do
   it { is_expected.to have_db_column(:end_date).of_type(:date) }
   it { is_expected.to have_db_column(:amount_in_dollars).of_type(:integer) }
   it { is_expected.to have_db_column(:abstract).of_type(:text) }
-  it { is_expected.to have_db_column(:import_source).of_type(:string) }
+  it { is_expected.to have_db_column(:import_source).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -23,7 +23,7 @@ describe 'the grants table', type: :model do
 end
 
 describe Grant, type: :model do
-  subject(:grant) { described_class.new }
+  subject(:grant) { build(:grant) }
 
   it_behaves_like 'an application record'
 
@@ -35,12 +35,13 @@ describe Grant, type: :model do
   it { is_expected.to validate_presence_of(:identifier) }
   it { is_expected.to validate_uniqueness_of(:identifier).scoped_to(:agency_name) }
   it { is_expected.to validate_presence_of(:agency_name) }
-  it { is_expected.to validate_inclusion_of(:agency_name).in_array(['NSF', 'NIH']) }
-  it { is_expected.to validate_inclusion_of(:import_source).in_array(['NSF', 'NIH']).allow_nil }
+  it { is_expected.to validate_inclusion_of(:agency_name).in_array(['AHRQ', 'ALLCDC', 'FDA', 'HRSA', 'NIH', 'NSF', 'SAMSHA']) }
+  it { is_expected.to validate_inclusion_of(:import_source).in_array(['NSF', 'NIH']) }
+  it { is_expected.to validate_presence_of(:import_source) }
 
   describe '.agency_names' do
     it 'returns the list of possible canonical agency names for a grant' do
-      expect(described_class.agency_names).to eq ['NSF', 'NIH']
+      expect(described_class.agency_names).to eq ['AHRQ', 'ALLCDC', 'FDA', 'HRSA', 'NIH', 'NSF', 'SAMSHA']
     end
   end
 

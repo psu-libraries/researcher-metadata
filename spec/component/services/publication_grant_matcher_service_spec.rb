@@ -46,8 +46,8 @@ describe PublicationGrantMatcherService do
       end
 
       it 'does not create duplicate ResearchFund records if a matching record already exists for the given publication and grant' do
-        ResearchFund.create!(publication: pub, grant: grant1)
-        ResearchFund.create!(publication: pub, grant: grant2)
+        create(:research_fund, publication: pub, grant: grant1)
+        create(:research_fund, publication: pub, grant: grant2)
 
         expect { service.match_from_pure(funding_data, pub) }.not_to change(ResearchFund, :count)
       end

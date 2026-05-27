@@ -21,6 +21,11 @@ namespace :import do
     NSFGrantImporter.new.call
   end
 
+  desc 'Import NIH project data'
+  task nih_projects: :environment do
+    NIHGrantImporter.call
+  end
+
   desc 'Import Unpaywall publication metadata'
   task unpaywall: :environment do
     time_started_at = ENV.fetch('ARGO_SUBMITTED_AT', Time.now)

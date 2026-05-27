@@ -522,6 +522,80 @@ describe User, type: :model do
     end
   end
 
+  describe '.find_by_nih_investigator' do
+    let!(:other_middle) { create(:user, first_name: 'First', middle_name: 'Other', last_name: 'Last') }
+
+    context 'when given an investigator with a middle initial' do
+      let(:investigator) {
+        instance_double(
+          NIHProjectInvestigator,
+          first_name: 'first',
+          middle_initial: 'm',
+          last_name: 'last'
+        )
+      }
+
+      context 'when there is a user with matching first, middle, and last names' do
+        let!(:full_match) { create(:user, first_name: 'First', middle_name: 'Middle', last_name: 'Last') }
+
+        context 'when there is a user with matching first and last names and a blank middle name' do
+          let!(:blank_middle) { create(:user, first_name: 'First', middle_name: '', last_name: 'Last') }
+
+          it 'returns the fully matching user' do
+            expect(described_class.find_by_nih_investigator(investigator)).to eq full_match
+          end
+        end
+
+        context 'when there is a user with matching first and last names and a null middle name' do
+          let!(:null_middle) { create(:user, first_name: 'First', middle_name: nil, last_name: 'Last') }
+
+          it 'returns the fully matching user' do
+            expect(described_class.find_by_nih_investigator(investigator)).to eq full_match
+          end
+        end
+      end
+
+      context 'when there is a user with matching first and last names and a blank middle name' do
+        let!(:blank_middle) { create(:user, first_name: 'First', middle_name: '', last_name: 'Last') }
+
+        it 'returns the partially matching user' do
+          expect(described_class.find_by_nih_investigator(investigator)).to eq blank_middle
+        end
+      end
+
+      context 'when there is a user with matching first and last names and a null middle name' do
+        let!(:null_middle) { create(:user, first_name: 'First', middle_name: nil, last_name: 'Last') }
+
+        it 'returns the partially matching user' do
+          expect(described_class.find_by_nih_investigator(investigator)).to eq null_middle
+        end
+      end
+
+      context 'when there is only a user with matching first and last names and a non-matching middle name' do
+        it 'returns nil' do
+          expect(described_class.find_by_nih_investigator(investigator)).to be_nil
+        end
+      end
+    end
+
+    context 'when given an investigator without a middle initial' do
+      let(:investigator) {
+        instance_double(
+          NIHProjectInvestigator,
+          first_name: 'first',
+          middle_initial: nil,
+          last_name: 'last'
+        )
+      }
+
+      context 'when there is a user with matching first and last names' do
+        it 'returns the matching user' do
+          expect(described_class.find_by_nih_investigator(investigator)).to eq other_middle
+        end
+      end
+    end
+  end
+
   describe '.needs_open_access_notification' do
     let!(:recent_date) { 1.month.ago }
     let!(:long_ago_date) { 3.years.ago }
