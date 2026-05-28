@@ -13,7 +13,7 @@ describe ScholarsphereDepositService do
                          activity_insight_oa_file_id: 1 }
   let(:metadata) { double 'metadata' }
   let(:files) { double 'files' }
-  let(:ingest) { double 'scholarsphere client ingest', publish: response }
+  let(:ingest) { double 'scholarsphere client ingest', create: response }
   let(:response) { double 'scholarsphere client response', status: status, body: response_body }
   let(:response_body) { %{{"url": "/the-url"}} }
   let(:status) { 200 }

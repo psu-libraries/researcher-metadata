@@ -802,8 +802,14 @@ describe OpenAccessPublicationsController, type: :controller do
 
         context 'when the user is a deputy impersonating the primary user' do
           let(:deputy) { assignment.deputy }
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
 
-          before { post :create_scholarsphere_deposit, params: params }
+          before do
+            allow(service).to receive(:create_draft).and_return(test_url)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+            post :create_scholarsphere_deposit, params: params
+          end
 
           it 'adds the deputy user id to the work deposit' do
             expect(found_deposit.deputy_user_id).to eq(deputy.id)

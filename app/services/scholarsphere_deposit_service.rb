@@ -40,7 +40,7 @@ class ScholarsphereDepositService
       depositor: user.webaccess_id
     )
 
-    response = ingest.publish
+    response = ingest.create
     response_body = JSON.parse(response.body)
 
     if response.status == 200

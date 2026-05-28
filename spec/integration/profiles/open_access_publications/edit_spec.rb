@@ -93,7 +93,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
       end
 
       it "shows the publication's journal" do
-        expect(page).to have_content 'A Prestegious Journal'
+        expect(page).to have_content 'A Prestigious Journal'
       end
 
       it "shows the publication's issue number" do
