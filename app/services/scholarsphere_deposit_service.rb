@@ -17,7 +17,9 @@ class ScholarsphereDepositService
       publish: false
     )
 
-    response = ingest.publish
+    response = ingest.create
+    raise DepositFailed.new('Something went wrong.') unless response
+
     response_body = JSON.parse(response.body)
 
     # Draft works will return a 201

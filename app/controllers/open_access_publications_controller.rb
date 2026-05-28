@@ -15,6 +15,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     end
   end
 
+  # TODO: Remove
   def update
     @form = OpenAccessURLForm.new(form_params)
 
@@ -40,6 +41,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     send_file(file.stored_file_path)
   end
 
+  # TODO: Remove
   def scholarsphere_file_version
     file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
     @jobs ||= []
@@ -70,6 +72,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     redirect_to edit_open_access_publication_path(publication)
   end
 
+  # TODO: Remove
   def file_version_result
     jobs = params[:jobs]
     pdf_file_versions = []
@@ -122,6 +125,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
               x_sendfile: true)
   end
 
+  # TODO: Remove
   def scholarsphere_deposit_form
     @cache_files = params.dig(:scholarsphere_work_deposit, :cache_files)
     if @cache_files.nil?
@@ -158,6 +162,10 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   rescue ActiveRecord::RecordInvalid
     @form = OpenAccessURLForm.new
     flash.now[:alert] = @deposit.errors.full_messages.join(', ')
+    render :edit
+  rescue ScholarsphereDepositService::DepositFailed
+    @form = OpenAccessURLForm.new
+    flash[:alert] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
     render :edit
   end
 
