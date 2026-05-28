@@ -59,12 +59,15 @@ class GoogleScholarProfileImporter
     end
 
     def update_user(user, profile)
-      user.update!(
+      updates = {
         google_scholar_id: user.google_scholar_id.presence || profile[:scholar_id],
-        google_scholar_h_index: profile[:h_index],
-        google_scholar_citation_total: profile[:citation_total],
         google_scholar_imported_at: Time.current
-      )
+      }
+
+      updates[:google_scholar_h_index] = profile[:h_index] if profile[:h_index].present?
+      updates[:google_scholar_citation_total] = profile[:citation_total] if profile[:citation_total].present?
+
+      user.update!(updates)
     end
 
     def profile_search_name(user)

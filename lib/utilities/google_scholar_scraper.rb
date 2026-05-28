@@ -59,6 +59,8 @@ class GoogleScholarScraper
       sleep 2
     end
 
+    return unless profile_stats[:h_index].present? || papers.any?
+
     cache_profile(scholar_id, {
                     scholar_id: scholar_id,
                     h_index: profile_stats[:h_index],
