@@ -49,3 +49,5 @@ scholarsphere:
 external_assets:
   endpoint:
 
+open_alex:
+  api_key:
