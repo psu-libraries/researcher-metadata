@@ -154,7 +154,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
           it 'saves the failure to the ScholarsphereWorkDeposit' do
             click_on 'Deposit to Scholarsphere'
             expect(ScholarsphereWorkDeposit.last.status).to eq('Failed')
-            expect(ScholarsphereWorkDeposit.last.error_message).to eq("{\"error\" : \"some error\"}")
+            expect(ScholarsphereWorkDeposit.last.error_message).to eq('{"error" : "some error"}')
           end
         end
       end
