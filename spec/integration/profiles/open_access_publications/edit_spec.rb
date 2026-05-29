@@ -129,6 +129,13 @@ describe 'visiting the page to edit the open access status of a publication', ty
           allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return scholarsphere_base_uri
         end
 
+        it 'creates a new ScholarsphereWorkDeposit' do
+          initial_count = ScholarsphereWorkDeposit.count
+          click_on 'Deposit to Scholarsphere'
+          after_count = ScholarsphereWorkDeposit.count
+          expect(after_count - initial_count).to eq(1)
+        end
+
         it 'reroutes to Scholarsphere' do
           click_on 'Deposit to Scholarsphere'
           sleep 0.1
@@ -142,6 +149,12 @@ describe 'visiting the page to edit the open access status of a publication', ty
           it 'displays an error message when something goes wrong' do
             click_on 'Deposit to Scholarsphere'
             expect(page).to have_content I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
+          end
+
+          it 'saves the failure to the ScholarsphereWorkDeposit' do
+            click_on 'Deposit to Scholarsphere'
+            expect(ScholarsphereWorkDeposit.last.status).to eq('Failed')
+            expect(ScholarsphereWorkDeposit.last.error_message).to eq("{\"error\" : \"some error\"}")
           end
         end
       end

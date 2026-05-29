@@ -10,7 +10,8 @@ describe ScholarsphereDepositService do
                          files: files,
                          record_success: nil,
                          standard_oa_workflow?: true,
-                         activity_insight_oa_file_id: 1 }
+                         activity_insight_oa_file_id: 1,
+                         update: nil }
   let(:metadata) { double 'metadata' }
   let(:files) { double 'files' }
   let(:ingest) { double 'scholarsphere client ingest', create: response }
@@ -41,6 +42,11 @@ describe ScholarsphereDepositService do
           publish: false
         }
       ).and_return ingest
+    end
+
+    it "saves the edit url to the deposit's draft_scholarship_work_deposit_url" do
+      service.create_draft
+      expect(deposit).to have_received(:update).with({ draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/the-edit-url' })
     end
 
     it 'returns the edit_url from the body' do

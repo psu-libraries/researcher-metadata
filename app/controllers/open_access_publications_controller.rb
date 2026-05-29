@@ -159,11 +159,13 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     service = ScholarsphereDepositService.new(@deposit, current_user)
     edit_url = service.create_draft
     redirect_to edit_url, allow_other_host: true
-  rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordInvalid => e
+    @deposit.record_failure(e.to_s)
     @form = OpenAccessURLForm.new
     flash.now[:alert] = @deposit.errors.full_messages.join(', ')
     render :edit
-  rescue ScholarsphereDepositService::DepositFailed
+  rescue ScholarsphereDepositService::DepositFailed => e
+    @deposit.record_failure(e.to_s)
     @form = OpenAccessURLForm.new
     flash[:alert] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
     render :edit

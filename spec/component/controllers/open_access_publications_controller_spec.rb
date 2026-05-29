@@ -800,6 +800,22 @@ describe OpenAccessPublicationsController, type: :controller do
           end
         end
 
+        context 'when a deposit is not able to be created' do
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
+
+          before do
+            allow(service).to receive(:create_draft).and_raise(ScholarsphereDepositService::DepositFailed)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+          end
+
+          it 'records the failure in the ScholarsphereWorkDeposit' do
+            post :create_scholarsphere_deposit, params: params
+            expect(ScholarsphereWorkDeposit.last.status).to eq('Failed')
+            expect(ScholarsphereWorkDeposit.last.error_message).to eq('ScholarsphereDepositService::DepositFailed')
+          end
+        end
+
         context 'when the user is a deputy impersonating the primary user' do
           let(:deputy) { assignment.deputy }
           let!(:service) { instance_double ScholarsphereDepositService }
