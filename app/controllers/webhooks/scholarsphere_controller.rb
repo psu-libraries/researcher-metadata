@@ -18,12 +18,12 @@ module Webhooks
     end
 
     def open_access_work_published
-      if params[:scholarsphere_work_url].present?
-        deposit = ScholarsphereWorkDeposit.find_by(draft_scholarsphere_work_deposit_url: params[:scholarsphere_work_url])
-        if deposit
-          full_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{params[:scholarsphere_work_url]}"
-          deposit.record_success(full_url)
-        end
+      return head(:bad_request) if params[:scholarsphere_work_url].blank?
+
+      deposit = ScholarsphereWorkDeposit.find_by(draft_scholarsphere_work_deposit_url: params[:scholarsphere_work_url])
+      if deposit
+        full_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{params[:scholarsphere_work_url]}"
+        deposit.record_success(full_url)
       end
       render plain: 'ok'
     end

@@ -163,24 +163,22 @@ describe Webhooks::ScholarsphereController do
 
     context 'when given the correct API key' do
       context 'when not given a scholarsphere_work_url param' do
-        it 'returns 200 ok' do
+        it 'returns 400' do
           post webhooks_scholarsphere_open_access_work_published_path, headers: { 'X-API-KEY' => 'webhooksecret123' }
 
-          expect(response).to have_http_status :ok
-          expect(response.body).to eq 'ok'
+          expect(response).to have_http_status :bad_request
         end
       end
 
       context 'when given a blank scholarsphere_work_url param' do
-        it 'returns 200 ok' do
+        it 'returns 400' do
           post(
             webhooks_scholarsphere_open_access_work_published_path,
             headers: { 'X-API-KEY' => 'webhooksecret123' },
             params: { scholarsphere_work_url: '' }
           )
 
-          expect(response).to have_http_status :ok
-          expect(response.body).to eq 'ok'
+          expect(response).to have_http_status :bad_request
         end
       end
 

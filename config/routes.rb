@@ -131,6 +131,6 @@ Rails.application.routes.draw do
   end
 
   # TODO: Remove once ScholarSphere has been updated to use the new namespaced endpoints above.
-  # See: https://github.com/psu-libraries/researcher-metadata/issues/XXXX
-  post 'webhooks/scholarsphere_events' => 'webhooks#scholarsphere_events', as: :scholarsphere_events_webhook
+  # See: https://github.com/psu-libraries/researcher-metadata/issues/1249
+  post 'webhooks/scholarsphere_events' => 'webhooks/scholarsphere#work_withdrawn', as: :scholarsphere_events_webhook
 end
