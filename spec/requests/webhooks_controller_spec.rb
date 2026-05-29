@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe WebhooksController do
+describe 'Legacy ScholarsphereEvents webhook' do # rubocop:disable RSpec/DescribeClass
   let!(:ss_oal) {
     create(
       :open_access_location,
