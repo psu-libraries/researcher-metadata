@@ -123,5 +123,14 @@ Rails.application.routes.draw do
 
   put 'education_history_items/:id' => 'education_history_items#update', as: :education_history_item
 
-  post 'webhooks/scholarsphere_events' => 'webhooks#scholarsphere_events', as: :scholarsphere_events_webhook
+  namespace :webhooks do
+    scope '/scholarsphere' do
+      post 'work_withdrawn' => 'scholarsphere#work_withdrawn', as: :scholarsphere_work_withdrawn
+      post 'open_access_work_published' => 'scholarsphere#open_access_work_published', as: :scholarsphere_open_access_work_published
+    end
+  end
+
+  # TODO: Remove once ScholarSphere has been updated to use the new namespaced endpoints above.
+  # See: https://github.com/psu-libraries/researcher-metadata/issues/1249
+  post 'webhooks/scholarsphere_events' => 'webhooks/scholarsphere#work_withdrawn', as: :scholarsphere_events_webhook
 end

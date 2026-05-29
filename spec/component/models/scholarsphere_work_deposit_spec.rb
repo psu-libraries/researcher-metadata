@@ -26,6 +26,7 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:deputy_user_id).of_type(:integer) }
   it { is_expected.to have_db_column(:deposit_workflow).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_oa_file_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:draft_scholarsphere_work_deposit_url).of_type(:string) }
 
   it { is_expected.to have_db_index(:authorship_id) }
   it { is_expected.to have_db_index :deputy_user_id }
