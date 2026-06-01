@@ -21,7 +21,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.3.0"
+    default: "v4.6.4"
   CONFIG_REPO_NAME:
     type: string
     default: "researcher-metadata-config"
@@ -34,6 +34,9 @@ parameters:
   CLUSTERS_PROD:
     type: string
     default: "prod"
+  CLUSTERS_ULPROD:
+    type: string
+    default: "ulprod"
   REGISTRY_HOST:
     type: string
     default: "harbor.k8s.libraries.psu.edu"
@@ -92,9 +95,9 @@ jobs:
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
       clusters: << parameters.clusters >>
-      CONFIG_REPO: git@github.com:psu-libraries/researcher-metadata-config.git
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
@@ -103,19 +106,7 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            export TRIGGERED_BY="$CIRCLE_USERNAME"
-            export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
-            /usr/local/bin/image-tag
-            cd $CONFIG_REPO_NAME
-
-            # Split comma-separated clusters into array and loop
-            clusters="${clusters// /}"
-            IFS=',' read -ra CLUSTERS \<<< "$clusters"
-            for cluster in "${CLUSTERS[@]}"; do
-              export TARGET_CLUSTER="$cluster"
-              echo "Processing cluster: $TARGET_CLUSTER"
-              /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/$CIRCLE_PROJECT_REPONAME/prod.yaml"
-            done
+            /usr/local/bin/image-release-for-clusters
 
 
   deploy-application:
@@ -127,6 +118,7 @@ jobs:
       clusters: << parameters.clusters >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
     parameters:
       clusters:
         type: string
@@ -278,9 +270,23 @@ jobs:
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
-  version: 2
-  rmd-ci-cd:     # The name of our workflow is "build_and_test"
-    jobs:             # The list of jobs we run as part of this workflow.
+
+  delete-deployment:
+    when:
+      equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
+    jobs:
+      - delete-deployment:
+          name: delete-deployment
+          context: [org-global]
+          delete_branch: << pipeline.parameters.GHA_Meta >>
+          filters:
+            branches:
+              only: /.*/
+
+  rmd-ci-cd:
+    unless:
+      equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
+    jobs:
       - push-image:
           name: push-image
           context:
@@ -328,7 +334,7 @@ workflows:
           context:
             - org-global
           name: "Release"
-          clusters: << pipeline.parameters.CLUSTERS_PROD >>
+          clusters: << pipeline.parameters.CLUSTERS_PROD >>,<< pipeline.parameters.CLUSTERS_ULPROD >>
           from_tag: "<< pipeline.git.revision >>"
           to_tag: "<< pipeline.git.tag >>"
           filters:
