@@ -139,6 +139,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         field(:authorship)
         field(:title)
         field(:deposit_workflow)
+        field(:draft_scholarsphere_work_deposit_url)
       end
     end
 end
