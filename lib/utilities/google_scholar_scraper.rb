@@ -23,11 +23,6 @@ class GoogleScholarScraper
     @total_credits_used = 0
   end
 
-  def call
-    # Placeholder for orchestration - will be implemented by GoogleScholarImporter
-    raise NotImplementedError, 'Use GoogleScholarImporter.new.call instead'
-  end
-
   def search_profiles(name)
     html = fetch_author_search_html(name)
     return [] unless html
