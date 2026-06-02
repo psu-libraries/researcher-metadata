@@ -10,10 +10,11 @@ describe ScholarsphereDepositService do
                          files: files,
                          record_success: nil,
                          standard_oa_workflow?: true,
-                         activity_insight_oa_file_id: 1 }
+                         activity_insight_oa_file_id: 1,
+                         update: nil }
   let(:metadata) { double 'metadata' }
   let(:files) { double 'files' }
-  let(:ingest) { double 'scholarsphere client ingest', publish: response }
+  let(:ingest) { double 'scholarsphere client ingest', create: response }
   let(:response) { double 'scholarsphere client response', status: status, body: response_body }
   let(:response_body) { %{{"url": "/the-url"}} }
   let(:status) { 200 }
@@ -26,6 +27,41 @@ describe ScholarsphereDepositService do
         depositor: 'abc123'
       }
     ).and_return ingest
+  end
+
+  describe '#create_draft' do
+    let(:response_body) { %{{"url": "/the-url", "edit_url":"/the-edit-url"}} }
+    let(:status) { 201 }
+
+    before do
+      allow(Scholarsphere::Client::Ingest).to receive(:new).with(
+        {
+          metadata: metadata,
+          files: files,
+          depositor: 'abc123',
+          publish: false
+        }
+      ).and_return ingest
+    end
+
+    it "saves the url to the deposit's draft_scholarship_work_deposit_url" do
+      service.create_draft
+      expect(deposit).to have_received(:update).with({ draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/the-url' })
+    end
+
+    it 'returns the edit_url from the body' do
+      resp = service.create_draft
+      expect(resp).to eq('https://scholarsphere.test/the-edit-url')
+    end
+
+    context 'if the scholarsphere client does not return successfully' do
+      let(:status) { 500 }
+      let(:response_body) { %{{"error": "some error"}} }
+
+      it 'raises a Deposit Failed error' do
+        expect { service.create_draft }.to raise_error ScholarsphereDepositService::DepositFailed, response_body
+      end
+    end
   end
 
   describe '#create' do
@@ -44,14 +80,6 @@ describe ScholarsphereDepositService do
       it 'records the successful response with the URI that is returned' do
         expect(deposit).to receive(:record_success).with('https://scholarsphere.test/the-url')
         service.create
-      end
-
-      context "when deposit's #standard_oa_workflow? is true" do
-        it 'sends a confirmation email to the user' do
-          expect(standard_email).to receive(:deliver_now)
-          expect(ai_oa_email).not_to receive(:deliver_now)
-          service.create
-        end
       end
 
       context "when deposit's #standard_oa_workflow? is false" do

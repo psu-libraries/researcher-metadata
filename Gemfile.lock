@@ -561,7 +561,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scholarsphere-client (0.5.2)
+    scholarsphere-client (0.5.3)
       aws-sdk-s3 (~> 1.49)
       faraday (> 0.12)
       marcel (~> 1.0)

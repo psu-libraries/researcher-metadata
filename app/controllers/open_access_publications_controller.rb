@@ -15,6 +15,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     end
   end
 
+  # TODO: Remove
   def update
     @form = OpenAccessURLForm.new(form_params)
 
@@ -40,6 +41,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     send_file(file.stored_file_path)
   end
 
+  # TODO: Remove
   def scholarsphere_file_version
     file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
     @jobs ||= []
@@ -70,6 +72,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     redirect_to edit_open_access_publication_path(publication)
   end
 
+  # TODO: Remove
   def file_version_result
     jobs = params[:jobs]
     pdf_file_versions = []
@@ -122,6 +125,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
               x_sendfile: true)
   end
 
+  # TODO: Remove
   def scholarsphere_deposit_form
     @cache_files = params.dig(:scholarsphere_work_deposit, :cache_files)
     if @cache_files.nil?
@@ -145,34 +149,25 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    extra_params = { authorship: @authorship,
-                     deputy_user_id: current_user.deputy.id,
-                     deposit_workflow: 'Standard OA Workflow' }
-    @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
-    @deposit.file_uploads = []
-
-    files = params.dig(:scholarsphere_work_deposit, :file_uploads_attributes)
-    files&.each_value do |file|
-      if file.present? && file[:cache_path].present?
-        ss_file_upload = ScholarsphereFileUpload.new
-        ss_file_upload.file = File.new(file[:cache_path])
-        ss_file_upload.save!
-        @deposit.file_uploads << ss_file_upload
-      end
-    end
-
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
+    @deposit.deposit_workflow = 'Standard OA Workflow'
+    @deposit.deputy_user_id = current_user.deputy.id
     ActiveRecord::Base.transaction do
       @deposit.save!
       @authorship.update!(updated_by_owner_at: Time.current)
     end
-
-    ScholarsphereUploadJob.perform_later(@deposit.id, current_user.id)
-
-    flash[:notice] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
-    redirect_to edit_profile_publications_path
-  rescue ActiveRecord::RecordInvalid
+    service = ScholarsphereDepositService.new(@deposit, current_user)
+    edit_url = service.create_draft
+    redirect_to edit_url, allow_other_host: true
+  rescue ActiveRecord::RecordInvalid => e
+    @deposit.record_failure(e.to_s)
     @form = OpenAccessURLForm.new
     flash.now[:alert] = @deposit.errors.full_messages.join(', ')
+    render :edit
+  rescue ScholarsphereDepositService::DepositFailed => e
+    @deposit.record_failure(e.to_s)
+    @form = OpenAccessURLForm.new
+    flash[:alert] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
     render :edit
   end
 

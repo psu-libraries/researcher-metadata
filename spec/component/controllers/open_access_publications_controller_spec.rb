@@ -668,8 +668,6 @@ describe OpenAccessPublicationsController, type: :controller do
     let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
     let(:perform_request) { post :create_scholarsphere_deposit, params: { id: 1 } }
 
-    before { allow(ScholarsphereUploadJob).to receive(:perform_later) }
-
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
@@ -771,6 +769,14 @@ describe OpenAccessPublicationsController, type: :controller do
         end
 
         context 'when given valid params' do
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
+
+          before do
+            allow(service).to receive(:create_draft).and_return(test_url)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+          end
+
           it 'creates a new scholarsphere work deposit' do
             expect do
               post :create_scholarsphere_deposit, params: params
@@ -778,78 +784,51 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(found_deposit).not_to be_nil
           end
 
-          it 'saves the uploaded file to the new scholarsphere work deposit' do
-            post :create_scholarsphere_deposit, params: params
-
-            expect(found_deposit.file_uploads.count).to eq 1
-            expect(found_deposit.status).to eq 'Pending'
-            expect(found_deposit.file_uploads.first.file.identifier).to eq file.original_filename
-          end
-
           it "sets the modification timestamp on the user's authorship of the publication" do
             post :create_scholarsphere_deposit, params: params
             expect(auth.reload.updated_by_owner_at).to eq now
           end
 
-          it "redirects to the publication management page for the user's profile" do
+          it 'calls ScholarsphereDepositService' do
             post :create_scholarsphere_deposit, params: params
-            expect(response).to redirect_to edit_profile_publications_path
+            expect(service).to have_received(:create_draft)
           end
 
-          it 'sets a success message' do
+          it 'redirects to the url returned by the deposit service' do
             post :create_scholarsphere_deposit, params: params
-            expect(flash[:notice]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
+            expect(response).to redirect_to(test_url)
+          end
+        end
+
+        context 'when a deposit is not able to be created' do
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
+
+          before do
+            allow(service).to receive(:create_draft).and_raise(ScholarsphereDepositService::DepositFailed)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
           end
 
-          it 'schedules a job to send the publication to ScholarSphere' do
+          it 'records the failure in the ScholarsphereWorkDeposit' do
             post :create_scholarsphere_deposit, params: params
-            expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)
+            expect(ScholarsphereWorkDeposit.last.status).to eq('Failed')
+            expect(ScholarsphereWorkDeposit.last.error_message).to eq('ScholarsphereDepositService::DepositFailed')
           end
         end
 
         context 'when the user is a deputy impersonating the primary user' do
           let(:deputy) { assignment.deputy }
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
 
-          before { post :create_scholarsphere_deposit, params: params }
+          before do
+            allow(service).to receive(:create_draft).and_return(test_url)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+            post :create_scholarsphere_deposit, params: params
+          end
 
           it 'adds the deputy user id to the work deposit' do
             expect(found_deposit.deputy_user_id).to eq(deputy.id)
-          end
-        end
-
-        context 'when given no cache_path for the scholarsphere work deposit' do
-          let(:cache_path) { '' }
-
-          it 'does not create a new scholarsphere work deposit' do
-            expect do
-              post :create_scholarsphere_deposit, params: params
-            end.not_to change(ScholarsphereWorkDeposit, :count)
-          end
-
-          it 'does not create any new file upload records' do
-            expect do
-              post :create_scholarsphere_deposit, params: params
-            end.not_to change(ScholarsphereFileUpload, :count)
-          end
-
-          it "does not set the modification timestamp on the user's authorship of the publication" do
-            post :create_scholarsphere_deposit, params: params
-            expect(auth.reload.updated_by_owner_at).to be_nil
-          end
-
-          it 'does not schedule a job to send the publication to ScholarSphere' do
-            post :create_scholarsphere_deposit, params: params
-            expect(ScholarsphereUploadJob).not_to have_received(:perform_later)
-          end
-
-          it 'sets an error message' do
-            post :create_scholarsphere_deposit, params: params
-            expect(flash.now[:alert]).not_to be_empty
-          end
-
-          it 'rerenders the form' do
-            post :create_scholarsphere_deposit, params: params
-            expect(response).to render_template :edit
           end
         end
       end
