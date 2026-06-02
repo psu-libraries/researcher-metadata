@@ -61,7 +61,19 @@ module Admin::Users
         field(:show_all_contracts)
         field(:suppress_oa_reminders) { label 'Suppress Open Access Reminder Emails' }
         field(:scopus_h_index) do
-          label 'H-Index'
+          label 'Scopus H-Index'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_h_index) do
+          label 'Google Scholar H-Index'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_citation_total) do
+          label 'Google Scholar Citations'
           visible do
             bindings[:view]._current_user.is_admin
           end
@@ -90,7 +102,9 @@ module Admin::Users
         field(:penn_state_identifier) { label 'Penn State ID' }
         field(:psu_identity) { label 'Penn State Identity' }
         field(:psu_identity_updated_at) { label 'Identity Updated On' }
-        field(:scopus_h_index) { label 'H-Index' }
+        field(:scopus_h_index) { label 'Scopus H-Index' }
+        field(:google_scholar_h_index) { label 'Google Scholar H-Index' }
+        field(:google_scholar_citation_total) { label 'Google Scholar Citations' }
         field(:ai_title) { label 'Title' }
         field(:orcid_identifier) do
           label 'ORCID ID'
