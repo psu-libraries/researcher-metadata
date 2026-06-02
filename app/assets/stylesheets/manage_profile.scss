@@ -168,43 +168,6 @@ table.legend {
   }
 }
 
-.file-upload-fields {
-  min-height: 126px;
-
-  .file-group {
-    border: 1px solid lightgrey;
-    border-radius: 10px;
-    margin-bottom: 14px;
-    min-height: inherit;
-    padding: 14px;
-  }
-
-  // scss-lint:disable SelectorFormat
-  .scholarsphere_work_deposit_file_uploads_file {
-    float: left;
-    margin-right: 20px;
-    width: 80%;
-  }
-
-  input.file {
-    height: inherit;
-    padding: 10px;
-  }
-
-  .remove_fields {
-    float: right;
-  }
-}
-
-.cocoon-links {
-  float: right;
-  margin-bottom: 14px;
-}
-
-.file-uploads {
-  margin-bottom: 60px;
-}
-
 .delegate-list {
   padding: 0;
 }
