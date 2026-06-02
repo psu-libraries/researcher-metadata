@@ -71,7 +71,6 @@ describe ScholarsphereDepositService do
 
     before do
       allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return 'https://scholarsphere.test'
-      allow(FacultyConfirmationsMailer).to receive(:scholarsphere_deposit_confirmation).with(profile, deposit).and_return standard_email
       allow(FacultyConfirmationsMailer).to receive(:ai_oa_workflow_scholarsphere_deposit_confirmation).with(profile, deposit).and_return ai_oa_email
       allow(UserProfile).to receive(:new).with(user).and_return(profile)
     end
