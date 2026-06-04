@@ -12,10 +12,6 @@ class PublicationFuzzyMatcher
     score >= MATCH_THRESHOLD
   end
 
-  def match_score(scholar_publication_title, scholar_publication_year = nil)
-    calculate_match_score(scholar_publication_title, scholar_publication_year)
-  end
-
   private
 
     def calculate_match_score(scholar_title, scholar_year)

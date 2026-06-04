@@ -319,7 +319,3 @@ class GoogleScholarScraper
       value.to_s.downcase.match(%r{10\.\S+/\S+})&.[](0)&.delete_suffix('.')
     end
 end
-
-module Utilities
-  GoogleScholarScraper = ::GoogleScholarScraper
-end
