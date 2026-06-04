@@ -3,7 +3,7 @@
 require 'utilities/google_scholar_scraper'
 
 class GoogleScholarProfileImporter
-  def initialize(scraper: GoogleScholarScraper.new, matcher_class: GoogleScholarProfileMatcher)
+  def initialize(scraper: Utilities::GoogleScholarScraper.new, matcher_class: GoogleScholarProfileMatcher)
     @scraper = scraper
     @matcher_class = matcher_class
   end

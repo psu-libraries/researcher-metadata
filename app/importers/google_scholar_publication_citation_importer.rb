@@ -3,7 +3,7 @@
 require 'utilities/google_scholar_scraper'
 
 class GoogleScholarPublicationCitationImporter
-  def initialize(scraper: GoogleScholarScraper.new)
+  def initialize(scraper: Utilities::GoogleScholarScraper.new)
     @scraper = scraper
   end
 

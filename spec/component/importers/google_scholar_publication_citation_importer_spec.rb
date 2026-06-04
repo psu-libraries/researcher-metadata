@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 
 describe GoogleScholarPublicationCitationImporter do
   describe '#call' do
-    let(:scraper) { instance_double(GoogleScholarScraper) }
+    let(:scraper) { instance_double(Utilities::GoogleScholarScraper) }
     let(:importer) { described_class.new(scraper: scraper) }
 
     let!(:publication_with_doi) { create(:publication, doi: 'https://doi.org/10.123/example') }
