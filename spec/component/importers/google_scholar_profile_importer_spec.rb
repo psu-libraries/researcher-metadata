@@ -30,6 +30,34 @@ describe GoogleScholarProfileImporter do
       end
     end
 
+    context 'when an active user has a Google Scholar URL in their Activity Insight profile' do
+      let!(:user) do
+        create(:user, :with_psu_identity,
+               google_scholar_id: nil,
+               ai_google_scholar: 'https://scholar.google.com/citations?hl=en&user=ai-scholar-id')
+      end
+
+      before do
+        allow(scraper).to receive(:fetch_profile).with('ai-scholar-id').and_return(
+          scholar_id: 'ai-scholar-id',
+          h_index: 7,
+          citation_total: 99,
+          publications: []
+        )
+        allow(scraper).to receive(:search_profiles)
+      end
+
+      it 'uses the ID extracted from the AI URL without doing name discovery' do
+        importer.call
+
+        user.reload
+        expect(user.google_scholar_id).to eq 'ai-scholar-id'
+        expect(user.google_scholar_h_index).to eq 7
+        expect(user.google_scholar_citation_total).to eq 99
+        expect(scraper).not_to have_received(:search_profiles)
+      end
+    end
+
     context 'when an active user does not have a Google Scholar ID' do
       let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
 

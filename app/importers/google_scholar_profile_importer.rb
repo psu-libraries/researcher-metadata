@@ -30,6 +30,8 @@ class GoogleScholarProfileImporter
     def import_user(user)
       profile = if user.google_scholar_id.present?
                   scraper.fetch_profile(user.google_scholar_id)
+                elsif (id = scholar_id_from_ai_url(user.ai_google_scholar))
+                  scraper.fetch_profile(id)
                 else
                   discover_profile(user)
                 end
@@ -68,6 +70,14 @@ class GoogleScholarProfileImporter
       updates[:google_scholar_citation_total] = profile[:citation_total] if profile[:citation_total].present?
 
       user.update!(updates)
+    end
+
+    def scholar_id_from_ai_url(url)
+      return unless url.present?
+
+      URI.decode_www_form(URI.parse(url).query.to_s).find { |key, _| key == 'user' }&.last
+    rescue URI::InvalidURIError
+      nil
     end
 
     def profile_search_name(user)
