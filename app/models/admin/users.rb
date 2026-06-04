@@ -103,6 +103,12 @@ module Admin::Users
         field(:psu_identity) { label 'Penn State Identity' }
         field(:psu_identity_updated_at) { label 'Identity Updated On' }
         field(:scopus_h_index) { label 'Scopus H-Index' }
+        field(:google_scholar_id) do
+          label 'Google Scholar ID'
+          pretty_value do
+            %{<a href="https://scholar.google.com/citations?hl=en&user=#{value}" target="_blank">#{value}</a>}.html_safe if value
+          end
+        end
         field(:google_scholar_h_index) { label 'Google Scholar H-Index' }
         field(:google_scholar_citation_total) { label 'Google Scholar Citations' }
         field(:ai_title) { label 'Title' }
