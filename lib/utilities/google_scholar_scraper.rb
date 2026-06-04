@@ -136,22 +136,12 @@ module Utilities
       def parse_profile_candidates(html)
         doc = Nokogiri::HTML(html)
 
-        doc.css('.gs_ai.gs_scl a').filter_map do |link|
-          href = link['href']
-          next unless href&.include?('oi=ao')
-
-          scholar_id = scholar_id_from_href(href)
+        doc.css('a[href*="user="][href*="oi=ao"]').filter_map do |link|
+          scholar_id = scholar_id_from_href(link['href'])
           next unless scholar_id
 
-          profile = link.ancestors('.gs_ai').first
-          {
-            scholar_id: scholar_id,
-            name: link.text.strip,
-            affiliation: profile&.at_css('.gs_ai_aff').then { |el| el&.text&.strip },
-            email_domain: profile&.at_css('.gs_ai_eml').then { |el| el&.text&.strip },
-            interests: profile&.css('.gs_ai_one_int')&.map { |interest| interest.text.strip } || []
-          }
-        end
+          { scholar_id: scholar_id }
+        end.uniq { |c| c[:scholar_id] }
       end
 
       def scholar_id_from_href(href)
