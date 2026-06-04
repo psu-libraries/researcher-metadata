@@ -80,10 +80,10 @@ module Utilities
       attr_reader :api_key, :refresh_days, :credit_budget
 
       def fetch_author_search_html(name)
-        scholar_url = 'https://scholar.google.com/citations?' \
-                      "view_op=search_authors&mauthors=#{URI.encode_www_form_component(name)}&hl=en"
+        query = URI.encode_www_form_component("#{name} psu.edu")
+        scholar_url = "https://scholar.google.com/scholar?q=#{query}&hl=en"
 
-        fetch_scraperapi_html(scholar_url, "Google Scholar author search for #{name}")
+        fetch_scraperapi_html(scholar_url, "Google Scholar author search for #{name}", render: false)
       end
 
       def fetch_scholar_search_html(query)
@@ -99,7 +99,7 @@ module Utilities
         fetch_scraperapi_html(scholar_url, "Scholar profile for #{user_id}")
       end
 
-      def fetch_scraperapi_html(scholar_url, description)
+      def fetch_scraperapi_html(scholar_url, description, render: true)
         return nil if credit_budget_exceeded?
 
         uri = URI('https://api.scraperapi.com/')
@@ -107,7 +107,7 @@ module Utilities
           api_key: api_key,
           url: scholar_url,
           country_code: 'us',
-          render: 'true',
+          render: render.to_s,
           max_cost: SCRAPE_MAX_COST
         )
 
@@ -136,17 +136,20 @@ module Utilities
       def parse_profile_candidates(html)
         doc = Nokogiri::HTML(html)
 
-        doc.css('.gs_ai_chpr').filter_map do |profile|
-          link = profile.at_css('.gs_ai_name a')
-          scholar_id = scholar_id_from_href(link&.[]('href'))
+        doc.css('.gs_ai.gs_scl a').filter_map do |link|
+          href = link['href']
+          next unless href&.include?('oi=ao')
+
+          scholar_id = scholar_id_from_href(href)
           next unless scholar_id
 
+          profile = link.ancestors('.gs_ai').first
           {
             scholar_id: scholar_id,
             name: link.text.strip,
-            affiliation: profile.at_css('.gs_ai_aff')&.text&.strip,
-            email_domain: profile.at_css('.gs_ai_eml')&.text&.strip,
-            interests: profile.css('.gs_ai_one_int').map { |interest| interest.text.strip }
+            affiliation: profile&.at_css('.gs_ai_aff').then { |el| el&.text&.strip },
+            email_domain: profile&.at_css('.gs_ai_eml').then { |el| el&.text&.strip },
+            interests: profile&.css('.gs_ai_one_int')&.map { |interest| interest.text.strip } || []
           }
         end
       end
