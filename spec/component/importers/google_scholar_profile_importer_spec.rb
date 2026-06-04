@@ -54,7 +54,21 @@ describe GoogleScholarProfileImporter do
         expect(user.google_scholar_id).to eq 'ai-scholar-id'
         expect(user.google_scholar_h_index).to eq 7
         expect(user.google_scholar_citation_total).to eq 99
+        expect(scraper).to have_received(:fetch_profile).with('ai-scholar-id')
         expect(scraper).not_to have_received(:search_profiles)
+      end
+
+      it 'stores the scholar_id returned by the fetched profile' do
+        allow(scraper).to receive(:fetch_profile).with('ai-scholar-id').and_return(
+          scholar_id: 'canonical-scholar-id',
+          h_index: 7,
+          citation_total: 99,
+          publications: []
+        )
+
+        importer.call
+
+        expect(user.reload.google_scholar_id).to eq 'canonical-scholar-id'
       end
     end
 
