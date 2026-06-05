@@ -134,7 +134,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
           click_on 'Deposit to Scholarsphere'
           after_count = ScholarsphereWorkDeposit.count
           expect(after_count - initial_count).to eq(1)
-          expect(ScholarsphereWorkDeposit.last.draft_scholarsphere_work_deposit_url).to eq("#{scholarsphere_base_uri}/the-url")
+          expect(ScholarsphereWorkDeposit.last.draft_scholarsphere_work_deposit_url).to eq('/the-url')
         end
 
         it 'reroutes to Scholarsphere' do
