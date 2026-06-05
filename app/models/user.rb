@@ -56,6 +56,15 @@ class User < ApplicationRecord
 
   scope :active, -> { where.not(psu_identity: nil).where("psu_identity->'data'->>'affiliation' != '[\"MEMBER\"]'") }
 
+  scope :admin_search, lambda { |query|
+    return all if query.blank?
+
+    query.to_s.split.map { |t| "%#{t}%" }.reduce(all) do |s, term|
+      s.where('first_name ILIKE ? OR middle_name ILIKE ? OR last_name ILIKE ? OR webaccess_id ILIKE ?',
+              term, term, term, term)
+    end
+  }
+
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
   # TODO handle the following cases:
