@@ -12,6 +12,7 @@ module Admin::Users
       end
 
       list do
+        search_by :admin_search
         scopes [nil, :active]
         field(:id) do
           visible do
