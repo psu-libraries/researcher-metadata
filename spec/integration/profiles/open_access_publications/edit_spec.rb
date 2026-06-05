@@ -131,14 +131,14 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
         it 'creates a new ScholarsphereWorkDeposit' do
           initial_count = ScholarsphereWorkDeposit.count
-          click_on 'Deposit to Scholarsphere'
+          click_on 'Deposit to ScholarSphere'
           after_count = ScholarsphereWorkDeposit.count
           expect(after_count - initial_count).to eq(1)
           expect(ScholarsphereWorkDeposit.last.draft_scholarsphere_work_deposit_url).to eq("#{scholarsphere_base_uri}/the-url")
         end
 
         it 'reroutes to Scholarsphere' do
-          click_on 'Deposit to Scholarsphere'
+          click_on 'Deposit to ScholarSphere'
           sleep 0.1
           expect(page.current_url).to eq("#{scholarsphere_base_uri}#{edit_url_path}")
         end
@@ -148,12 +148,12 @@ describe 'visiting the page to edit the open access status of a publication', ty
           let(:response_body) { %{{"error" : "some error"}} }
 
           it 'displays an error message when something goes wrong' do
-            click_on 'Deposit to Scholarsphere'
+            click_on 'Deposit to ScholarSphere'
             expect(page).to have_content I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
           end
 
           it 'saves the failure to the ScholarsphereWorkDeposit' do
-            click_on 'Deposit to Scholarsphere'
+            click_on 'Deposit to ScholarSphere'
             expect(ScholarsphereWorkDeposit.last.status).to eq('Failed')
             expect(ScholarsphereWorkDeposit.last.error_message).to eq('{"error" : "some error"}')
           end
