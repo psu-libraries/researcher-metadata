@@ -10,6 +10,7 @@ class GoogleScholarProfileImporter
 
   def call
     users = User.active
+    users = users.limit(ENV['LIMIT'].to_i) if ENV['LIMIT'].present?
     pbar = Utilities::ProgressBarTTY.create(
       title: 'Importing Google Scholar Profile Data',
       total: users.count
@@ -21,6 +22,9 @@ class GoogleScholarProfileImporter
     end
 
     pbar.finish
+
+    sleep 30
+    Rails.logger.info("GoogleScholarProfileImporter: total ScraperAPI credits used: #{scraper.total_credits_used}")
   end
 
   private
@@ -73,7 +77,7 @@ class GoogleScholarProfileImporter
     end
 
     def scholar_id_from_ai_url(url)
-      return unless url.present?
+      return if url.blank?
 
       URI.decode_www_form(URI.parse(url).query.to_s).find { |key, _| key == 'user' }&.last
     rescue URI::InvalidURIError
