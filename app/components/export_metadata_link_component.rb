@@ -6,4 +6,8 @@ class ExportMetadataLinkComponent < ViewComponent::Base
   def initialize(publication:)
     @publication = publication
   end
+
+  def scholarsphere_export_failed?
+    publication.scholarsphere_upload_failed?
+  end
 end

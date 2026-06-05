@@ -1,6 +1,14 @@
-  <%= form_with url: scholarsphere_deposit_path(@publication.id), method: :post do |f| %>
-    <button type="submit"
-            class="btn btn-primary">
-      Deposit to Scholarsphere
-    </button>
+  <% if scholarsphere_export_failed? %>
+    <div class="alert alert-warning" role="alert">
+      <%= helpers.fa_icon('exclamation-triangle') %>&nbsp;
+      <%= t('components.export_metadata_link_component.failed_message_html',
+            email_link: helpers.mail_to('openaccess@psu.edu', 'openaccess@psu.edu')) %>
+    </div>
+  <% else %>
+    <%= form_with url: scholarsphere_deposit_path(@publication.id), method: :post do |f| %>
+      <button type="submit"
+              class="btn btn-primary">
+        <%= t('components.export_metadata_link_component.deposit_button') %>
+      </button>
+    <% end %>
   <% end %>
