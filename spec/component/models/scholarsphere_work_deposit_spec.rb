@@ -474,6 +474,52 @@ describe ScholarsphereFileUpload, type: :model do
       end
     end
 
+    context 'when the deposit has a DOI and uses the standard OA workflow' do
+      before do
+        dep.doi = 'a/test/doi'
+        dep.deposit_workflow = 'Standard OA Workflow'
+      end
+
+      it 'adds open access metadata flags' do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          identifier: ['a/test/doi'],
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            { psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher' },
+            { display_name: 'Test Author' },
+            { display_name: 'Another Contributor' }
+          ],
+          open_access: true,
+          metadata_imported_from_rmd: true
+        })
+      end
+    end
+
+    context 'when the deposit uses the standard OA workflow without a DOI' do
+      before { dep.deposit_workflow = 'Standard OA Workflow' }
+
+      it 'does not add open access metadata flags' do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            { psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher' },
+            { display_name: 'Test Author' },
+            { display_name: 'Another Contributor' }
+          ]
+        })
+      end
+    end
+
     context 'when the deposit has a subtitle' do
       before { dep.subtitle = 'test subtitle' }
 
