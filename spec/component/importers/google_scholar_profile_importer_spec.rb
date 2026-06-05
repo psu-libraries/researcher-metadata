@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 
 describe GoogleScholarProfileImporter do
   describe '#call' do
-    let(:scraper) { instance_double(Utilities::GoogleScholarScraper) }
+    let(:scraper) { instance_double(Utilities::GoogleScholarScraper, total_credits_used: 0) }
     let(:importer) { described_class.new(scraper: scraper) }
 
     context 'when an active user already has a Google Scholar ID' do
