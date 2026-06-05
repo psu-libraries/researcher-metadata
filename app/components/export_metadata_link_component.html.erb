@@ -1,8 +1,7 @@
   <% if scholarsphere_export_failed? %>
     <div class="alert alert-warning" role="alert">
-      <%= helpers.fa_icon('exclamation-triangle') %>&nbsp;
-      <%= t('components.export_metadata_link_component.failed_message_html',
-            email_link: helpers.mail_to('openaccess@psu.edu', 'openaccess@psu.edu')) %>
+      <%= failed_alert_icon %>&nbsp;
+      <%= failed_message_html %>
     </div>
   <% else %>
     <%= form_with url: scholarsphere_deposit_path(@publication.id), method: :post do |f| %>
