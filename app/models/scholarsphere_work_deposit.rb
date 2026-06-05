@@ -95,7 +95,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     base_metadata[:publisher_statement] = publisher_statement if publisher_statement.present?
     if standard_oa_workflow? && doi.present?
       base_metadata[:open_access] = true
-      base_metadata[:metadata_imported_from_rmd] = true
+      base_metadata[:imported_metadata_from_rmd] = true
     end
     base_metadata
   end
