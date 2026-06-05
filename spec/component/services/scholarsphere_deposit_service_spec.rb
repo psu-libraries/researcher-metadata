@@ -46,7 +46,7 @@ describe ScholarsphereDepositService do
 
     it "saves the url to the deposit's draft_scholarship_work_deposit_url" do
       service.create_draft
-      expect(deposit).to have_received(:update).with({ draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/the-url' })
+      expect(deposit).to have_received(:update).with({ draft_scholarsphere_work_deposit_url: '/the-url' })
     end
 
     it 'returns the edit_url from the body' do
