@@ -47,6 +47,11 @@ class GoogleScholarProfileImporter
     end
 
     def discover_profile(user)
+      if user.publications.none?
+        Rails.logger.info("GoogleScholarProfileImporter: skipping user #{user.id} — 0 publications, cannot match")
+        return nil
+      end
+
       scraper.search_profiles(profile_search_name(user)).each do |candidate|
         profile = scraper.fetch_profile(candidate[:scholar_id])
         next unless profile

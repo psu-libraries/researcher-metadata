@@ -117,4 +117,23 @@ describe GoogleScholarProfileImporter do
       end
     end
   end
+
+  describe '#discover_profile' do
+    let(:scraper) { instance_double(Utilities::GoogleScholarScraper, total_credits_used: 0) }
+    let(:importer) { described_class.new(scraper: scraper) }
+
+    context 'when user has no publications' do
+      it 'returns nil without calling scraper.search_profiles' do
+        user = create(:user,
+                      publications: [],
+                      google_scholar_id: nil,
+                      ai_google_scholar: nil)
+
+        expect(scraper).not_to receive(:search_profiles)
+        result = importer.send(:discover_profile, user)
+
+        expect(result).to be_nil
+      end
+    end
+  end
 end
