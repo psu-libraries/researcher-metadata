@@ -129,10 +129,11 @@ describe GoogleScholarProfileImporter do
                       google_scholar_id: nil,
                       ai_google_scholar: nil)
 
-        expect(scraper).not_to receive(:search_profiles)
+        allow(scraper).to receive(:search_profiles)
         result = importer.send(:discover_profile, user)
 
         expect(result).to be_nil
+        expect(scraper).not_to have_received(:search_profiles)
       end
     end
   end
