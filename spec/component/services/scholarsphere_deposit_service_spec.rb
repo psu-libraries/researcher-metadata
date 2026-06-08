@@ -51,7 +51,7 @@ describe ScholarsphereDepositService do
 
     it 'returns the edit_url from the body' do
       resp = service.create_draft
-      expect(resp).to eq('https://scholarsphere.test/the-edit-url')
+      expect(resp).to eq('https://scholarsphere.test/the-edit-url?external_entry=true')
     end
 
     context 'if the scholarsphere client does not return successfully' do
