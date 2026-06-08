@@ -139,8 +139,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
         it 'reroutes to Scholarsphere' do
           click_on 'Deposit to Scholarsphere'
-          sleep 0.1
-          expect(page.current_url).to eq("#{scholarsphere_base_uri}#{edit_url_path}")
+          expect(page.current_url).to eq("#{scholarsphere_base_uri}#{edit_url_path}?external_entry=true")
         end
 
         context 'if the deposit is not successful' do
