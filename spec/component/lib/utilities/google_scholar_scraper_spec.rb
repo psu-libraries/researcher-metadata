@@ -6,7 +6,7 @@ require 'utilities/google_scholar_scraper'
 describe Utilities::GoogleScholarScraper do
   subject(:scraper) { described_class.new(api_key: 'test-key') }
 
-  describe '#search_profiles' do
+  describe '#search_profiles', vcr: false do
     let(:html_with_profile) do
       <<~HTML
         <html><body>
