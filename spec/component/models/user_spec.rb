@@ -1949,29 +1949,29 @@ describe User, type: :model do
     let!(:bob_sha)  { create(:user, first_name: 'Bob',  last_name: 'Sha', webaccess_id: 'bsha99') }
 
     it 'returns users matching a single token against first_name' do
-      expect(User.admin_search('Zhou')).to include(zhou_sha, zhou_li)
-      expect(User.admin_search('Zhou')).not_to include(bob_sha)
+      expect(described_class.admin_search('Zhou')).to include(zhou_sha, zhou_li)
+      expect(described_class.admin_search('Zhou')).not_to include(bob_sha)
     end
 
     it 'returns users matching a single token against last_name' do
-      expect(User.admin_search('Sha')).to include(zhou_sha, bob_sha)
-      expect(User.admin_search('Sha')).not_to include(zhou_li)
+      expect(described_class.admin_search('Sha')).to include(zhou_sha, bob_sha)
+      expect(described_class.admin_search('Sha')).not_to include(zhou_li)
     end
 
     it 'returns the user matching first and last name as separate tokens' do
-      expect(User.admin_search('Zhou Sha')).to contain_exactly(zhou_sha)
+      expect(described_class.admin_search('Zhou Sha')).to contain_exactly(zhou_sha)
     end
 
     it 'is case-insensitive' do
-      expect(User.admin_search('zhou sha')).to contain_exactly(zhou_sha)
+      expect(described_class.admin_search('zhou sha')).to contain_exactly(zhou_sha)
     end
 
     it 'matches against webaccess_id' do
-      expect(User.admin_search('zzs5259')).to contain_exactly(zhou_sha)
+      expect(described_class.admin_search('zzs5259')).to contain_exactly(zhou_sha)
     end
 
     it 'returns all users when query is blank' do
-      expect(User.admin_search('')).to include(zhou_sha, zhou_li, bob_sha)
+      expect(described_class.admin_search('')).to include(zhou_sha, zhou_li, bob_sha)
     end
   end
 end
