@@ -2,8 +2,11 @@
 
 class GoogleScholarProfileMatcher
   DOI_MATCH_THRESHOLD = 2
+  DOI_MATCH_THRESHOLD_PSU = 1
   TITLE_MATCH_THRESHOLD = 2
   TITLE_SIMILARITY_THRESHOLD = 0.90
+  PSU_EMAIL_DOMAINS = %w[psu.edu].freeze
+  PSU_INSTITUTION_NAMES = ['Penn State', 'Pennsylvania State'].freeze
 
   MatchResult = Struct.new(:matched?, :strategy, :match_count, :message, keyword_init: true)
 
@@ -13,8 +16,21 @@ class GoogleScholarProfileMatcher
   end
 
   def match
+    affiliation_status = psu_affiliation_status
+
+    if affiliation_status == :not_psu
+      return MatchResult.new(
+        matched?: false,
+        strategy: :institution,
+        match_count: 0,
+        message: "rejected user #{user.id} — Scholar profile institution is not Penn State " \
+                 "(#{profile[:email_domain]})"
+      )
+    end
+
+    doi_threshold = affiliation_status == :psu ? DOI_MATCH_THRESHOLD_PSU : DOI_MATCH_THRESHOLD
     doi_count = doi_match_count
-    return matched_result(:doi, doi_count) if doi_count >= DOI_MATCH_THRESHOLD
+    return matched_result(:doi, doi_count) if doi_count >= doi_threshold
 
     title_count = title_match_count
     return matched_result(:title, title_count) if title_count >= TITLE_MATCH_THRESHOLD
@@ -30,6 +46,21 @@ class GoogleScholarProfileMatcher
   private
 
     attr_reader :user, :profile
+
+    def psu_affiliation_status
+      email_domain = profile[:email_domain].to_s.strip.downcase
+      affiliation = profile[:affiliation].to_s
+
+      if email_domain.present?
+        return :psu if PSU_EMAIL_DOMAINS.any? { |d| email_domain == d || email_domain.end_with?(".#{d}") }
+
+        return :not_psu
+      end
+
+      return :psu if PSU_INSTITUTION_NAMES.any? { |name| affiliation.include?(name) }
+
+      :unknown
+    end
 
     def matched_result(strategy, count)
       MatchResult.new(
