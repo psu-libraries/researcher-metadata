@@ -469,6 +469,12 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(service).to have_received(:create_draft)
           end
 
+          it 'passes the current user to ScholarsphereDepositService when not masquerading' do
+            post :create_scholarsphere_deposit, params: params
+            expect(ScholarsphereDepositService).to have_received(:new)
+              .with(instance_of(ScholarsphereWorkDeposit), user)
+          end
+
           it 'redirects to the url returned by the deposit service' do
             post :create_scholarsphere_deposit, params: params
             expect(response).to redirect_to(test_url)
@@ -504,6 +510,11 @@ describe OpenAccessPublicationsController, type: :controller do
 
           it 'adds the deputy user id to the work deposit' do
             expect(found_deposit.deputy_user_id).to eq(deputy.id)
+          end
+
+          it 'passes the deputy user to ScholarsphereDepositService as depositor' do
+            expect(ScholarsphereDepositService).to have_received(:new)
+              .with(instance_of(ScholarsphereWorkDeposit), deputy)
           end
         end
       end

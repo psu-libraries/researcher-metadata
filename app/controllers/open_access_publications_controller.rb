@@ -49,7 +49,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       @deposit.save!
       @authorship.update!(updated_by_owner_at: Time.current)
     end
-    service = ScholarsphereDepositService.new(@deposit, current_user)
+    service = ScholarsphereDepositService.new(@deposit, current_user.deputy.presence || current_user)
     edit_url = service.create_draft
     redirect_to edit_url, allow_other_host: true
   rescue ActiveRecord::RecordInvalid => e
