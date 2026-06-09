@@ -18,6 +18,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.form-control {
+  margin-bottom: 1rem;
+}
+
 .btn-primary:hover,
 .btn-primary:focus {
   background-color: $nittany-navy;
