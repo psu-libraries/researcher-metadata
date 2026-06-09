@@ -25,10 +25,10 @@ module Utilities
     end
 
     def search_profiles(name)
-      html = fetch_author_search_html(name)
-      return [] unless html
+      data = fetch_structured_google_search(name)
+      return [] unless data
 
-      parse_profile_candidates(html)
+      parse_structured_search_candidates(data, name)
     end
 
     def fetch_profile(scholar_id)
@@ -79,13 +79,6 @@ module Utilities
 
       attr_reader :api_key, :refresh_days, :credit_budget
 
-      def fetch_author_search_html(name)
-        query = URI.encode_www_form_component("#{name} psu.edu")
-        scholar_url = "https://scholar.google.com/scholar?q=#{query}&hl=en"
-
-        fetch_scraperapi_html(scholar_url, "Google Scholar author search for #{name}", render: false)
-      end
-
       def fetch_scholar_search_html(query)
         scholar_url = "https://scholar.google.com/scholar?q=#{URI.encode_www_form_component(query)}&hl=en"
 
@@ -133,11 +126,45 @@ module Utilities
         credit_budget && total_credits_used >= credit_budget
       end
 
-      def parse_profile_candidates(html)
-        doc = Nokogiri::HTML(html)
+      def fetch_structured_google_search(name)
+        return nil if credit_budget_exceeded?
 
-        doc.css('a[href*="user="][href*="oi=ao"]').filter_map do |link|
-          scholar_id = scholar_id_from_href(link['href'])
+        query = %("#{name}" psu.edu site:scholar.google.com/citations)
+        uri = URI('https://api.scraperapi.com/structured/google/search/v1')
+        uri.query = URI.encode_www_form(api_key: api_key, query: query, country_code: 'us')
+
+        begin
+          response = Net::HTTP.get_response(uri)
+          @total_credits_used += response['sa-credit-cost'].to_i if response['sa-credit-cost']
+          unless response.code == '200'
+            Rails.logger.warn("Structured Google search failed with HTTP #{response.code} for #{name}")
+            return nil
+          end
+
+          JSON.parse(response.body)
+        rescue Net::OpenTimeout, Net::ReadTimeout, SocketError => e
+          Rails.logger.error("Network error fetching Google Scholar search for #{name}: #{e.message}")
+          nil
+        rescue JSON::ParserError
+          Rails.logger.error("Invalid JSON from Google structured search for #{name}")
+          nil
+        end
+      end
+
+      def parse_structured_search_candidates(data, name)
+        name_parts = name.to_s.downcase.split
+        first = name_parts.first
+        last = name_parts.last
+        return [] unless first && last
+
+        (data['organic_results'] || []).filter_map do |result|
+          link = result['link'].to_s
+          next unless link.include?('scholar.google.com/citations') && link.include?('user=')
+
+          title = result['title'].to_s.downcase
+          next unless title.include?(first) && title.include?(last)
+
+          scholar_id = scholar_id_from_href(link)
           next unless scholar_id
 
           { scholar_id: scholar_id }
