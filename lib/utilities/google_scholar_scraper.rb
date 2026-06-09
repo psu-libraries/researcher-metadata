@@ -61,6 +61,8 @@ module Utilities
                       scholar_id: scholar_id,
                       h_index: profile_stats[:h_index],
                       citation_total: profile_stats[:citation_total],
+                      email_domain: profile_stats[:email_domain],
+                      affiliation: profile_stats[:affiliation],
                       publications: papers
                     })
     end
@@ -183,11 +185,12 @@ module Utilities
         doc = Nokogiri::HTML(html)
         h_index = nil
         citation_total = nil
+        email_domain = nil
+        affiliation = nil
 
         doc.css('#gsc_rsb_st tr').each do |row|
           label = row.at_css('.gsc_rsb_sc1')&.text&.strip
-          values = row.css('.gsc_rsb_std')
-          first_value = values.first&.text&.strip
+          first_value = row.css('.gsc_rsb_std').first&.text&.strip
 
           if label == 'Citations'
             citation_total = first_value&.to_i
@@ -196,7 +199,15 @@ module Utilities
           end
         end
 
-        { h_index: h_index, citation_total: citation_total }
+        affiliation_div = doc.at_css('#gsc_prf_ivh')
+        if affiliation_div
+          div_text = affiliation_div.text
+          email_match = div_text.match(/Verified email at (\S+)/i)
+          email_domain = email_match[1].sub(/[.,;]+$/, '') if email_match
+          affiliation = affiliation_div.children.find(&:text?)&.text&.strip.presence
+        end
+
+        { h_index: h_index, citation_total: citation_total, email_domain: email_domain, affiliation: affiliation }
       end
 
       def parse_papers(html)
@@ -311,6 +322,8 @@ module Utilities
           scholar_id: profile[:scholar_id] || profile['scholar_id'],
           h_index: profile[:h_index] || profile['h_index'],
           citation_total: profile[:citation_total] || profile['citation_total'],
+          email_domain: profile[:email_domain] || profile['email_domain'],
+          affiliation: profile[:affiliation] || profile['affiliation'],
           publications: symbolize_publications(profile[:publications] || profile['publications'])
         }
       end
