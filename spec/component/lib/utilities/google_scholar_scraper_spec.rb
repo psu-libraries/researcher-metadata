@@ -106,14 +106,6 @@ describe Utilities::GoogleScholarScraper do
       HTML
     end
 
-    around do |example|
-      cache_file = Rails.root.join('tmp/caches/scholar_scrape_cache.json')
-      original = File.exist?(cache_file) ? JSON.parse(File.read(cache_file)) : {}
-      File.write(cache_file, JSON.generate(original.except('D680R8QAAAAJ')))
-      example.run
-      File.write(cache_file, JSON.generate(original))
-    end
-
     before do
       stub_request(:get, /api\.scraperapi\.com\//)
         .to_return(status: 200, body: profile_html, headers: { 'sa-credit-cost' => '10' })
@@ -147,6 +139,33 @@ describe Utilities::GoogleScholarScraper do
       profile = scraper.fetch_profile('D680R8QAAAAJ')
 
       expect(profile[:affiliation]).to be_nil
+    end
+
+    it 'fetches from ScraperAPI on every call instead of caching' do
+      scraper.fetch_profile('D680R8QAAAAJ')
+      scraper.fetch_profile('D680R8QAAAAJ')
+
+      expect(WebMock).to have_requested(:get, /api\.scraperapi\.com\//).twice
+    end
+  end
+
+  describe '#credit_budget_exceeded?', vcr: false do
+    subject(:scraper) { described_class.new(api_key: 'test-key', credit_budget: 20) }
+
+    before do
+      stub_request(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
+        .to_return(status: 200, body: { 'organic_results' => [] }.to_json,
+                   headers: { 'sa-credit-cost' => '25' })
+    end
+
+    it 'returns false before any credits are used' do
+      expect(scraper.credit_budget_exceeded?).to be false
+    end
+
+    it 'returns true once credits used reach the budget' do
+      scraper.search_profiles('Anne Verplanck')
+
+      expect(scraper.credit_budget_exceeded?).to be true
     end
   end
 end

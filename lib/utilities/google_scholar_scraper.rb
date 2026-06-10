@@ -4,22 +4,17 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'nokogiri'
-require 'time'
 
 module Utilities
   class GoogleScholarScraper
     PAGE_SIZE = 100
-    SCRAPE_CACHE_FILE = Rails.root.join('tmp/caches/scholar_scrape_cache.json').to_s
-    PROFILE_CACHE_FILE = Rails.root.join('tmp/caches/scholar_profile_cache.json').to_s
     SCRAPE_MAX_COST = 35
 
     attr_reader :total_credits_used
 
     def initialize(api_key: ENV.fetch('SCRAPERAPI_KEY'),
-                   refresh_days: ENV.fetch('REFRESH_DAYS', '120').to_i,
                    credit_budget: ENV.key?('CREDIT_BUDGET') ? ENV.fetch('CREDIT_BUDGET').to_i : nil)
       @api_key = api_key
-      @refresh_days = refresh_days
       @credit_budget = credit_budget
       @total_credits_used = 0
     end
@@ -32,11 +27,6 @@ module Utilities
     end
 
     def fetch_profile(scholar_id)
-      if recently_scraped?(scholar_id)
-        cached = cached_profile(scholar_id)
-        return symbolize_profile(cached) if cached
-      end
-
       papers = []
       profile_stats = { h_index: nil, citation_total: nil }
       cstart = 0
@@ -57,14 +47,14 @@ module Utilities
 
       return unless profile_stats[:h_index].present? || papers.any?
 
-      cache_profile(scholar_id, {
-                      scholar_id: scholar_id,
-                      h_index: profile_stats[:h_index],
-                      citation_total: profile_stats[:citation_total],
-                      email_domain: profile_stats[:email_domain],
-                      affiliation: profile_stats[:affiliation],
-                      publications: papers
-                    })
+      {
+        scholar_id: scholar_id,
+        h_index: profile_stats[:h_index],
+        citation_total: profile_stats[:citation_total],
+        email_domain: profile_stats[:email_domain],
+        affiliation: profile_stats[:affiliation],
+        publications: papers
+      }
     end
 
     def fetch_publication_by_doi(doi)
@@ -77,9 +67,13 @@ module Utilities
       parse_doi_search_result(html, normalized_doi)
     end
 
+    def credit_budget_exceeded?
+      credit_budget.present? && total_credits_used >= credit_budget
+    end
+
     private
 
-      attr_reader :api_key, :refresh_days, :credit_budget
+      attr_reader :api_key, :credit_budget
 
       def fetch_scholar_search_html(query)
         scholar_url = "https://scholar.google.com/scholar?q=#{URI.encode_www_form_component(query)}&hl=en"
@@ -122,10 +116,6 @@ module Utilities
           Rails.logger.error("Network error fetching #{description}: #{e.message}")
           nil
         end
-      end
-
-      def credit_budget_exceeded?
-        credit_budget && total_credits_used >= credit_budget
       end
 
       def fetch_structured_google_search(name)
@@ -264,89 +254,6 @@ module Utilities
         return unless href
 
         URI.join('https://scholar.google.com', href).to_s
-      end
-
-      def recently_scraped?(scholar_id)
-        cache = load_scrape_cache
-        last_scraped = cache[scholar_id]
-        return false unless last_scraped
-
-        Time.now - Time.parse(last_scraped) < refresh_days * 24 * 60 * 60
-      rescue ArgumentError
-        false
-      end
-
-      def cached_profile(scholar_id)
-        profile_cache = load_profile_cache
-        profile_cache[scholar_id]
-      end
-
-      def cache_profile(scholar_id, profile)
-        timestamp_cache = load_scrape_cache
-        timestamp_cache[scholar_id] = Time.now.utc.iso8601
-        save_scrape_cache(timestamp_cache)
-
-        profile_cache = load_profile_cache
-        profile_cache[scholar_id] = profile
-        save_profile_cache(profile_cache)
-
-        symbolize_profile(profile)
-      end
-
-      def load_profile_cache
-        return {} unless File.exist?(PROFILE_CACHE_FILE)
-
-        JSON.parse(File.read(PROFILE_CACHE_FILE, encoding: 'UTF-8'))
-      rescue JSON::ParserError
-        {}
-      end
-
-      def save_profile_cache(cache)
-        File.write(PROFILE_CACHE_FILE, JSON.pretty_generate(cache))
-      end
-
-      def load_scrape_cache
-        return {} unless File.exist?(SCRAPE_CACHE_FILE)
-
-        JSON.parse(File.read(SCRAPE_CACHE_FILE, encoding: 'UTF-8'))
-      rescue JSON::ParserError
-        {}
-      end
-
-      def save_scrape_cache(cache)
-        File.write(SCRAPE_CACHE_FILE, JSON.pretty_generate(cache))
-      end
-
-      def symbolize_profile(profile)
-        {
-          scholar_id: profile[:scholar_id] || profile['scholar_id'],
-          h_index: profile[:h_index] || profile['h_index'],
-          citation_total: profile[:citation_total] || profile['citation_total'],
-          email_domain: profile[:email_domain] || profile['email_domain'],
-          affiliation: profile[:affiliation] || profile['affiliation'],
-          publications: symbolize_publications(profile[:publications] || profile['publications'])
-        }
-      end
-
-      def symbolize_publications(publications)
-        case publications
-        when Hash
-          publications.map do |title, citations|
-            { title: title, citations: citations, year: nil, doi: nil, detail_url: nil }
-          end
-        when Array
-          publications.map do |publication|
-            {
-              title: publication[:title] || publication['title'],
-              citations: publication[:citations] || publication['citations'],
-              year: publication[:year] || publication['year'],
-              doi: publication[:doi] || publication['doi'],
-              detail_url: publication[:detail_url] || publication['detail_url']
-            }
-          end
-        else
-          []
-        end
       end
 
       def normalized_doi(value)
