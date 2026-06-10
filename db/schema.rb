@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_18_180941) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_10_125810) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -692,6 +692,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_18_180941) do
     t.integer "google_scholar_h_index"
     t.integer "google_scholar_citation_total"
     t.datetime "google_scholar_imported_at"
+    t.datetime "google_scholar_checked_at"
+    t.boolean "google_scholar_not_found", default: false, null: false
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["google_scholar_id"], name: "index_users_on_google_scholar_id", unique: true
