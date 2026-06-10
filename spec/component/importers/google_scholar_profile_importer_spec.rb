@@ -294,5 +294,4 @@ describe GoogleScholarProfileImporter do
       end
     end
   end
-
 end
