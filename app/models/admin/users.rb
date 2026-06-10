@@ -79,6 +79,18 @@ module Admin::Users
             bindings[:view]._current_user.is_admin
           end
         end
+        field(:google_scholar_not_found) do
+          label 'Google Scholar Not Found'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_checked_at) do
+          label 'Google Scholar Checked On'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
         field(:created_at) do
           visible do
             bindings[:view]._current_user.is_admin
@@ -112,6 +124,8 @@ module Admin::Users
         end
         field(:google_scholar_h_index) { label 'Google Scholar H-Index' }
         field(:google_scholar_citation_total) { label 'Google Scholar Citations' }
+        field(:google_scholar_checked_at) { label 'Google Scholar Checked On' }
+        field(:google_scholar_not_found) { label 'Google Scholar Not Found' }
         field(:ai_title) { label 'Title' }
         field(:orcid_identifier) do
           label 'ORCID ID'
@@ -168,6 +182,12 @@ module Admin::Users
         field(:webaccess_id) do
           read_only true
           label 'Penn State WebAccess ID'
+        end
+        field(:google_scholar_not_found) do
+          label 'Google Scholar Not Found'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
         end
         field(:first_name) do
           read_only do
