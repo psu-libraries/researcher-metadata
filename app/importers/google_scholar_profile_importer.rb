@@ -41,8 +41,8 @@ class GoogleScholarProfileImporter
 
     def importable_users
       User.active
-          .where('google_scholar_checked_at IS NULL OR google_scholar_checked_at < ?', refresh_days.days.ago)
-          .where('google_scholar_id IS NOT NULL OR ai_google_scholar IS NOT NULL OR google_scholar_not_found = FALSE')
+        .where('google_scholar_checked_at IS NULL OR google_scholar_checked_at < ?', refresh_days.days.ago)
+        .where('google_scholar_id IS NOT NULL OR ai_google_scholar IS NOT NULL OR google_scholar_not_found = FALSE')
     end
 
     def import_user(user)
