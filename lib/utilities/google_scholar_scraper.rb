@@ -121,7 +121,7 @@ module Utilities
       def fetch_structured_google_search(name)
         return nil if credit_budget_exceeded?
 
-        query = %("#{name}" psu.edu site:scholar.google.com/citations)
+        query = "#{name} psu.edu site:scholar.google.com/citations"
         uri = URI('https://api.scraperapi.com/structured/google/search/v1')
         uri.query = URI.encode_www_form(api_key: api_key, query: query, country_code: 'us')
 

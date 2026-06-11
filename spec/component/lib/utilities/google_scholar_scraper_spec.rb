@@ -56,11 +56,11 @@ describe Utilities::GoogleScholarScraper do
       expect(scraper.search_profiles('Anne Verplanck')).to eq []
     end
 
-    it 'sends name in quotes with psu.edu and site: operator' do
+    it 'sends the unquoted name with psu.edu and site: operator' do
       scraper.search_profiles('Anne Verplanck')
 
       expect(WebMock).to have_requested(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
-        .with(query: hash_including('query' => '"Anne Verplanck" psu.edu site:scholar.google.com/citations'))
+        .with(query: hash_including('query' => 'Anne Verplanck psu.edu site:scholar.google.com/citations'))
     end
 
     it 'tracks credit cost' do
