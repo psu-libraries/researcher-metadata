@@ -494,7 +494,7 @@ describe ScholarsphereFileUpload, type: :model do
             { display_name: 'Test Author' },
             { display_name: 'Another Contributor' }
           ],
-          open_access: true,
+          open_access_upload: true,
           imported_metadata_from_rmd: true
         })
       end
