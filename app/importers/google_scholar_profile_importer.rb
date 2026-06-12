@@ -31,7 +31,6 @@ class GoogleScholarProfileImporter
 
     pbar.finish
 
-    sleep 30
     Rails.logger.info("GoogleScholarProfileImporter: total ScraperAPI credits used: #{scraper.total_credits_used}")
   end
 
