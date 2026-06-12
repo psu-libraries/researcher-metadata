@@ -114,6 +114,23 @@ describe GoogleScholarProfileImporter do
       end
     end
 
+    context 'when an active user has a middle name' do
+      let!(:user) do
+        create(:user, :with_psu_identity, first_name: 'Jane', middle_name: 'Quinn', last_name: 'Scholar')
+      end
+
+      before do
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
+        allow(scraper).to receive(:search_profiles).and_return([])
+      end
+
+      it 'searches with first and last name only' do
+        importer.call
+
+        expect(scraper).to have_received(:search_profiles).with('Jane Scholar')
+      end
+    end
+
     context 'when a user is inactive' do
       let!(:user) { create(:user, google_scholar_id: 'inactive-scholar-id') }
 

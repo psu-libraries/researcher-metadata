@@ -112,6 +112,6 @@ class GoogleScholarProfileImporter
     end
 
     def profile_search_name(user)
-      [user.first_name, user.middle_name, user.last_name].compact_blank.join(' ')
+      [user.first_name, user.last_name].compact_blank.join(' ')
     end
 end
