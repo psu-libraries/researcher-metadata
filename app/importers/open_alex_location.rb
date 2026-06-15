@@ -11,15 +11,11 @@ class OpenAlexLocation
   end
 
   def name
-    parsed_location['source']['display_name']
+    source['display_name'] if source
   end
 
   def host_type
-    parsed_location['source']['type']
-  end
-
-  def primary?
-    id == work.primary_location_id
+    source['type'] if source
   end
 
   def best_oa?
@@ -49,4 +45,8 @@ class OpenAlexLocation
   private
 
     attr_reader :parsed_location, :work
+
+    def source
+      parsed_location['source']
+    end
 end

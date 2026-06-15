@@ -9,20 +9,23 @@ describe OpenAlexLocation do
       'id' => id,
       'landing_page_url' => 'test-landing-page-url',
       'pdf_url' => 'test-pdf-url',
-      'source' => {
-        'display_name' => 'Test Location',
-        'type' => 'repository'
-      },
+      'source' => source,
       'license' => 'test license',
       'version' => 'test version',
-      'is_published' => true
+      'is_published' => true,
+      'raw_source_name' => 'Raw Test Location'
+    }
+  }
+  let(:source) {
+    {
+      'display_name' => 'Test Location',
+      'type' => 'repository'
     }
   }
   let(:id) { 'abc123' }
   let(:work) {
     instance_double(
       OpenAlexWork,
-      primary_location_id: 'abc123',
       best_oa_location_id: 'abc123'
     )
   }
@@ -34,29 +37,33 @@ describe OpenAlexLocation do
   end
 
   describe '#name' do
-    it 'retuns the display_name of the location source from the given metadata' do
-      expect(loc.name).to eq 'Test Location'
+    context 'when the given metadata includes a source' do
+      it 'retuns the display_name of the location source from the given metadata' do
+        expect(loc.name).to eq 'Test Location'
+      end
+    end
+
+    context 'when the given metadata does not include a source' do
+      let(:source) { nil }
+
+      it 'returns nil' do
+        expect(loc.name).to be_nil
+      end
     end
   end
 
   describe '#host_type' do
-    it 'returns the type of the location source from the given metadata' do
-      expect(loc.host_type).to eq 'repository'
-    end
-  end
-
-  describe '#primary?' do
-    context "when the given metadata is for a location with the same ID as the work's primary location" do
-      it 'returns true' do
-        expect(loc.primary?).to be true
+    context 'when the given metadata includes a source' do
+      it 'returns the type of the location source from the given metadata' do
+        expect(loc.host_type).to eq 'repository'
       end
     end
 
-    context "when the given metadata is for a location with a different ID than the work's primary location" do
-      let(:id) { 'def456' }
+    context 'when the given metadata does not include a source' do
+      let(:source) { nil }
 
-      it 'returns false' do
-        expect(loc.primary?).to be false
+      it 'returns nil' do
+        expect(loc.host_type).to be_nil
       end
     end
   end

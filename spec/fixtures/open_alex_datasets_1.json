@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "next_cursor": "cursor_abc123"
+  },
+  "results": [
+    {
+      "id": "open-alex-id-1",
+      "doi": "https://doi.org/10.1/a",
+      "title": "Test Dataset 1",
+      "publication_date": "2026-05-10",
+      "primary_location": {
+        "source": {
+          "display_name": "Test Repo 1"
+        }
+      },
+      "type": "dataset",
+      "open_access": {
+        "oa_status": "green"
+      },
+      "locations": [
+        {
+          "is_published": true
+        }
+      ],
+      "updated_date": "2026-06-02T09:04:35.204637"
+    },
+    {
+      "id": "open-alex-id-2",
+      "doi": "https://doi.org/10.2/b",
+      "title": "Test Dataset 2",
+      "publication_date": "2020-01-01",
+      "primary_location": {
+        "source": {
+          "display_name": "Test Repo 2"
+        }
+      },
+      "type": "dataset",
+      "open_access": {
+        "oa_status": "bronze"
+      },
+      "locations": [
+        {
+          "is_published": false
+        },
+        {
+          "is_published": true
+        }
+      ],
+      "updated_date": "2026-02-01T10:17:42.837655"
+    },
+    {
+      "id": "open-alex-id-3",
+      "doi": "https://doi.org/10.3/c",
+      "title": "Unpublished Dataset",
+      "publication_date": "2018-12-22",
+      "primary_location": {
+        "source": {
+          "display_name": "Test Repo 3"
+        }
+      },
+      "type": "dataset",
+      "open_access": {
+        "oa_status": "closed"
+      },
+      "locations": [
+        {
+          "is_published": false
+        },
+        {
+          "is_published": false
+        }
+      ],
+      "updated_date": "2026-03-27T18:03:01.982043"
+    }
+  ]
+}

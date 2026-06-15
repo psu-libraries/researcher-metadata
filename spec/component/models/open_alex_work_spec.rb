@@ -7,7 +7,7 @@ describe OpenAlexWork do
   let(:work_data) {
     {
       'doi' => 'test-doi',
-      'title' => 'Test Dataset',
+      'title' => title,
       'type' => 'dataset',
       'publication_date' => '2026-06-01',
       'id' => 'oa-id-123',
@@ -30,6 +30,7 @@ describe OpenAlexWork do
       ]
     }
   }
+  let(:title) { 'Test Dataset' }
   let(:locations) {
     [
       {
@@ -53,7 +54,8 @@ describe OpenAlexWork do
       OpenAlexLocation,
       id: 'abc123',
       published?: false,
-      name: 'Test Repo'
+      name: 'Test Repo',
+      pdf_url: pdf_url
     )
   }
   let(:loc_2) {
@@ -63,6 +65,7 @@ describe OpenAlexWork do
       published?: true
     )
   }
+  let(:pdf_url) { nil }
   let(:auth_1) { instance_double(OpenAlexAuthor, psu_affiliated?: false) }
   let(:auth_2) { instance_double(OpenAlexAuthor, psu_affiliated?: true) }
 
@@ -92,7 +95,7 @@ describe OpenAlexWork do
 
   describe '#type' do
     it 'returns the work type from the given metadata' do
-      expect(work.type).to eq 'dataset'
+      expect(work.type).to eq 'Dataset'
     end
   end
 
@@ -114,12 +117,84 @@ describe OpenAlexWork do
     end
   end
 
-  describe '#has_published_location?' do
+  describe '#importable?' do
     context 'when the work metadata contains no locations' do
       let(:locations) { [] }
 
-      it 'returns false' do
-        expect(work.has_published_location?).to be false
+      context 'when the work metadata includes a title' do
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+      end
+
+      context 'when the work metadata includes a blank title' do
+        let(:title) { '' }
+
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+      end
+
+      context 'when the work metadata does not include a title' do
+        let(:title) { nil }
+
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
       end
     end
 
@@ -133,14 +208,158 @@ describe OpenAlexWork do
         ]
       }
 
-      it 'returns false' do
-        expect(work.has_published_location?).to be false
+      context 'when the work metadata includes a title' do
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+      end
+
+      context 'when the work metadata includes a blank title' do
+        let(:title) { '' }
+
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+      end
+
+      context 'when the work metadata does not include a title' do
+        let(:title) { nil }
+
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
       end
     end
 
     context 'when the work metadata has a published location' do
-      it 'returns true' do
-        expect(work.has_published_location?).to be true
+      context 'when the work metadata includes a title' do
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns true' do
+            expect(work.importable?).to be true
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns true' do
+            expect(work.importable?).to be true
+          end
+        end
+      end
+
+      context 'when the work metadata includes a blank title' do
+        let(:title) { '' }
+
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+      end
+
+      context 'when the work metadata does not include a title' do
+        let(:title) { nil }
+
+        context 'when the work metadata includes a PDF URL for the primary location' do
+          let(:pdf_url) { 'https://test.com/pdf' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata includes a blank PDF URL for the primary location' do
+          let(:pdf_url) { '' }
+
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
+
+        context 'when the work metadata does not include a PDF URL for the primary location' do
+          it 'returns false' do
+            expect(work.importable?).to be false
+          end
+        end
       end
     end
   end
@@ -160,12 +379,6 @@ describe OpenAlexWork do
   describe '#locations' do
     it "returns an OpenAlexLocation for each of the work's locations in the given metadata" do
       expect(work.locations).to eq [loc_1, loc_2]
-    end
-  end
-
-  describe '#primary_location_id' do
-    it "returns the ID of the work's primary location from the given metadata" do
-      expect(work.primary_location_id).to eq 'abc123'
     end
   end
 

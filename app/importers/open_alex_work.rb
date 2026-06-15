@@ -14,7 +14,7 @@ class OpenAlexWork
   end
 
   def type
-    parsed_work['type']
+    parsed_work['type'].capitalize
   end
 
   def publication_date
@@ -29,8 +29,8 @@ class OpenAlexWork
     Time.parse(parsed_work['updated_date'])
   end
 
-  def has_published_location?
-    !!locations.find(&:published?)
+  def importable?
+    !!(has_published_location? && title.present? && primary_location.pdf_url.blank?)
   end
 
   def oa_status
@@ -45,10 +45,6 @@ class OpenAlexWork
     parsed_work['locations'].map do |l|
       OpenAlexLocation.new(l, self)
     end
-  end
-
-  def primary_location_id
-    primary_location.id
   end
 
   def best_oa_location_id
@@ -71,5 +67,9 @@ class OpenAlexWork
 
     def primary_location
       OpenAlexLocation.new(parsed_work['primary_location'], self)
+    end
+
+    def has_published_location?
+      !!locations.find(&:published?)
     end
 end

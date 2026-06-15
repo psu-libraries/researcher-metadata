@@ -353,7 +353,7 @@ describe Publication, type: :model do
                                                        'Newspaper Article', 'Comment/Debate', 'Commissioned Report',
                                                        'Digital or Visual Product', 'Editorial', 'Foreword/Postscript',
                                                        'Letter', 'Paper', 'Patent', 'Poster', 'Scholarly Edition',
-                                                       'Short Survey', 'Working Paper', 'Other']
+                                                       'Short Survey', 'Working Paper', 'Dataset', 'Other']
     end
   end
 
