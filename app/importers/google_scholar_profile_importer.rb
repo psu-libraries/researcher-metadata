@@ -4,7 +4,7 @@ require 'utilities/google_scholar_scraper'
 require 'utilities/google_scholar_url'
 
 class GoogleScholarProfileImporter
-  include Utilities::GoogleScholarUrl
+  include Utilities::GoogleScholarURL
 
   def initialize(scraper: Utilities::GoogleScholarScraper.new,
                  matcher_class: GoogleScholarProfileMatcher,

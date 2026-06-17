@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Utilities
-  module GoogleScholarUrl
+  module GoogleScholarURL
     private
 
       def scholar_id_from_url(url)

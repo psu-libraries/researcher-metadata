@@ -8,7 +8,7 @@ require 'utilities/google_scholar_url'
 
 module Utilities
   class GoogleScholarScraper
-    include GoogleScholarUrl
+    include GoogleScholarURL
 
     PAGE_SIZE = 100
     SCRAPE_MAX_COST = 35
