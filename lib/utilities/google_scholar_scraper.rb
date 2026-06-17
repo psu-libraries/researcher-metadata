@@ -4,6 +4,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'nokogiri'
+require 'string/similarity'
 require 'utilities/google_scholar_url'
 
 module Utilities
@@ -12,6 +13,7 @@ module Utilities
 
     PAGE_SIZE = 100
     SCRAPE_MAX_COST = 35
+    CANDIDATE_NAME_SIMILARITY_THRESHOLD = 0.75
 
     attr_reader :total_credits_used
 
@@ -121,6 +123,10 @@ module Utilities
         end
       end
 
+      def name_token_matches?(title, name_part)
+        title.split.any? { |word| String::Similarity.cosine(word, name_part) >= CANDIDATE_NAME_SIMILARITY_THRESHOLD }
+      end
+
       def fetch_structured_google_search(name)
         return nil if credit_budget_exceeded?
 
@@ -157,7 +163,7 @@ module Utilities
           next unless link.include?('scholar.google.com/citations') && link.include?('user=')
 
           title = result['title'].to_s.downcase
-          next unless title.include?(first) && title.include?(last)
+          next unless name_token_matches?(title, first) && name_token_matches?(title, last)
 
           scholar_id = scholar_id_from_url(link)
           next unless scholar_id

@@ -42,6 +42,48 @@ describe Utilities::GoogleScholarScraper do
       expect(results.pluck(:scholar_id)).not_to include('WRONGID')
     end
 
+    it 'matches a candidate whose first name differs by one character (e.g. Sergei vs Sergey)' do
+      stub_request(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
+        .to_return(
+          status: 200,
+          body: {
+            'organic_results' => [
+              {
+                'title' => 'Sergey Tabachnikov - Google Scholar',
+                'link' => 'https://scholar.google.com/citations?user=SOT2AAAAAAAJ&hl=en'
+              }
+            ]
+          }.to_json,
+          headers: { 'sa-credit-cost' => '25' }
+        )
+
+      results = scraper.search_profiles('Sergei Tabachnikov')
+
+      expect(results.length).to eq 1
+      expect(results.first[:scholar_id]).to eq 'SOT2AAAAAAAJ'
+    end
+
+    it 'matches a candidate whose first name is a longer variant (e.g. Dave vs David)' do
+      stub_request(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
+        .to_return(
+          status: 200,
+          body: {
+            'organic_results' => [
+              {
+                'title' => 'David Mauger - Google Scholar',
+                'link' => 'https://scholar.google.com/citations?user=DTM5AAAAAAAJ&hl=en'
+              }
+            ]
+          }.to_json,
+          headers: { 'sa-credit-cost' => '25' }
+        )
+
+      results = scraper.search_profiles('Dave Mauger')
+
+      expect(results.length).to eq 1
+      expect(results.first[:scholar_id]).to eq 'DTM5AAAAAAAJ'
+    end
+
     it 'returns an empty array when organic_results is empty' do
       stub_request(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
         .to_return(status: 200, body: empty_response, headers: { 'sa-credit-cost' => '25' })
