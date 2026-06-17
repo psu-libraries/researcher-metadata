@@ -49,11 +49,11 @@ describe Utilities::GoogleScholarScraper do
       expect(scraper.search_profiles('Nobody Here')).to eq []
     end
 
-    it 'returns an empty array when ScraperAPI fails' do
+    it 'returns nil when ScraperAPI fails' do
       stub_request(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
         .to_return(status: 500, body: '')
 
-      expect(scraper.search_profiles('Anne Verplanck')).to eq []
+      expect(scraper.search_profiles('Anne Verplanck')).to be_nil
     end
 
     it 'sends the unquoted name with psu.edu and site: operator' do

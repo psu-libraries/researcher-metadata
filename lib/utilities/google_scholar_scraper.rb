@@ -21,7 +21,7 @@ module Utilities
 
     def search_profiles(name)
       data = fetch_structured_google_search(name)
-      return [] unless data
+      return nil if data.nil?
 
       parse_structured_search_candidates(data, name)
     end

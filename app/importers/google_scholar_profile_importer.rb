@@ -65,17 +65,24 @@ class GoogleScholarProfileImporter
         return
       end
 
-      profile = discover_profile(user)
+      result = discover_profile(user)
 
-      if profile
-        update_user(user, profile)
-      elsif !scraper.credit_budget_exceeded?
+      if result.is_a?(Hash)
+        update_user(user, result)
+      elsif result != :scraper_error && !scraper.credit_budget_exceeded?
         user.update!(google_scholar_checked_at: Time.current, google_scholar_not_found: true)
       end
     end
 
     def discover_profile(user)
-      scraper.search_profiles(profile_search_name(user)).each do |candidate|
+      candidates = scraper.search_profiles(profile_search_name(user))
+
+      if candidates.nil?
+        Rails.logger.warn("GoogleScholarProfileImporter: skipping user #{user.id} — ScraperAPI error during search")
+        return :scraper_error
+      end
+
+      candidates.each do |candidate|
         profile = scraper.fetch_profile(candidate[:scholar_id])
         next unless profile
 

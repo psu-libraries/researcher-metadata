@@ -241,6 +241,29 @@ describe GoogleScholarProfileImporter do
       end
     end
 
+    context 'when the ScraperAPI search call fails with a transient error' do
+      let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
+
+      before do
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
+        allow(scraper).to receive(:search_profiles).with('Jane Scholar').and_return(nil)
+      end
+
+      it 'does not mark the user as not found' do
+        importer.call
+
+        user.reload
+        expect(user.google_scholar_not_found).to be false
+      end
+
+      it 'does not record a checked_at timestamp' do
+        importer.call
+
+        user.reload
+        expect(user.google_scholar_checked_at).to be_nil
+      end
+    end
+
     context 'when discovery comes back empty because the credit budget ran out mid-user' do
       let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
 
