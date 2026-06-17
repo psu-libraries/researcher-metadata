@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require 'utilities/google_scholar_scraper'
+require 'utilities/google_scholar_url'
 
 class GoogleScholarProfileImporter
+  include Utilities::GoogleScholarUrl
+
   def initialize(scraper: Utilities::GoogleScholarScraper.new,
                  matcher_class: GoogleScholarProfileMatcher,
                  refresh_days: ENV.fetch('REFRESH_DAYS', '120').to_i)
@@ -45,7 +48,7 @@ class GoogleScholarProfileImporter
     end
 
     def import_user(user)
-      scholar_id = user.google_scholar_id.presence || scholar_id_from_ai_url(user.ai_google_scholar)
+      scholar_id = user.google_scholar_id.presence || scholar_id_from_url(user.ai_google_scholar)
 
       if scholar_id
         profile = scraper.fetch_profile(scholar_id)
@@ -107,14 +110,6 @@ class GoogleScholarProfileImporter
       updates[:google_scholar_citation_total] = profile[:citation_total] if profile[:citation_total].present?
 
       user.update!(updates)
-    end
-
-    def scholar_id_from_ai_url(url)
-      return if url.blank?
-
-      URI.decode_www_form(URI.parse(url).query.to_s).find { |key, _| key == 'user' }&.last
-    rescue URI::InvalidURIError
-      nil
     end
 
     def profile_search_name(user)

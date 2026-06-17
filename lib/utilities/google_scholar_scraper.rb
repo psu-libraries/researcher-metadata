@@ -4,9 +4,12 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'nokogiri'
+require 'utilities/google_scholar_url'
 
 module Utilities
   class GoogleScholarScraper
+    include GoogleScholarUrl
+
     PAGE_SIZE = 100
     SCRAPE_MAX_COST = 35
 
@@ -156,19 +159,11 @@ module Utilities
           title = result['title'].to_s.downcase
           next unless title.include?(first) && title.include?(last)
 
-          scholar_id = scholar_id_from_href(link)
+          scholar_id = scholar_id_from_url(link)
           next unless scholar_id
 
           { scholar_id: scholar_id }
         end.uniq { |c| c[:scholar_id] }
-      end
-
-      def scholar_id_from_href(href)
-        return unless href
-
-        URI.decode_www_form(URI.parse(href).query.to_s).find { |key, _value| key == 'user' }&.last
-      rescue URI::InvalidURIError
-        nil
       end
 
       def parse_profile_stats(html)
