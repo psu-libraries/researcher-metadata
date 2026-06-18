@@ -85,8 +85,14 @@ class GoogleScholarProfileImporter
         return :scraper_error
       end
 
+      scraper_error = false
+
       candidates.each do |candidate|
         partial = scraper.fetch_profile_page0(candidate[:scholar_id])
+        if partial == :scraper_error
+          scraper_error = true
+          next
+        end
         next unless partial
 
         result = matcher_class.new(user, partial).match
@@ -98,6 +104,8 @@ class GoogleScholarProfileImporter
 
         return full_profile
       end
+
+      return :scraper_error if scraper_error
 
       Rails.logger.info("GoogleScholarProfileImporter: no Google Scholar profile match for user #{user.id}")
       nil

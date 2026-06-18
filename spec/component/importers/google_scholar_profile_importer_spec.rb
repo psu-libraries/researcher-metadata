@@ -181,6 +181,34 @@ describe GoogleScholarProfileImporter do
       end
     end
 
+    context 'when fetch_profile_page0 returns a scraper error for a candidate' do
+      let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
+
+      before do
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
+
+        allow(scraper).to receive(:search_profiles).with('Jane Scholar').and_return(
+          [{ scholar_id: 'transient-id' }]
+        )
+        allow(scraper).to receive(:fetch_profile_page0).with('transient-id').and_return(:scraper_error)
+        allow(scraper).to receive(:fetch_profile)
+      end
+
+      it 'does not mark the user as not found so the next run retries' do
+        importer.call
+
+        user.reload
+        expect(user.google_scholar_not_found).to be false
+        expect(user.google_scholar_checked_at).to be_nil
+      end
+
+      it 'does not call fetch_profile' do
+        importer.call
+
+        expect(scraper).not_to have_received(:fetch_profile)
+      end
+    end
+
     context 'when fetch_profile returns nil after a page-0 match' do
       let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
 

@@ -62,6 +62,24 @@ module Utilities
       }
     end
 
+    def fetch_profile_page0(scholar_id)
+      html = fetch_page_html(scholar_id, 0)
+      return :scraper_error unless html
+
+      stats = parse_profile_stats(html)
+      papers = parse_papers(html)
+      return unless stats[:h_index].present? || papers.any?
+
+      {
+        scholar_id: scholar_id,
+        h_index: stats[:h_index],
+        citation_total: stats[:citation_total],
+        email_domain: stats[:email_domain],
+        affiliation: stats[:affiliation],
+        publications: papers
+      }
+    end
+
     def fetch_publication_by_doi(doi)
       normalized_doi = normalized_doi(doi)
       return unless normalized_doi

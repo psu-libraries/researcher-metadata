@@ -191,6 +191,73 @@ describe Utilities::GoogleScholarScraper do
     end
   end
 
+  describe '#fetch_profile_page0', vcr: false do
+    let(:profile_html) do
+      <<~HTML
+        <html><body>
+          <div id="gsc_prf_ivh">
+            Materials Research Institute, Pennsylvania State University
+            <a class="gsc_prf_ila" href="/citations">Verified email at psu.edu</a>
+          </div>
+          <table id="gsc_rsb_st">
+            <tr>
+              <td class="gsc_rsb_sc1">Citations</td>
+              <td class="gsc_rsb_std">1500</td>
+            </tr>
+            <tr>
+              <td class="gsc_rsb_sc1">h-index</td>
+              <td class="gsc_rsb_std">20</td>
+            </tr>
+          </table>
+          <tbody id="gsc_a_b"></tbody>
+        </body></html>
+      HTML
+    end
+
+    before do
+      stub_request(:get, /api\.scraperapi\.com\//)
+        .to_return(status: 200, body: profile_html, headers: { 'sa-credit-cost' => '10' })
+    end
+
+    it 'returns a profile hash with the correct shape' do
+      profile = scraper.fetch_profile_page0('D680R8QAAAAJ')
+
+      expect(profile).to include(
+        scholar_id: 'D680R8QAAAAJ',
+        h_index: 20,
+        citation_total: 1500,
+        email_domain: 'psu.edu',
+        affiliation: 'Materials Research Institute, Pennsylvania State University',
+        publications: []
+      )
+    end
+
+    it 'makes exactly one HTTP request regardless of page size' do
+      scraper.fetch_profile_page0('D680R8QAAAAJ')
+
+      expect(WebMock).to have_requested(:get, /api\.scraperapi\.com\//).once
+    end
+
+    it 'returns :scraper_error when ScraperAPI returns a non-200 response' do
+      stub_request(:get, /api\.scraperapi\.com\//)
+        .to_return(status: 500, body: '')
+
+      expect(scraper.fetch_profile_page0('D680R8QAAAAJ')).to eq :scraper_error
+    end
+
+    it 'returns nil when the page loads but the profile is empty' do
+      stub_request(:get, /api\.scraperapi\.com\//)
+        .to_return(status: 200, body: '<html><body></body></html>', headers: { 'sa-credit-cost' => '10' })
+
+      expect(scraper.fetch_profile_page0('D680R8QAAAAJ')).to be_nil
+    end
+
+    it 'tracks credit cost' do
+      expect { scraper.fetch_profile_page0('D680R8QAAAAJ') }
+        .to change(scraper, :total_credits_used).by(10)
+    end
+  end
+
   describe '#credit_budget_exceeded?', vcr: false do
     subject(:scraper) { described_class.new(api_key: 'test-key', credit_budget: 20) }
 
