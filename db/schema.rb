@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_29_142542) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_18_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -573,6 +573,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_29_142542) do
     t.string "deposit_workflow"
     t.integer "activity_insight_oa_file_id"
     t.string "draft_scholarsphere_work_deposit_url"
+    t.string "scholarsphere_edit_url"
     t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
     t.index ["deputy_user_id"], name: "index_scholarsphere_work_deposits_on_deputy_user_id"
   end

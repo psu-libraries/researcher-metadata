@@ -25,8 +25,12 @@ class ScholarsphereDepositService
     # Draft works will return a 201
     if response.status == 201 || !response_body['edit_url'].nil?
       base_url = ResearcherMetadata::Application.scholarsphere_base_uri
-      deposit.update(draft_scholarsphere_work_deposit_url: response_body['url'].to_s)
-      "#{base_url}#{response_body['edit_url']}?external_entry=true"
+      edit_url = "#{base_url}#{response_body['edit_url']}?external_entry=true"
+      deposit.update(
+        draft_scholarsphere_work_deposit_url: response_body['url'].to_s,
+        scholarsphere_edit_url: edit_url
+      )
+      edit_url
     else
       logger.info response.inspect
       raise DepositFailed.new(response.body)
