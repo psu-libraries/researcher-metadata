@@ -50,16 +50,7 @@ module Utilities
         sleep 2
       end
 
-      return unless profile_stats[:h_index].present? || papers.any?
-
-      {
-        scholar_id: scholar_id,
-        h_index: profile_stats[:h_index],
-        citation_total: profile_stats[:citation_total],
-        email_domain: profile_stats[:email_domain],
-        affiliation: profile_stats[:affiliation],
-        publications: papers
-      }
+      build_profile_result(scholar_id, profile_stats, papers)
     end
 
     def fetch_profile_page0(scholar_id)
@@ -68,16 +59,7 @@ module Utilities
 
       stats = parse_profile_stats(html)
       papers = parse_papers(html)
-      return unless stats[:h_index].present? || papers.any?
-
-      {
-        scholar_id: scholar_id,
-        h_index: stats[:h_index],
-        citation_total: stats[:citation_total],
-        email_domain: stats[:email_domain],
-        affiliation: stats[:affiliation],
-        publications: papers
-      }
+      build_profile_result(scholar_id, stats, papers)
     end
 
     def fetch_publication_by_doi(doi)
@@ -139,6 +121,19 @@ module Utilities
           Rails.logger.error("Network error fetching #{description}: #{e.message}")
           nil
         end
+      end
+
+      def build_profile_result(scholar_id, stats, papers)
+        return unless stats[:h_index].present? || papers.any?
+
+        {
+          scholar_id: scholar_id,
+          h_index: stats[:h_index],
+          citation_total: stats[:citation_total],
+          email_domain: stats[:email_domain],
+          affiliation: stats[:affiliation],
+          publications: papers
+        }
       end
 
       def name_token_matches?(title, name_part)

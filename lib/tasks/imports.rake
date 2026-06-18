@@ -118,9 +118,6 @@ namespace :import do
       GoogleScholarProfileImporter.new.call
     end
 
-    desc 'Alias for import:google_scholar:profiles'
-    task scrape: :profiles
-
     desc 'Import Google Scholar publication citation counts by DOI'
     task publication_citations: :environment do
       GoogleScholarPublicationCitationImporter.new.call
