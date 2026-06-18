@@ -8,7 +8,8 @@ class PublicationImport < ApplicationRecord
       'Web of Science',
       'Penn State Law eLibrary Repo',
       'Dickinson Law IDEAS Repo',
-      'Dickinson Law INSIGHT Repo'
+      'Dickinson Law INSIGHT Repo',
+      'Open Alex'
     ]
   end
 

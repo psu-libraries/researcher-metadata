@@ -26,7 +26,7 @@ class Publication < ApplicationRecord
       'Extension Publication', 'Magazine/Trade Publication', 'Manuscript', 'Newsletter',
       'Newspaper Article', 'Comment/Debate', 'Commissioned Report', 'Digital or Visual Product',
       'Editorial', 'Foreword/Postscript', 'Letter', 'Paper', 'Patent', 'Poster',
-      'Scholarly Edition', 'Short Survey', 'Working Paper', 'Other'
+      'Scholarly Edition', 'Short Survey', 'Working Paper', 'Dataset', 'Other'
     ]
   end
 

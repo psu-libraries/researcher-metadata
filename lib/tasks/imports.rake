@@ -26,6 +26,13 @@ namespace :import do
     NIHGrantImporter.call
   end
 
+  namespace :open_alex do
+    desc 'Import Open Alex dataset metadata'
+    task datasets: :environment do
+      OpenAlexDatasetImporter.call
+    end
+  end
+
   desc 'Import Unpaywall publication metadata'
   task unpaywall: :environment do
     time_started_at = ENV.fetch('ARGO_SUBMITTED_AT', Time.now)
