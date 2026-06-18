@@ -68,11 +68,16 @@ class AuthorshipDecorator < BaseDecorator
     end
 
     def profile_management_pub_title
-      if no_open_access_information? && is_oa_publication? && published? && confirmed
+      if should_link_to_open_access_page?
         view_context.link_to title, view_context.edit_open_access_publication_path(publication)
       else
         title
       end
+    end
+
+    def should_link_to_open_access_page?
+      (no_open_access_information? || scholarsphere_upload_pending?) &&
+        is_oa_publication? && published? && confirmed
     end
 
     def wrap_title(title)

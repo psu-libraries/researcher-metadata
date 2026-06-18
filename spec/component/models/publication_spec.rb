@@ -2014,6 +2014,56 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#scholarsphere_pending_edit_url' do
+    let(:pub) { create(:publication) }
+    let(:auth) { create(:authorship, publication: pub) }
+
+    context 'when there is a pending deposit with an edit url' do
+      before do
+        create(:scholarsphere_work_deposit,
+               authorship: auth,
+               status: 'Pending',
+               scholarsphere_edit_url: 'https://scholarsphere.test/works/1/edit?external_entry=true')
+      end
+
+      it 'returns the pending deposit edit url' do
+        expect(pub.scholarsphere_pending_edit_url).to eq 'https://scholarsphere.test/works/1/edit?external_entry=true'
+      end
+    end
+
+    context 'when there are multiple pending deposits with edit urls' do
+      before do
+        create(:scholarsphere_work_deposit,
+               authorship: auth,
+               status: 'Pending',
+               scholarsphere_edit_url: 'https://scholarsphere.test/works/old/edit?external_entry=true',
+               created_at: 2.days.ago)
+        create(:scholarsphere_work_deposit,
+               authorship: auth,
+               status: 'Pending',
+               scholarsphere_edit_url: 'https://scholarsphere.test/works/new/edit?external_entry=true',
+               created_at: 1.day.ago)
+      end
+
+      it 'returns the most recent pending deposit edit url' do
+        expect(pub.scholarsphere_pending_edit_url).to eq 'https://scholarsphere.test/works/new/edit?external_entry=true'
+      end
+    end
+
+    context 'when pending deposits exist but none have an edit url' do
+      before do
+        create(:scholarsphere_work_deposit,
+               authorship: auth,
+               status: 'Pending',
+               scholarsphere_edit_url: nil)
+      end
+
+      it 'returns nil' do
+        expect(pub.scholarsphere_pending_edit_url).to be_nil
+      end
+    end
+  end
+
   describe '#scholarsphere_upload_failed?' do
     let(:pub) { create(:publication) }
     let(:auth) { create(:authorship, publication: pub) }

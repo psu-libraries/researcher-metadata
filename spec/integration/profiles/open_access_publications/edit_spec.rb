@@ -57,7 +57,12 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
   let!(:waived_auth) { create(:authorship, user: user, publication: waived_pub) }
   let!(:ss_deposited_auth) { create(:authorship, user: user, publication: ss_pub) }
-  let!(:swd) { create(:scholarsphere_work_deposit, authorship: ss_deposited_auth, status: 'Pending') }
+  let!(:swd) {
+    create(:scholarsphere_work_deposit,
+           authorship: ss_deposited_auth,
+           status: 'Pending',
+           scholarsphere_edit_url: 'https://scholarsphere.test/works/999/edit?external_entry=true')
+  }
 
   before do
     create(:authorship, user: user, publication: oa_pub)
@@ -234,6 +239,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
       it 'shows the open access status of the publication' do
         expect(page).to have_content 'This publication is in the process of being added to Scholarsphere'
+        expect(page).to have_link 'Scholarsphere', href: 'https://scholarsphere.test/works/999/edit?external_entry=true'
       end
     end
 
