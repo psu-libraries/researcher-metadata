@@ -247,6 +247,16 @@ describe AuthorshipDecorator do
       end
     end
 
+    context 'when a Scholarsphere upload is pending' do
+      let(:title) { 'Test Title' }
+      let(:no_info) { false }
+      let(:pending) { true }
+
+      it 'returns a label with a link to the publication open access page' do
+        expect(ad.profile_management_label).to eq %{<span class="publication-title">the pub link</span>}
+      end
+    end
+
     context 'when the given object is not a journal article' do
       context 'when the given object has a title' do
         let(:title) { 'Test Title' }
