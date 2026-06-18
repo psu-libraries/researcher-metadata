@@ -44,7 +44,7 @@ class GoogleScholarProfileImporter
     def importable_users
       User.active
         .where('google_scholar_checked_at IS NULL OR google_scholar_checked_at < ?', refresh_days.days.ago)
-        .where('google_scholar_id IS NOT NULL OR ai_google_scholar IS NOT NULL OR google_scholar_not_found = FALSE')
+        .where('google_scholar_id IS NOT NULL OR ai_google_scholar IS NOT NULL OR google_scholar_not_found IS FALSE')
     end
 
     def import_user(user)
@@ -86,12 +86,17 @@ class GoogleScholarProfileImporter
       end
 
       candidates.each do |candidate|
-        profile = scraper.fetch_profile(candidate[:scholar_id])
-        next unless profile
+        partial = scraper.fetch_profile_page0(candidate[:scholar_id])
+        next unless partial
 
-        result = matcher_class.new(user, profile).match
+        result = matcher_class.new(user, partial).match
         Rails.logger.info("GoogleScholarProfileImporter: #{result.message}")
-        return profile if result.matched?
+        next unless result.matched?
+
+        full_profile = scraper.fetch_profile(candidate[:scholar_id])
+        return :scraper_error unless full_profile
+
+        return full_profile
       end
 
       Rails.logger.info("GoogleScholarProfileImporter: no Google Scholar profile match for user #{user.id}")

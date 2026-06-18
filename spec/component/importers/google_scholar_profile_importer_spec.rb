@@ -92,13 +92,27 @@ describe GoogleScholarProfileImporter do
         allow(scraper).to receive(:search_profiles).with('Jane Scholar').and_return(
           [{ scholar_id: 'discovered-scholar-id' }]
         )
+        allow(scraper).to receive(:fetch_profile_page0).with('discovered-scholar-id').and_return(
+          scholar_id: 'discovered-scholar-id',
+          h_index: 18,
+          citation_total: 1200,
+          email_domain: nil,
+          affiliation: nil,
+          publications: [
+            { title: 'First', doi: '10.123/first' },
+            { title: 'Second', doi: '10.123/second' }
+          ]
+        )
         allow(scraper).to receive(:fetch_profile).with('discovered-scholar-id').and_return(
           scholar_id: 'discovered-scholar-id',
           h_index: 18,
           citation_total: 1200,
+          email_domain: nil,
+          affiliation: nil,
           publications: [
             { title: 'First', doi: '10.123/first' },
-            { title: 'Second', doi: '10.123/second' }
+            { title: 'Second', doi: '10.123/second' },
+            { title: 'Third', doi: '10.123/third' }
           ]
         )
       end
@@ -111,6 +125,103 @@ describe GoogleScholarProfileImporter do
         expect(user.google_scholar_h_index).to eq 18
         expect(user.google_scholar_citation_total).to eq 1200
         expect(user.google_scholar_imported_at).to be_present
+      end
+    end
+
+    context 'when a discovery candidate is rejected by the matcher on page 0' do
+      let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
+
+      before do
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
+
+        allow(scraper).to receive(:search_profiles).with('Jane Scholar').and_return(
+          [{ scholar_id: 'non-psu-scholar-id' }]
+        )
+        allow(scraper).to receive(:fetch_profile_page0).with('non-psu-scholar-id').and_return(
+          scholar_id: 'non-psu-scholar-id',
+          h_index: 5,
+          citation_total: 50,
+          email_domain: 'mit.edu',
+          affiliation: 'Massachusetts Institute of Technology',
+          publications: []
+        )
+        allow(scraper).to receive(:fetch_profile)
+      end
+
+      it 'does not call fetch_profile for the rejected candidate' do
+        importer.call
+
+        expect(scraper).not_to have_received(:fetch_profile)
+      end
+
+      it 'marks the user as not found' do
+        importer.call
+
+        expect(user.reload.google_scholar_not_found).to be true
+      end
+    end
+
+    context 'when fetch_profile_page0 returns nil for a candidate' do
+      let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
+
+      before do
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
+
+        allow(scraper).to receive(:search_profiles).with('Jane Scholar').and_return(
+          [{ scholar_id: 'unreachable-id' }]
+        )
+        allow(scraper).to receive(:fetch_profile_page0).with('unreachable-id').and_return(nil)
+        allow(scraper).to receive(:fetch_profile)
+      end
+
+      it 'skips the candidate and does not call fetch_profile' do
+        importer.call
+
+        expect(scraper).not_to have_received(:fetch_profile)
+      end
+    end
+
+    context 'when fetch_profile returns nil after a page-0 match' do
+      let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
+
+      before do
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
+        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/second')
+
+        allow(scraper).to receive(:search_profiles).with('Jane Scholar').and_return(
+          [{ scholar_id: 'matched-but-gone-id' }]
+        )
+        allow(scraper).to receive(:fetch_profile_page0).with('matched-but-gone-id').and_return(
+          scholar_id: 'matched-but-gone-id',
+          h_index: 10,
+          citation_total: 200,
+          email_domain: nil,
+          affiliation: nil,
+          publications: [
+            { title: 'First', doi: '10.123/first' },
+            { title: 'Second', doi: '10.123/second' }
+          ]
+        )
+        allow(scraper).to receive(:fetch_profile).with('matched-but-gone-id').and_return(nil)
+      end
+
+      it 'does not import and does not raise' do
+        expect { importer.call }.not_to raise_error
+      end
+
+      it 'leaves the user not found' do
+        importer.call
+
+        user.reload
+        expect(user.google_scholar_imported_at).to be_nil
+      end
+
+      it 'does not mark the user as not found so the next run retries' do
+        importer.call
+
+        user.reload
+        expect(user.google_scholar_not_found).to be false
+        expect(user.google_scholar_checked_at).to be_nil
       end
     end
 
