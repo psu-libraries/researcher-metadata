@@ -346,7 +346,7 @@ GEM
       rubocop-rspec_rails (~> 2.30)
       scss_lint (~> 0.60)
     nio4r (2.7.4)
-    nokogiri (1.18.10)
+    nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oauth2 (2.0.12)
