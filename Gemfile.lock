@@ -406,12 +406,12 @@ GEM
     puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.19)
+    rack (3.1.21)
     rack-protection (4.2.0)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
-    rack-session (2.1.1)
+    rack-session (2.1.2)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
     rack-test (2.2.0)
@@ -751,4 +751,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.6.2
+  4.0.9
