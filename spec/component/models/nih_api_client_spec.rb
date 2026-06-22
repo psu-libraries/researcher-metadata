@@ -98,5 +98,29 @@ describe NIHAPIClient do # rubocop:disable RSpec/SpecFilePathFormat
     it 'returns the publication metadata from PubMed for the given NIH project number' do
       expect(client.publications_by_project('abc123')).to eq ['publication 1', 'publication 2']
     end
+
+    context 'when fetching a PubMed record raises an error' do
+      let(:error) { StandardError.new('pubmed timeout') }
+
+      before do
+        allow(HTTParty).to receive(:get).with(
+          'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=pm123'
+        ).and_raise(error)
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error and skips the failed PubMed record' do
+        expect(client.publications_by_project('abc123')).to eq ['publication 2']
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: error,
+          metadata: {
+            project_number: 'abc123',
+            pmid: 'pm123'
+          }
+        )
+      end
+    end
   end
 end
