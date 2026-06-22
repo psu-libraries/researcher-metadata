@@ -106,12 +106,12 @@ describe NIHAPIClient do # rubocop:disable RSpec/SpecFilePathFormat
         allow(HTTParty).to receive(:get).with(
           'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=pm123'
         ).and_raise(error)
-        allow(ImporterErrorLog).to receive(:log_error)
       end
 
       it 'logs the error and skips the failed PubMed record' do
-        expect(client.publications_by_project('abc123')).to eq ['publication 2']
+        allow(ImporterErrorLog).to receive(:log_error)
 
+        expect(client.publications_by_project('abc123')).to eq ['publication 2']
         expect(ImporterErrorLog).to have_received(:log_error).with(
           importer_class: described_class,
           error: error,
@@ -119,6 +119,26 @@ describe NIHAPIClient do # rubocop:disable RSpec/SpecFilePathFormat
             project_number: 'abc123',
             pmid: 'pm123'
           }
+        )
+      end
+
+      it 'creates an ImporterErrorLog record' do
+        # Mock JSON.parse to override top level mocks
+        allow(JSON).to receive(:parse).with(
+          { project_number: 'abc123', pmid: 'pm123' }.to_json,
+          { quirks_mode: true }
+        ).and_return({ 'project_number' => 'abc123', 'pmid' => 'pm123' })
+        expect { client.publications_by_project('abc123') }.to change(ImporterErrorLog, :count).by(1)
+        # Allow JSON.parse to operate normally for downstream calls
+        allow(JSON).to receive(:parse).and_call_original
+
+        error_log = ImporterErrorLog.order(:created_at).last
+        expect(error_log.importer_type).to eq('NIHAPIClient')
+        expect(error_log.error_type).to eq('StandardError')
+        expect(error_log.error_message).to eq('pubmed timeout')
+        expect(error_log.metadata).to eq(
+          'project_number' => 'abc123',
+          'pmid' => 'pm123'
         )
       end
     end
