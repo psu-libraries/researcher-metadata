@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require 'utilities/google_scholar_url'
+
 class GoogleScholarProfileMatcher
+  include Utilities::GoogleScholarURL
   DOI_MATCH_THRESHOLD = 2
   DOI_MATCH_THRESHOLD_PSU = 1
   TITLE_MATCH_THRESHOLD = 2
@@ -108,7 +111,4 @@ class GoogleScholarProfileMatcher
       Array(profile[:publications])
     end
 
-    def normalized_doi(value)
-      value.to_s.downcase.match(%r{10\.\S+/\S+})&.[](0)&.delete_suffix('.')
-    end
 end

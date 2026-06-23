@@ -11,5 +11,9 @@ module Utilities
       rescue URI::InvalidURIError
         nil
       end
+
+      def normalized_doi(value)
+        value.to_s.downcase.match(%r{10\.\S+/\S+})&.[](0)&.delete_suffix('.')
+      end
   end
 end

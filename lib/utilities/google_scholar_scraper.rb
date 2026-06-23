@@ -252,9 +252,5 @@ module Utilities
 
         URI.join('https://scholar.google.com', href).to_s
       end
-
-      def normalized_doi(value)
-        value.to_s.downcase.match(%r{10\.\S+/\S+})&.[](0)&.delete_suffix('.')
-      end
   end
 end
