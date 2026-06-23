@@ -515,7 +515,6 @@ rake import:google_scholar                       # runs both of the above in ord
 |---|---|---|---|
 | `SCRAPERAPI_KEY` | Yes | — | ScraperAPI authentication key |
 | `REFRESH_DAYS` | No | 120 | Skip users imported within this many days |
-| `CREDIT_BUDGET` | No | 500 | Stop importing after this many ScraperAPI credits are used |
 
 ### Admin and Profile Views
 

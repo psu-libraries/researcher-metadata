@@ -12,15 +12,12 @@ module Utilities
     include GoogleScholarURL
 
     PAGE_SIZE = 100
-    SCRAPE_MAX_COST = 35
     CANDIDATE_NAME_SIMILARITY_THRESHOLD = 0.75
 
     attr_reader :total_credits_used
 
-    def initialize(api_key: ENV.fetch('SCRAPERAPI_KEY'),
-                   credit_budget: ENV.key?('CREDIT_BUDGET') ? ENV.fetch('CREDIT_BUDGET').to_i : nil)
+    def initialize(api_key: ENV.fetch('SCRAPERAPI_KEY'))
       @api_key = api_key
-      @credit_budget = credit_budget
       @total_credits_used = 0
     end
 
@@ -72,13 +69,9 @@ module Utilities
       parse_doi_search_result(html, normalized_doi)
     end
 
-    def credit_budget_exceeded?
-      credit_budget.present? && total_credits_used >= credit_budget
-    end
-
     private
 
-      attr_reader :api_key, :credit_budget
+      attr_reader :api_key
 
       def fetch_scholar_search_html(query)
         scholar_url = "https://scholar.google.com/scholar?q=#{URI.encode_www_form_component(query)}&hl=en"
@@ -94,25 +87,17 @@ module Utilities
       end
 
       def fetch_scraperapi_html(scholar_url, description, render: true)
-        return nil if credit_budget_exceeded?
-
         uri = URI('https://api.scraperapi.com/')
         uri.query = URI.encode_www_form(
           api_key: api_key,
           url: scholar_url,
           country_code: 'us',
-          render: render.to_s,
-          max_cost: SCRAPE_MAX_COST
+          render: render.to_s
         )
 
         begin
           response = Net::HTTP.get_response(uri)
           @total_credits_used += response['sa-credit-cost'].to_i if response['sa-credit-cost']
-
-          if response.code == '403' && response.body.include?('max_cost')
-            Rails.logger.warn("Request rejected for #{description}: would exceed max_cost")
-            return nil
-          end
 
           return nil unless response.code == '200'
 
@@ -141,8 +126,6 @@ module Utilities
       end
 
       def fetch_structured_google_search(name)
-        return nil if credit_budget_exceeded?
-
         query = "#{name} psu.edu site:scholar.google.com/citations"
         uri = URI('https://api.scraperapi.com/structured/google/search/v1')
         uri.query = URI.encode_www_form(api_key: api_key, query: query, country_code: 'us')

@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 
 describe GoogleScholarProfileImporter do
   describe '#call' do
-    let(:scraper) { instance_double(Utilities::GoogleScholarScraper, total_credits_used: 0, credit_budget_exceeded?: false) }
+    let(:scraper) { instance_double(Utilities::GoogleScholarScraper, total_credits_used: 0) }
     let(:importer) { described_class.new(scraper: scraper) }
 
     context 'when an active user already has a Google Scholar ID' do
@@ -400,42 +400,6 @@ describe GoogleScholarProfileImporter do
 
         user.reload
         expect(user.google_scholar_checked_at).to be_nil
-      end
-    end
-
-    context 'when discovery comes back empty because the credit budget ran out mid-user' do
-      let!(:user) { create(:user, :with_psu_identity, first_name: 'Jane', last_name: 'Scholar') }
-
-      before do
-        create(:sample_publication, user: user, doi: 'https://doi.org/10.123/first')
-        # false for the pre-user check in #call, true when checked after discovery
-        allow(scraper).to receive(:credit_budget_exceeded?).and_return(false, true)
-        allow(scraper).to receive(:search_profiles).and_return([])
-      end
-
-      it 'does not mark the user as not found' do
-        importer.call
-
-        user.reload
-        expect(user.google_scholar_not_found).to be false
-        expect(user.google_scholar_checked_at).to be_nil
-      end
-    end
-
-    context 'when the credit budget is already exhausted at the start of the run' do
-      let!(:user) { create(:user, :with_psu_identity, google_scholar_id: 'known-scholar-id') }
-
-      before do
-        allow(scraper).to receive(:credit_budget_exceeded?).and_return(true)
-      end
-
-      it 'stops without fetching or writing tracking fields' do
-        allow(scraper).to receive(:fetch_profile)
-
-        importer.call
-
-        expect(scraper).not_to have_received(:fetch_profile)
-        expect(user.reload.google_scholar_checked_at).to be_nil
       end
     end
 

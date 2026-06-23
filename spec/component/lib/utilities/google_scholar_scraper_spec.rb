@@ -258,23 +258,4 @@ describe Utilities::GoogleScholarScraper do
     end
   end
 
-  describe '#credit_budget_exceeded?', vcr: false do
-    subject(:scraper) { described_class.new(api_key: 'test-key', credit_budget: 20) }
-
-    before do
-      stub_request(:get, /api\.scraperapi\.com\/structured\/google\/search\/v1/)
-        .to_return(status: 200, body: { 'organic_results' => [] }.to_json,
-                   headers: { 'sa-credit-cost' => '25' })
-    end
-
-    it 'returns false before any credits are used' do
-      expect(scraper.credit_budget_exceeded?).to be false
-    end
-
-    it 'returns true once credits used reach the budget' do
-      scraper.search_profiles('Anne Verplanck')
-
-      expect(scraper.credit_budget_exceeded?).to be true
-    end
-  end
 end

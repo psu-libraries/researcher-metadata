@@ -23,11 +23,6 @@ class GoogleScholarProfileImporter
     )
 
     users.find_each do |user|
-      if scraper.credit_budget_exceeded?
-        Rails.logger.warn('GoogleScholarProfileImporter: credit budget exhausted, stopping run')
-        break
-      end
-
       import_user(user)
       pbar.increment
     end
@@ -72,7 +67,7 @@ class GoogleScholarProfileImporter
 
       if result.is_a?(Hash)
         update_user(user, result)
-      elsif result != :scraper_error && !scraper.credit_budget_exceeded?
+      elsif result != :scraper_error
         user.update!(google_scholar_checked_at: Time.current, google_scholar_not_found: true)
       end
     end
