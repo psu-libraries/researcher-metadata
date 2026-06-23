@@ -105,9 +105,7 @@ class GoogleScholarProfileMatcher
     end
 
     def candidate_publications
-      Array(profile[:publications] || profile['publications']).map do |publication|
-        publication.respond_to?(:symbolize_keys) ? publication.symbolize_keys : publication
-      end
+      Array(profile[:publications])
     end
 
     def normalized_doi(value)
