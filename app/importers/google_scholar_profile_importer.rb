@@ -37,9 +37,7 @@ class GoogleScholarProfileImporter
     attr_reader :scraper, :matcher_class, :refresh_days
 
     def importable_users
-      User.active
-        .where('google_scholar_checked_at IS NULL OR google_scholar_checked_at < ?', refresh_days.days.ago)
-        .where('google_scholar_id IS NOT NULL OR ai_google_scholar IS NOT NULL OR google_scholar_not_found IS FALSE')
+      User.active.needs_google_scholar_refresh(refresh_days.days.ago)
     end
 
     def import_user(user)

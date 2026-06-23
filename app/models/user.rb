@@ -55,6 +55,10 @@ class User < ApplicationRecord
   has_many :primaries, through: :deputy_assignments
 
   scope :active, -> { where.not(psu_identity: nil).where("psu_identity->'data'->>'affiliation' != '[\"MEMBER\"]'") }
+  scope :needs_google_scholar_refresh, ->(days_ago) {
+    where('google_scholar_checked_at IS NULL OR google_scholar_checked_at < ?', days_ago)
+      .where('google_scholar_id IS NOT NULL OR ai_google_scholar IS NOT NULL OR google_scholar_not_found IS FALSE')
+  }
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
