@@ -257,5 +257,4 @@ describe Utilities::GoogleScholarScraper do
         .to change(scraper, :total_credits_used).by(10)
     end
   end
-
 end

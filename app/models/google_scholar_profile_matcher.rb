@@ -4,6 +4,7 @@ require 'utilities/google_scholar_url'
 
 class GoogleScholarProfileMatcher
   include Utilities::GoogleScholarURL
+
   DOI_MATCH_THRESHOLD = 2
   DOI_MATCH_THRESHOLD_PSU = 1
   TITLE_MATCH_THRESHOLD = 2
@@ -110,5 +111,4 @@ class GoogleScholarProfileMatcher
     def candidate_publications
       Array(profile[:publications])
     end
-
 end
