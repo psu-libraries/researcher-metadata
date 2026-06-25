@@ -16,7 +16,6 @@ class GoogleScholarProfileImporter
 
   def call
     users = importable_users
-    users = users.limit(ENV['LIMIT'].to_i) if ENV['LIMIT'].present?
     pbar = Utilities::ProgressBarTTY.create(
       title: 'Importing Google Scholar Profile Data',
       total: users.count
