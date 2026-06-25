@@ -95,17 +95,19 @@ module Utilities
           render: render.to_s
         )
 
-        begin
-          response = Net::HTTP.get_response(uri)
-          @total_credits_used += response['sa-credit-cost'].to_i if response['sa-credit-cost']
+        response = scraperapi_get(uri, description)
+        return nil unless response&.code == '200'
 
-          return nil unless response.code == '200'
+        response.body
+      end
 
-          response.body
-        rescue Net::OpenTimeout, Net::ReadTimeout, SocketError => e
-          Rails.logger.error("Network error fetching #{description}: #{e.message}")
-          nil
-        end
+      def scraperapi_get(uri, description)
+        response = Net::HTTP.get_response(uri)
+        @total_credits_used += response['sa-credit-cost'].to_i if response['sa-credit-cost']
+        response
+      rescue Net::OpenTimeout, Net::ReadTimeout, SocketError => e
+        Rails.logger.error("Network error fetching #{description}: #{e.message}")
+        nil
       end
 
       def build_profile_result(scholar_id, stats, papers)
@@ -130,22 +132,18 @@ module Utilities
         uri = URI('https://api.scraperapi.com/structured/google/search/v1')
         uri.query = URI.encode_www_form(api_key: api_key, query: query, country_code: 'us')
 
-        begin
-          response = Net::HTTP.get_response(uri)
-          @total_credits_used += response['sa-credit-cost'].to_i if response['sa-credit-cost']
-          unless response.code == '200'
-            Rails.logger.warn("Structured Google search failed with HTTP #{response.code} for #{name}")
-            return nil
-          end
+        response = scraperapi_get(uri, "Google Scholar search for #{name}")
+        return nil unless response
 
-          JSON.parse(response.body)
-        rescue Net::OpenTimeout, Net::ReadTimeout, SocketError => e
-          Rails.logger.error("Network error fetching Google Scholar search for #{name}: #{e.message}")
-          nil
-        rescue JSON::ParserError
-          Rails.logger.error("Invalid JSON from Google structured search for #{name}")
-          nil
+        unless response.code == '200'
+          Rails.logger.warn("Structured Google search failed with HTTP #{response.code} for #{name}")
+          return nil
         end
+
+        JSON.parse(response.body)
+      rescue JSON::ParserError
+        Rails.logger.error("Invalid JSON from Google structured search for #{name}")
+        nil
       end
 
       def parse_structured_search_candidates(data, name)

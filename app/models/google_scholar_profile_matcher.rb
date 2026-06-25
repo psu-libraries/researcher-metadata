@@ -8,6 +8,7 @@ class GoogleScholarProfileMatcher
   DOI_MATCH_THRESHOLD = 2
   DOI_MATCH_THRESHOLD_PSU = 1
   TITLE_MATCH_THRESHOLD = 2
+  TITLE_MATCH_THRESHOLD_PSU = 1
   TITLE_SIMILARITY_THRESHOLD = 0.90
   PSU_EMAIL_DOMAINS = %w[psu.edu].freeze
   PSU_INSTITUTION_NAMES = ['Penn State', 'Pennsylvania State'].freeze
@@ -36,8 +37,9 @@ class GoogleScholarProfileMatcher
     doi_count = doi_match_count
     return matched_result(:doi, doi_count) if doi_count >= doi_threshold
 
+    title_threshold = affiliation_status == :psu ? TITLE_MATCH_THRESHOLD_PSU : TITLE_MATCH_THRESHOLD
     title_count = title_match_count
-    return matched_result(:title, title_count) if title_count >= TITLE_MATCH_THRESHOLD
+    return matched_result(:title, title_count) if title_count >= title_threshold
 
     MatchResult.new(
       matched?: false,
