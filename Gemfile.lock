@@ -138,7 +138,7 @@ GEM
     capybara-email (3.0.2)
       capybara (>= 2.4, < 4.0)
       mail
-    carrierwave (2.2.6)
+    carrierwave (2.2.7)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
       addressable (~> 2.6)
@@ -682,7 +682,7 @@ DEPENDENCIES
   cancancan (~> 3.3)
   capybara (>= 2.15, < 4.0)
   capybara-email
-  carrierwave (~> 2.2)
+  carrierwave (= 2.2.7)
   cocoon
   coffee-rails (~> 5)
   config (~> 5.1)
