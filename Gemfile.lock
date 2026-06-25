@@ -342,7 +342,7 @@ GEM
       rubocop-rspec (~> 3.5)
       rubocop-rspec_rails (~> 2.30)
       scss_lint (~> 0.60)
-    nio4r (2.7.4)
+    nio4r (2.7.5)
     nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -403,7 +403,7 @@ GEM
       date
       stringio
     public_suffix (6.0.1)
-    puma (6.6.0)
+    puma (7.2.1)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.19)
@@ -723,7 +723,7 @@ DEPENDENCIES
   progressbar
   pry-byebug
   psu_identity (~> 0.2)
-  puma (~> 6.5)
+  puma (~> 7.2)
   rails (~> 7.2)
   rails-controller-testing
   rails_admin (~> 3.3.0)
