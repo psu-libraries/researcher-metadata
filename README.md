@@ -514,7 +514,7 @@ rake import:google_scholar                       # runs both of the above in ord
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `SCRAPERAPI_KEY` | Yes | — | ScraperAPI authentication key |
-| `REFRESH_DAYS` | No | 120 | Skip users imported within this many days |
+| `GOOGLE_SCHOLAR_REFRESH_DAYS` | No | 120 | Skip users imported within this many days |
 
 ### Admin and Profile Views
 

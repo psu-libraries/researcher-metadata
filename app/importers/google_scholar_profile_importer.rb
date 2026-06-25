@@ -8,7 +8,7 @@ class GoogleScholarProfileImporter
 
   def initialize(scraper: Utilities::GoogleScholarScraper.new,
                  matcher_class: GoogleScholarProfileMatcher,
-                 refresh_days: ENV.fetch('REFRESH_DAYS', '120').to_i)
+                 refresh_days: ENV.fetch('GOOGLE_SCHOLAR_REFRESH_DAYS', '120').to_i)
     @scraper = scraper
     @matcher_class = matcher_class
     @refresh_days = refresh_days
