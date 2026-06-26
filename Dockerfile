@@ -1,5 +1,5 @@
 
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22:20260317 AS base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22-yarn-4.16.0 AS base
 # Isilon has issues with uid 2000 for some reason
 # change the app to run as 201
 ARG UID=201
@@ -14,11 +14,10 @@ RUN apt-get update && \
 RUN groupadd -g $GID app || true
 RUN useradd -u $UID -g $GID -d /app app || true
 WORKDIR /app
-RUN mkdir -p /app/tmp /app/vendor/cache && chown -R app:app /app
+RUN mkdir -p /app/tmp && chown -R app:app /app
 RUN mkdir -p /tmp/app && chown app:app /tmp/app && chmod 755 /tmp/app
 
 COPY --chown=app:app Gemfile Gemfile.lock /app/
-COPY --chown=app:app vendor/cache /app/vendor/cache
 USER app
 RUN gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
@@ -32,8 +31,7 @@ RUN yarn install --frozen-lockfile && \
   rm -rf /app/tmp
 
 COPY --chown=app:app . /app
-RUN rm -rf /app/vendor/cache/*.gem && \
-  rm -rf /app/.bundle/cache/*.gem
+RUN rm -rf /app/.bundle/cache/*.gem
 
 CMD ["/app/bin/start"]
 

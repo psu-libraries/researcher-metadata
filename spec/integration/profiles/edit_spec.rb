@@ -313,7 +313,7 @@ describe 'editing profile preferences' do
           expect(page).to have_content "Bob's Non-Open Access Publication"
           expect(page).to have_no_link "Bob's Non-Open Access Publication"
           expect(page).to have_content "Bob's Pending Scholarsphere Publication"
-          expect(page).to have_no_link "Bob's Pending Scholarsphere Publication"
+          expect(page).to have_link "Bob's Pending Scholarsphere Publication", href: edit_open_access_publication_path(pub_6)
           expect(page).to have_content "Bob's In Press Publication"
           expect(page).to have_no_link "Bob's In Press Publication"
           expect(page).to have_content "Bob's Uploaded to Activity Insight"

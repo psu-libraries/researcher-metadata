@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Profile</title>
   <%= csrf_meta_tags %>
@@ -40,12 +40,12 @@
   </nav>
   <%= render partial: 'shared/flash_notice' %>
   <%= render partial: 'shared/flash_alert' %>
-  <div class="container">
+  <main class="container">
     <div class="row">
       <div class="col">
         <%= yield %>
       </div>
     </div>
-  </div>
+  </main>
 </body>
 </html>

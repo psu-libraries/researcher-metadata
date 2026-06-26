@@ -17,7 +17,7 @@ gem 'activerecord-import'               # library for bulk inserting data using 
 gem 'bootstrap', '5.3'
 gem 'bugsnag', '~> 6.26'                # notify the team of any exceptions
 gem 'cancancan', '~> 3.3'               # for authorization
-gem 'carrierwave', '~> 2.2'             # file uploading
+gem 'carrierwave', '2.2.7'              # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'config', '~> 5.1'
@@ -25,7 +25,7 @@ gem 'cssbundling-rails'                 # For bundling stylesheets
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'delayed_job_web'                   # /delayed_job UI for delayed job
-gem 'devise', '~> 4.9'                  # for authentication and user management
+gem 'devise', '~> 5.0'                  # for authentication and user management
 gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
@@ -48,7 +48,7 @@ gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
-gem 'puma', '~> 6.5'                    # use Puma as the app server
+gem 'puma', '~> 7.2'                    # use Puma as the app server
 gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere

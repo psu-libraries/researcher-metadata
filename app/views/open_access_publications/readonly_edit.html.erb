@@ -44,7 +44,7 @@
             <% if publication.preferred_open_access_url %>
               <td>This publication is open access - <%= link_to publication.preferred_open_access_url, publication.preferred_open_access_url, target: '_blank' %></td>
             <% elsif publication.scholarsphere_upload_pending? %>
-              <td>This publication is in the process of being added to <%= link_to "Scholarsphere", "https://scholarsphere.psu.edu/", target: '_blank' %>.</td>
+              <td>This publication is in the process of being added to <%= link_to "Scholarsphere", publication.scholarsphere_pending_edit_url || "https://scholarsphere.psu.edu/", target: '_blank' %>.</td>
             <% elsif publication.open_access_waived? %>
               <td>Open access obligations have been waived for this publication.</td>
             <% end %>

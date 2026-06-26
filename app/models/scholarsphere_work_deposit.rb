@@ -38,12 +38,16 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   has_one :publication, through: :authorship
 
   validates :status, inclusion: { in: statuses }
-  validates :rights, inclusion: { in: rights }
   validates :deposit_workflow, inclusion: { in: deposit_workflows, allow_nil: true }
-  validates :title, :description, :published_date, :rights, presence: true
-  validate :at_least_one_file_upload
-  validate :agreed_to_deposit_agreement
+  validates :title, presence: true
   validate :doi_format_is_valid
+
+  with_options unless: :standard_oa_workflow? do |d|
+    d.validates :rights, :description, :published_date, presence: true
+    d.validates :rights, inclusion: { in: rights }
+    d.validate :at_least_one_file_upload
+    d.validate :agreed_to_deposit_agreement
+  end
 
   accepts_nested_attributes_for :file_uploads
 
@@ -89,6 +93,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     base_metadata[:subtitle] = subtitle if subtitle.present?
     base_metadata[:publisher] = [publisher] if publisher.present?
     base_metadata[:publisher_statement] = publisher_statement if publisher_statement.present?
+    if standard_oa_workflow? && doi.present?
+      base_metadata[:open_access_upload] = true
+      base_metadata[:imported_metadata_from_rmd] = true
+    end
     base_metadata
   end
 
@@ -135,6 +143,8 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         field(:authorship)
         field(:title)
         field(:deposit_workflow)
+        field(:draft_scholarsphere_work_deposit_url)
+        field(:scholarsphere_edit_url)
       end
     end
 end

@@ -88,10 +88,6 @@ Rails.application.routes.draw do
     post 'bio/orcid/works' => 'orcid_works#create', as: :orcid_works
     get 'publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
     get 'publications/:id/open_access/activity_insight_file_download' => 'open_access_publications#activity_insight_file_download', as: :activity_insight_file_download
-    post 'publications/:id/open_access/scholarsphere_file_version' => 'open_access_publications#scholarsphere_file_version', as: :scholarsphere_file_version
-    get 'publications/:id/open_access/file_version_result' => 'open_access_publications#file_version_result', as: :file_version_result
-    post 'publications/:id/open_access/scholarsphere_deposit_form' => 'open_access_publications#scholarsphere_deposit_form', as: :scholarsphere_deposit_form
-    get 'publications/:id/open_access/scholarsphere_file_serve/*filename' => 'open_access_publications#file_serve', as: :scholarsphere_file_serve, constraints: { filename: /.*/ }
     patch 'publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
     post 'publications/:id/open_access/scholarsphere_deposit' => 'open_access_publications#create_scholarsphere_deposit', as: :scholarsphere_deposit
     get 'publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver
@@ -123,5 +119,14 @@ Rails.application.routes.draw do
 
   put 'education_history_items/:id' => 'education_history_items#update', as: :education_history_item
 
-  post 'webhooks/scholarsphere_events' => 'webhooks#scholarsphere_events', as: :scholarsphere_events_webhook
+  namespace :webhooks do
+    scope '/scholarsphere' do
+      post 'work_withdrawn' => 'scholarsphere#work_withdrawn', as: :scholarsphere_work_withdrawn
+      post 'open_access_work_published' => 'scholarsphere#open_access_work_published', as: :scholarsphere_open_access_work_published
+    end
+  end
+
+  # TODO: Remove once ScholarSphere has been updated to use the new namespaced endpoints above.
+  # See: https://github.com/psu-libraries/researcher-metadata/issues/1249
+  post 'webhooks/scholarsphere_events' => 'webhooks/scholarsphere#work_withdrawn', as: :scholarsphere_events_webhook
 end

@@ -49,27 +49,14 @@
           <p>
             If there isn't already an open access version of your work available on the web, please
             consider uploading the <a href="https://psu.libanswers.com/faq/279953" target="_blank">Accepted
-            Manuscript</a> to ScholarSphere. You can attach as many files as needed, but you must attach at least one.
+            Manuscript</a> to ScholarSphere, the PSU institutional repository.
           </p>
           <p>
-            Most journals do not allow authors to deposit the Final Published Version of an article to ScholarSphere,
-            but we will try to find the sharing rules for whichever version you submit here. If we cannot find sharing
-            rules, you will have a chance to change this file. With questions, please contact the Office of Scholarly
+            The button below will begin the process of creating a submission in Scholarsphere.
+            For questions, please contact the Office of Scholarly
             Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>.
           </p>
-          <%= simple_form_for @deposit, url: scholarsphere_file_version_path, method: :post do |f| %>
-            <div class="file-uploads">
-              <%= f.simple_fields_for :file_uploads do |sfu| %>
-                <%= render 'file_upload_fields', f: sfu %>
-              <% end %>
-
-              <div class="cocoon-links">
-                <%= link_to_add_association 'Add Another File', f, :file_uploads, association: :file_uploads,
-                                            class: 'button-default add-button' %>
-              </div>
-            </div>
-            <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
-          <% end %>
+          <%= render ExportMetadataLinkComponent.new(publication:) %>
         </div>
         <div class="action-separator">-- or --</div>
         <div class="open-access-action">

@@ -102,7 +102,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(permissions_last_checked_at: nil)
   }
 
-  S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
+  S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.libraries.psu.edu'
 
   validates :license, inclusion: { in: licenses, allow_blank: true }
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }

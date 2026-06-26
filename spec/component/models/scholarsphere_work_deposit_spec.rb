@@ -26,6 +26,8 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:deputy_user_id).of_type(:integer) }
   it { is_expected.to have_db_column(:deposit_workflow).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_oa_file_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:draft_scholarsphere_work_deposit_url).of_type(:string) }
+  it { is_expected.to have_db_column(:scholarsphere_edit_url).of_type(:string) }
 
   it { is_expected.to have_db_index(:authorship_id) }
   it { is_expected.to have_db_index :deputy_user_id }
@@ -463,6 +465,52 @@ describe ScholarsphereFileUpload, type: :model do
           work_type: 'article',
           visibility: 'open',
           identifier: ['a/test/doi'],
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            { psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher' },
+            { display_name: 'Test Author' },
+            { display_name: 'Another Contributor' }
+          ]
+        })
+      end
+    end
+
+    context 'when the deposit has a DOI and uses the standard OA workflow' do
+      before do
+        dep.doi = 'a/test/doi'
+        dep.deposit_workflow = 'Standard OA Workflow'
+      end
+
+      it 'adds open access metadata flags' do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          identifier: ['a/test/doi'],
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            { psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher' },
+            { display_name: 'Test Author' },
+            { display_name: 'Another Contributor' }
+          ],
+          open_access_upload: true,
+          imported_metadata_from_rmd: true
+        })
+      end
+    end
+
+    context 'when the deposit uses the standard OA workflow without a DOI' do
+      before { dep.deposit_workflow = 'Standard OA Workflow' }
+
+      it 'does not add open access metadata flags' do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
             { psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher' },

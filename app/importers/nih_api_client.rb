@@ -31,8 +31,17 @@ class NIHAPIClient
       limit: REQUEST_RECORD_LIMIT
     )['results']
 
-    nih_pubs.map do |p|
+    nih_pubs.filter_map do |p|
       HTTParty.get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=#{p['pmid']}").body
+    rescue StandardError => e
+      log_error(
+        e,
+        {
+          project_number: project_number,
+          pmid: p['pmid']
+        }
+      )
+      nil
     end
   end
 
@@ -63,6 +72,14 @@ class NIHAPIClient
         criteria: { org_names: ['The Pennsylvania State University'] },
         offset: offset,
         limit: limit
+      )
+    end
+
+    def log_error(error, metadata)
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: error,
+        metadata: metadata
       )
     end
 end

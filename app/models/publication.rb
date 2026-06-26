@@ -657,6 +657,14 @@ class Publication < ApplicationRecord
     authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending')}).any?
   end
 
+  def scholarsphere_pending_edit_url
+    ScholarsphereWorkDeposit
+      .where(authorship_id: authorships.select(:id), status: 'Pending')
+      .where.not(scholarsphere_edit_url: [nil, ''])
+      .order(created_at: :desc)
+      .pick(:scholarsphere_edit_url)
+  end
+
   def scholarsphere_upload_failed?
     authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Failed')}).any?
   end

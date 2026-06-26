@@ -353,322 +353,9 @@ describe OpenAccessPublicationsController, type: :controller do
     end
   end
 
-  describe '#scholarsphere_file_version' do
-    let(:perform_request) { post :scholarsphere_file_version, params: { id: 1 } }
-
-    it_behaves_like 'an unauthenticated controller'
-
-    context 'when authenticated' do
-      before do
-        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-        allow(controller).to receive(:current_user).and_return(user)
-      end
-
-      context 'when is not open access' do
-        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
-        let(:params) {
-          {
-            id: pub.id,
-            scholarsphere_work_deposit: {
-              file_uploads_attributes: { '0' => { file: file } }
-            }
-          }
-        }
-
-        context 'when given valid params' do
-          context 'when given file does not return a version from exif check' do
-            let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: nil }
-            let(:pdf_file_version_job) { double 'ScholarsphereVersionCheckJob', provider_job_id: 10, job_id: 1 }
-            let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
-            let(:file_path) { cache_file[:cache_path] }
-
-            before do
-              allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
-              allow(ScholarsphereVersionCheckJob).to receive(:perform_later).and_return(pdf_file_version_job)
-            end
-
-            it 'begins file version check and renders the scholarsphere_file_version form' do
-              post :scholarsphere_file_version, params: params
-              expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarsphereVersionCheckJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
-            end
-          end
-
-          context 'when given file returns a version from exif check' do
-            let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: I18n.t('file_versions.published_version') }
-            let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
-
-            before do
-              allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
-              allow(ScholarsphereVersionCheckJob).to receive(:perform_later)
-            end
-
-            it 'does not begin file version check and renders the scholarsphere_file_version form' do
-              post :scholarsphere_file_version, params: params
-              expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarsphereVersionCheckJob).not_to have_received(:perform_later)
-            end
-          end
-
-          context 'when given file returns unknown from exif version checker' do
-            let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: 'unknown' }
-            let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
-
-            before do
-              allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
-              allow(ScholarsphereVersionCheckJob).to receive(:perform_later)
-            end
-
-            it 'does not begin file version check and renders the scholarsphere_file_version form' do
-              post :scholarsphere_file_version, params: params
-              expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarsphereVersionCheckJob).not_to have_received(:perform_later)
-            end
-          end
-        end
-
-        context 'when given no scholarsphere_work_deposit param' do
-          let(:params) { { id: pub.id } }
-
-          it 'sets an error message' do
-            post :scholarsphere_file_version, params: params
-            expect(flash.now[:alert]).not_to be_empty
-          end
-
-          it 'redirects to the edit form' do
-            post :scholarsphere_file_version, params: params
-            expect(response).to redirect_to(edit_open_access_publication_url)
-          end
-        end
-
-        context 'when given no file param for the scholarsphere work deposit' do
-          let(:file) { nil }
-
-          it 'sets an error message' do
-            post :scholarsphere_file_version, params: params
-            expect(flash.now[:alert]).not_to be_empty
-          end
-
-          it 'redirects to the edit form' do
-            post :scholarsphere_file_version, params: params
-            expect(response).to redirect_to(edit_open_access_publication_url)
-          end
-        end
-      end
-    end
-  end
-
-  describe '#file_version_result' do
-    let(:perform_request) { get :file_version_result, params: { id: pub.id, jobs: [job_id1, job_id2, job_id3] } }
-    let(:job_id1) { { provider_id: 1, job_id: 'job_id_1' } }
-    let(:job_id2) { { provider_id: 2, job_id: 'job_id_2' } }
-    let(:job_id3) { { provider_id: 3, job_id: 'job_id_3' } }
-    let(:file_path1) { '/path/to/file1.pdf' }
-    let(:file_path2) { '/path/to/file2.pdf' }
-    let(:file_path3) { '/path/to/file3.pdf' }
-
-    it_behaves_like 'an unauthenticated controller'
-
-    context 'when authenticated' do
-      before do
-        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-        allow(controller).to receive(:current_user).and_return(user)
-      end
-
-      context 'when pdf file version polling resolves with a version' do
-        before do
-          allow(Rails.cache).to receive(:read)
-            .with("file_version_job_#{job_id1[:job_id]}")
-            .and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: score1, file_path: file_path1 })
-          allow(Rails.cache).to receive(:read)
-            .with("file_version_job_#{job_id2[:job_id]}")
-            .and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: score2, file_path: file_path2 })
-          allow(Rails.cache).to receive(:read)
-            .with("file_version_job_#{job_id3[:job_id]}")
-            .and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
-        end
-
-        context 'when the absolute score of the acceptedVersion is greater than the publishedVersion' do
-          let(:score1) { -3 }
-          let(:score2) { 1 }
-
-          it 'renders the file version result partial with acceptedVersion as file_version and cache_files locals' do
-            allow(controller).to receive(:render).and_call_original
-            perform_request
-            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
-                                                              locals: { file_version: 'acceptedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
-          end
-        end
-
-        context 'when the absolute score of the publishedVersion is greater than the acceptedVersion' do
-          let(:score1) { -1 }
-          let(:score2) { 3 }
-
-          it 'renders the file version result partial with publishedVersion as file_version and cache_files locals' do
-            allow(controller).to receive(:render).and_call_original
-
-            perform_request
-            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
-                                                              locals: { file_version: 'publishedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
-          end
-        end
-
-        context 'when the absolute score of the publishedVersion is equal to the acceptedVersion' do
-          let(:score1) { -3 }
-          let(:score2) { 3 }
-
-          it 'renders the file version result partial with whatever is first in the list of file_versions and cache_files locals' do
-            allow(controller).to receive(:render).and_call_original
-
-            perform_request
-            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
-                                                              locals: { file_version: 'acceptedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
-          end
-        end
-
-        context 'when a job fails' do
-          let(:score1) { -3 }
-          let(:score2) { 1 }
-          let!(:job) { Delayed::Job.create id: 1,
-                                           handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
-                                             "job_class: ScholarsphereVersionCheckJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
-                                             "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
-                                             "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
-                                             "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
-                                             "08T18:19:35Z'\n",
-                                           failed_at: DateTime.now }
-
-          before do
-            allow(controller).to receive(:render).and_call_original
-            get :file_version_result, params: { id: pub.id, jobs: [job_id1, job_id2] }
-          end
-
-          it 'proceeds with analysis of the other job' do
-            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
-                                                              locals: { file_version: 'publishedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf'] })
-          end
-        end
-      end
-
-      context 'when there are no job ids' do
-        before do
-          get :file_version_result, params: { id: pub.id, jobs: [] }
-        end
-
-        it 'renders no_content' do
-          perform_request
-
-          expect(response.message).to eq 'No Content'
-        end
-      end
-
-      context 'when the job has yet to complete' do
-        let!(:job) { Delayed::Job.create id: 1,
-                                         handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
-                                           "job_class: ScholarsphereVersionCheckJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
-                                           "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
-                                           "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
-                                           "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
-                                           "08T18:19:35Z'\n" }
-
-        before do
-          get :file_version_result, params: { id: pub.id, jobs: [] }
-        end
-
-        it 'renders no_content' do
-          perform_request
-
-          expect(response.message).to eq 'No Content'
-        end
-      end
-    end
-  end
-
-  describe '#scholarsphere_deposit_form' do
-    let(:perform_request) { post :scholarsphere_deposit_form, params: { id: 1 } }
-
-    it_behaves_like 'an unauthenticated controller'
-
-    context 'when authenticated' do
-      before do
-        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-        allow(controller).to receive(:current_user).and_return(user)
-      end
-
-      context 'when is not open access' do
-        let(:pub_id) { pub.id }
-        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
-        let(:params) {
-          {
-            id: pub_id,
-            scholarsphere_work_deposit: {
-              cache_files: { '0' => { cache_path: file.path, original_filename: file.original_filename } }
-            }
-          }
-        }
-
-        context 'when given valid params' do
-          it 'render the scholarsphere deposit form' do
-            post :scholarsphere_deposit_form, params: params
-            expect(response).to render_template :scholarsphere_deposit_form
-          end
-        end
-
-        context 'when given no cache file param for the scholarsphere work deposit' do
-          let(:params) { { id: pub_id } }
-
-          it 'sets an error message' do
-            post :scholarsphere_deposit_form, params: params
-            expect(flash.now[:alert]).not_to be_empty
-          end
-
-          it 'rerenders the edit form' do
-            post :scholarsphere_deposit_form, params: params
-            expect(response).to render_template :edit
-          end
-        end
-      end
-    end
-  end
-
-  describe '#file_serve' do
-    let(:perform_request) { post :scholarsphere_deposit_form, params: { id: 1 } }
-
-    it_behaves_like 'an unauthenticated controller'
-
-    context 'when authenticated' do
-      before do
-        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-        allow(controller).to receive(:current_user).and_return(user)
-      end
-
-      context 'when is not open access' do
-        let(:pub_id) { pub.id }
-        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
-        let(:file_version_params) { { file_uploads_attributes: { '0' => { file: file } } } }
-        let(:file_handler) { ScholarsphereFileHandler.new(pub, file_version_params) }
-        let(:cache_files)  { file_handler.cache_files }
-        let(:cache_path) { cache_files.first[:cache_path] }
-        let(:params) { { id: pub_id, filename: cache_path.to_s } }
-
-        it 'renders the requested file' do
-          post :file_serve, params: params
-          expect(response.header['Content-Type']).to eq('application/pdf')
-          expect(response.header['Content-Disposition']).to eq('inline; filename="test_file.pdf"; filename*=UTF-8\'\'test_file.pdf')
-        end
-      end
-    end
-  end
-
   describe '#create_scholarsphere_deposit' do
     let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
     let(:perform_request) { post :create_scholarsphere_deposit, params: { id: 1 } }
-
-    before { allow(ScholarsphereUploadJob).to receive(:perform_later) }
 
     it_behaves_like 'an unauthenticated controller'
 
@@ -751,26 +438,20 @@ describe OpenAccessPublicationsController, type: :controller do
               title: 'test',
               description: 'test',
               published_date: '2021-03-30',
-              rights: 'https://creativecommons.org/licenses/by/4.0/',
-              deposit_agreement: '1',
-              file_uploads_attributes: { '0' => { cache_path: cache_path } }
+              deposit_agreement: '1'
             }
           }
         }
-        let(:file_version_params) {
-          {
-            file_uploads_attributes: { '0' => { file: file } }
-          }
-        }
-        let(:file_handler) { ScholarsphereFileHandler.new(pub, file_version_params) }
-        let(:cache_files) { file_handler.cache_files }
-        let(:cache_path) do
-          return nil if cache_files.empty?
-
-          cache_files.first[:cache_path]
-        end
 
         context 'when given valid params' do
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
+
+          before do
+            allow(service).to receive(:create_draft).and_return(test_url)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+          end
+
           it 'creates a new scholarsphere work deposit' do
             expect do
               post :create_scholarsphere_deposit, params: params
@@ -778,78 +459,62 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(found_deposit).not_to be_nil
           end
 
-          it 'saves the uploaded file to the new scholarsphere work deposit' do
-            post :create_scholarsphere_deposit, params: params
-
-            expect(found_deposit.file_uploads.count).to eq 1
-            expect(found_deposit.status).to eq 'Pending'
-            expect(found_deposit.file_uploads.first.file.identifier).to eq file.original_filename
-          end
-
           it "sets the modification timestamp on the user's authorship of the publication" do
             post :create_scholarsphere_deposit, params: params
             expect(auth.reload.updated_by_owner_at).to eq now
           end
 
-          it "redirects to the publication management page for the user's profile" do
+          it 'calls ScholarsphereDepositService' do
             post :create_scholarsphere_deposit, params: params
-            expect(response).to redirect_to edit_profile_publications_path
+            expect(service).to have_received(:create_draft)
           end
 
-          it 'sets a success message' do
+          it 'passes the current user to ScholarsphereDepositService when not masquerading' do
             post :create_scholarsphere_deposit, params: params
-            expect(flash[:notice]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
+            expect(ScholarsphereDepositService).to have_received(:new)
+              .with(instance_of(ScholarsphereWorkDeposit), user)
           end
 
-          it 'schedules a job to send the publication to ScholarSphere' do
+          it 'redirects to the url returned by the deposit service' do
             post :create_scholarsphere_deposit, params: params
-            expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)
+            expect(response).to redirect_to(test_url)
+          end
+        end
+
+        context 'when a deposit is not able to be created' do
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
+
+          before do
+            allow(service).to receive(:create_draft).and_raise(ScholarsphereDepositService::DepositFailed)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+          end
+
+          it 'records the failure in the ScholarsphereWorkDeposit' do
+            post :create_scholarsphere_deposit, params: params
+            expect(ScholarsphereWorkDeposit.last.status).to eq('Failed')
+            expect(ScholarsphereWorkDeposit.last.error_message).to eq('ScholarsphereDepositService::DepositFailed')
           end
         end
 
         context 'when the user is a deputy impersonating the primary user' do
           let(:deputy) { assignment.deputy }
+          let!(:service) { instance_double ScholarsphereDepositService }
+          let!(:test_url) { 'http://test.com' }
 
-          before { post :create_scholarsphere_deposit, params: params }
+          before do
+            allow(service).to receive(:create_draft).and_return(test_url)
+            allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+            post :create_scholarsphere_deposit, params: params
+          end
 
           it 'adds the deputy user id to the work deposit' do
             expect(found_deposit.deputy_user_id).to eq(deputy.id)
           end
-        end
 
-        context 'when given no cache_path for the scholarsphere work deposit' do
-          let(:cache_path) { '' }
-
-          it 'does not create a new scholarsphere work deposit' do
-            expect do
-              post :create_scholarsphere_deposit, params: params
-            end.not_to change(ScholarsphereWorkDeposit, :count)
-          end
-
-          it 'does not create any new file upload records' do
-            expect do
-              post :create_scholarsphere_deposit, params: params
-            end.not_to change(ScholarsphereFileUpload, :count)
-          end
-
-          it "does not set the modification timestamp on the user's authorship of the publication" do
-            post :create_scholarsphere_deposit, params: params
-            expect(auth.reload.updated_by_owner_at).to be_nil
-          end
-
-          it 'does not schedule a job to send the publication to ScholarSphere' do
-            post :create_scholarsphere_deposit, params: params
-            expect(ScholarsphereUploadJob).not_to have_received(:perform_later)
-          end
-
-          it 'sets an error message' do
-            post :create_scholarsphere_deposit, params: params
-            expect(flash.now[:alert]).not_to be_empty
-          end
-
-          it 'rerenders the form' do
-            post :create_scholarsphere_deposit, params: params
-            expect(response).to render_template :edit
+          it 'passes the deputy user to ScholarsphereDepositService as depositor' do
+            expect(ScholarsphereDepositService).to have_received(:new)
+              .with(instance_of(ScholarsphereWorkDeposit), deputy)
           end
         end
       end

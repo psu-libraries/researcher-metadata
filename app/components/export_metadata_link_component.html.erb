@@ -1,0 +1,13 @@
+  <% if scholarsphere_export_failed? %>
+    <div class="alert alert-warning" role="alert">
+      <%= failed_alert_icon %>&nbsp;
+      <%= failed_message_html %>
+    </div>
+  <% else %>
+    <%= form_with url: scholarsphere_deposit_path(@publication.id), method: :post do |f| %>
+      <button type="submit"
+              class="btn btn-primary">
+        <%= t('components.export_metadata_link_component.deposit_button') %>
+      </button>
+    <% end %>
+  <% end %>

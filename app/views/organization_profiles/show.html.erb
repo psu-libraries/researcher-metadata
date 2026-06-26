@@ -12,9 +12,9 @@
     <a href="#"><%= image_tag('logo.png', alt: "Penn State", class: 'logo') %></a>
   </div>
 </div>
-<div id="organization-profile">
+<main id="organization-profile">
   <div class="grid-container grid-org-pubs">
-    <h3><%= @organization.name %></h3>
+    <h1 class="h3"><%= "#{@organization.name} Researcher Publications" %></h1>
     <div class="intro">
       <p>This is a list of the Researcher Publications from the <%= @organization.name %> and is sorted by publication date.
       This list is created by the <a class="link" href="https://metadata.libraries.psu.edu/">Researcher Metadata Database</a>
@@ -40,7 +40,7 @@
         <%= paginate @publications %>
       </div>
     </div>
-</div>
+  </main>
 
 <footer>
   <div class="grid-x">
