@@ -122,6 +122,13 @@ The Unpaywall import has a second weekly import on Sunday at 10:00 PM where Unpa
 for new publications. We import the following types of records from Unpaywall:
     - open_access_locations
 
+1. **Google Scholar** - We scrape Google Scholar via ScraperAPI to enrich faculty citation metrics and
+per-publication citation counts. This import runs on demand. See the
+[Google Scholar Integration](#google-scholar-integration) section for details. We import the following
+types of data:
+    - `google_scholar_id`, `google_scholar_h_index`, `google_scholar_citation_total` (user-level)
+    - `google_scholar_citation_count` (publication-level)
+
 1. **Penn State Law School repository** - We import publication metadata from the repository maintained
 by Dickinson Law via the Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). 
 This is the repository maintained by Dickinson Law: [INSIGHT repository](https://insight.dickinsonlaw.psu.edu/).
@@ -467,6 +474,52 @@ There are several steps to this process:
 1. RMD then tries to grab permissions data for the publication from OA.Works
 1. The user is presented a form with prefilled fields using permissions data and data stored in RMD to be reviewed and/or editted
 1. The user submits the form and the files and metadata are sent to ScholarSphere
+
+## Google Scholar Integration
+
+RMD scrapes Google Scholar through [ScraperAPI](https://www.scraperapi.com/) to enrich faculty profiles
+with citation metrics and to update per-publication citation counts.
+
+### Profile Discovery Workflow
+
+For each active faculty member the profile importer follows a three-level priority chain:
+
+1. If the user already has a `google_scholar_id` stored in RMD, that profile is fetched directly.
+2. If the user has an `ai_google_scholar` URL from Activity Insight, the Scholar ID is extracted from
+   the `user=` query parameter and used to fetch the profile.
+3. Otherwise, the importer searches Google Scholar by faculty name, retrieves candidate profiles, and
+   confirms a match via `GoogleScholarProfileMatcher`. Confirmation requires two or more publication DOIs
+   from the candidate profile to match publications already associated with the faculty member. A strict
+   fuzzy-title match (via PostgreSQL `pg_trgm`) is used as a fallback only when DOI confirmation fails.
+   Users with no associated publications are skipped to conserve ScraperAPI credits.
+
+Once a profile is confirmed, the importer stores `google_scholar_id`, `google_scholar_h_index`,
+`google_scholar_citation_total`, and `google_scholar_imported_at` on the user record.
+
+### Publication Citation Workflow
+
+A separate `GoogleScholarPublicationCitationImporter` refreshes `publications.google_scholar_citation_count`
+using DOI matching only. Publications without a DOI match are skipped and logged.
+
+### Rake Tasks
+
+```bash
+rake import:google_scholar:profiles              # faculty metrics and ID discovery
+rake import:google_scholar:publication_citations # per-publication citation counts
+rake import:google_scholar                       # runs both of the above in order
+```
+
+### Configuration
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `SCRAPERAPI_KEY` | Yes | — | ScraperAPI authentication key |
+| `GOOGLE_SCHOLAR_REFRESH_DAYS` | No | 120 | Skip users imported within this many days |
+
+### Admin and Profile Views
+
+Google Scholar metrics (h-index, total citations, Scholar ID) are surfaced on faculty profile pages
+and in the RailsAdmin user show and list views.
 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.

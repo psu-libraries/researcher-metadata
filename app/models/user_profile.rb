@@ -15,6 +15,8 @@ class UserProfile
            :orcid_identifier,
            :organization_name,
            :pure_profile_url,
+           :google_scholar_citation_total,
+           :google_scholar_h_index,
            :scopus_h_index,
            :total_scopus_citations,
            to: :user

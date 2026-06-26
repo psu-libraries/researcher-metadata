@@ -30,6 +30,8 @@ describe UserProfile do
   it { is_expected.to delegate_method(:orcid_identifier).to(:user) }
   it { is_expected.to delegate_method(:organization_name).to(:user) }
   it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
+  it { is_expected.to delegate_method(:google_scholar_citation_total).to(:user) }
+  it { is_expected.to delegate_method(:google_scholar_h_index).to(:user) }
   it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
   it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
 

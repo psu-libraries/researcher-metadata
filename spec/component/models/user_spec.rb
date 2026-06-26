@@ -1942,4 +1942,43 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '.needs_google_scholar_refresh' do
+    let(:stale_cutoff) { 120.days.ago }
+
+    it 'includes a user with google_scholar_id set whose checked_at is nil' do
+      user = create(:user, :with_psu_identity, google_scholar_id: 'ABCDEF', google_scholar_checked_at: nil)
+      expect(described_class.needs_google_scholar_refresh(stale_cutoff)).to include(user)
+    end
+
+    it 'includes a user with google_scholar_id set whose checked_at is older than the cutoff' do
+      user = create(:user, :with_psu_identity, google_scholar_id: 'ABCDEF',
+                                               google_scholar_checked_at: 121.days.ago)
+      expect(described_class.needs_google_scholar_refresh(stale_cutoff)).to include(user)
+    end
+
+    it 'excludes a user with google_scholar_id set whose checked_at is recent' do
+      user = create(:user, :with_psu_identity, google_scholar_id: 'ABCDEF',
+                                               google_scholar_checked_at: 1.day.ago)
+      expect(described_class.needs_google_scholar_refresh(stale_cutoff)).not_to include(user)
+    end
+
+    it 'includes a user with ai_google_scholar set and nil checked_at' do
+      user = create(:user, :with_psu_identity, ai_google_scholar: 'https://scholar.google.com/citations?user=XYZ',
+                                               google_scholar_checked_at: nil)
+      expect(described_class.needs_google_scholar_refresh(stale_cutoff)).to include(user)
+    end
+
+    it 'excludes a user with no scholar identifiers and not_found already marked true' do
+      user = create(:user, :with_psu_identity, google_scholar_id: nil, ai_google_scholar: nil,
+                                               google_scholar_not_found: true, google_scholar_checked_at: nil)
+      expect(described_class.needs_google_scholar_refresh(stale_cutoff)).not_to include(user)
+    end
+
+    it 'includes a user with no scholar identifiers and not_found still false' do
+      user = create(:user, :with_psu_identity, google_scholar_id: nil, ai_google_scholar: nil,
+                                               google_scholar_not_found: false, google_scholar_checked_at: nil)
+      expect(described_class.needs_google_scholar_refresh(stale_cutoff)).to include(user)
+    end
+  end
 end

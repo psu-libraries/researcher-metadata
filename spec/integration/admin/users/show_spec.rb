@@ -24,6 +24,7 @@ describe 'Admin user detail page', type: :feature do
                        ai_fax_1: 298,
                        ai_fax_2: 1094,
                        ai_google_scholar: 'Test Google Scholar',
+                       google_scholar_id: 'D680R8QAAAAJ',
                        ai_website: 'http://test-example.com',
                        ai_bio: 'Test Bio',
                        ai_teaching_interests: 'Test Teaching Interests',
@@ -112,6 +113,8 @@ describe 'Admin user detail page', type: :feature do
         expect(page).to have_content '(743) 298-1094'
         expect(page).to have_content 'http://test-example.com'
         expect(page).to have_content 'Test Google Scholar'
+        expect(page).to have_link 'D680R8QAAAAJ',
+                                  href: 'https://scholar.google.com/citations?hl=en&user=D680R8QAAAAJ'
         expect(page).to have_content 'Test Bio'
         expect(page).to have_content 'Test Teaching Interests'
         expect(page).to have_content 'Test Research Interests'

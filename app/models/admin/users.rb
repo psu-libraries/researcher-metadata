@@ -61,7 +61,31 @@ module Admin::Users
         field(:show_all_contracts)
         field(:suppress_oa_reminders) { label 'Suppress Open Access Reminder Emails' }
         field(:scopus_h_index) do
-          label 'H-Index'
+          label 'Scopus H-Index'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_h_index) do
+          label 'Google Scholar H-Index'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_citation_total) do
+          label 'Google Scholar Citations'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_not_found) do
+          label 'Google Scholar Not Found'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
+        end
+        field(:google_scholar_checked_at) do
+          label 'Google Scholar Checked On'
           visible do
             bindings[:view]._current_user.is_admin
           end
@@ -90,7 +114,17 @@ module Admin::Users
         field(:penn_state_identifier) { label 'Penn State ID' }
         field(:psu_identity) { label 'Penn State Identity' }
         field(:psu_identity_updated_at) { label 'Identity Updated On' }
-        field(:scopus_h_index) { label 'H-Index' }
+        field(:scopus_h_index) { label 'Scopus H-Index' }
+        field(:google_scholar_id) do
+          label 'Google Scholar ID'
+          pretty_value do
+            %{<a href="https://scholar.google.com/citations?hl=en&user=#{value}" target="_blank">#{value}</a>}.html_safe if value
+          end
+        end
+        field(:google_scholar_h_index) { label 'Google Scholar H-Index' }
+        field(:google_scholar_citation_total) { label 'Google Scholar Citations' }
+        field(:google_scholar_checked_at) { label 'Google Scholar Checked On' }
+        field(:google_scholar_not_found) { label 'Google Scholar Not Found' }
         field(:ai_title) { label 'Title' }
         field(:orcid_identifier) do
           label 'ORCID ID'
@@ -147,6 +181,12 @@ module Admin::Users
         field(:webaccess_id) do
           read_only true
           label 'Penn State WebAccess ID'
+        end
+        field(:google_scholar_not_found) do
+          label 'Google Scholar Not Found'
+          visible do
+            bindings[:view]._current_user.is_admin
+          end
         end
         field(:first_name) do
           read_only do

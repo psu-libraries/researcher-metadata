@@ -111,4 +111,21 @@ namespace :import do
     PureJournalsImporter.new.call
     PurePublicationImporter.new.call
   end
+
+  namespace :google_scholar do
+    desc 'Import Google Scholar profile IDs, total citations, and h-indexes'
+    task profiles: :environment do
+      GoogleScholarProfileImporter.new.call
+    end
+
+    desc 'Import Google Scholar publication citation counts by DOI'
+    task publication_citations: :environment do
+      GoogleScholarPublicationCitationImporter.new.call
+    end
+  end
+
+  desc 'Fetch Google Scholar profile and publication citation metrics'
+  task google_scholar: :environment do
+    GoogleScholarImporter.new.call
+  end
 end

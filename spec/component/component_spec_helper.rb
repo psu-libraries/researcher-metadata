@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'rspec/its'
+require 'webmock/rspec'
 
 require 'support/capybara'
 require 'support/authentication'
