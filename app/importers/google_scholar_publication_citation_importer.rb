@@ -30,6 +30,12 @@ class GoogleScholarPublicationCitationImporter
       result = scraper.fetch_publication_by_doi(publication.doi)
       return unless result
 
+      pub_title = publication.title
+      distance = String::Similarity.levenshtein_distance(pub_title, result[:title])
+      max_length = [pub_title.length, result[:title].length].max
+      title_similarity = 1 - (distance / max_length.to_f)
+      return unless title_similarity > 0.85
+
       publication.update!(google_scholar_citation_count: result[:citations])
     rescue StandardError => e
       Rails.logger.warn(

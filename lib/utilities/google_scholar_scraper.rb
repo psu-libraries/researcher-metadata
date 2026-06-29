@@ -76,7 +76,7 @@ module Utilities
       def fetch_scholar_search_html(query)
         scholar_url = "https://scholar.google.com/scholar?q=#{URI.encode_www_form_component(query)}&hl=en"
 
-        fetch_scraperapi_html(scholar_url, "Google Scholar publication search for #{query}")
+        fetch_scraperapi_html(scholar_url, "Google Scholar publication search for #{query}", render: false)
       end
 
       def fetch_page_html(user_id, cstart)
@@ -224,10 +224,9 @@ module Utilities
       def parse_doi_search_result(html, doi)
         doc = Nokogiri::HTML(html)
 
-        doc.css('.gs_r.gs_or.gs_scl').each do |result|
-          result_text = result.text.downcase
-          next unless result_text.include?(doi.downcase)
+        result = doc.css('.gs_r.gs_or.gs_scl').first
 
+        if result.present?
           return {
             doi: doi,
             title: result.at_css('.gs_rt')&.text&.strip,
