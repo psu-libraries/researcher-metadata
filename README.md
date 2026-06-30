@@ -123,9 +123,9 @@ for new publications. We import the following types of records from Unpaywall:
     - open_access_locations
 
 1. **Google Scholar** - We scrape Google Scholar via ScraperAPI to enrich faculty citation metrics and
-per-publication citation counts. This import runs on demand. See the
-[Google Scholar Integration](#google-scholar-integration) section for details. We import the following
-types of data:
+per-publication citation counts. This import runs monthly. It is important to conserve ScraperAPI credits 
+used per-request.  These credits reset every month. See the [Google Scholar Integration](#google-scholar-integration) 
+section for details. We import the following types of data:
     - `google_scholar_id`, `google_scholar_h_index`, `google_scholar_citation_total` (user-level)
     - `google_scholar_citation_count` (publication-level)
 
@@ -499,7 +499,7 @@ Once a profile is confirmed, the importer stores `google_scholar_id`, `google_sc
 ### Publication Citation Workflow
 
 A separate `GoogleScholarPublicationCitationImporter` refreshes `publications.google_scholar_citation_count`
-using DOI matching only. Publications without a DOI match are skipped and logged.
+using a DOI search and fuzzy title match. Publications without a DOI match are skipped.
 
 ### Rake Tasks
 

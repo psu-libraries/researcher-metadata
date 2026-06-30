@@ -534,6 +534,7 @@ class Publication < ApplicationRecord
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
       field(:total_scopus_citations) { label 'Number of Scopus citations' }
+      field(:google_scholar_citation_count) { label 'Number of Google Scholar citations' }
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }

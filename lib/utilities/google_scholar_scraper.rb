@@ -63,7 +63,8 @@ module Utilities
       normalized_doi = normalized_doi(doi)
       return unless normalized_doi
 
-      html = fetch_scholar_search_html(normalized_doi)
+      doi_query = "doi:#{normalized_doi}"
+      html = fetch_scholar_search_html(doi_query)
       return unless html
 
       parse_doi_search_result(html, normalized_doi)
