@@ -7,16 +7,18 @@ describe GoogleScholarPublicationCitationImporter do
     let(:scraper) { instance_double(Utilities::GoogleScholarScraper) }
     let(:importer) { described_class.new(scraper: scraper) }
 
-    let!(:publication_with_doi) { create(:publication, doi: 'https://doi.org/10.123/example') }
+    let!(:publication_with_doi) do
+      create(:publication, doi: 'https://doi.org/10.123/example', title: 'Machine Learning in Libraries')
+    end
     let!(:publication_without_doi) { create(:publication, doi: nil) }
 
     before do
       allow(scraper).to receive(:fetch_publication_by_doi)
         .with('https://doi.org/10.123/example')
-        .and_return(doi: '10.123/example', citations: 42)
+        .and_return(doi: '10.123/example', title: 'Machine Learning in Librariex', citations: 42)
     end
 
-    it 'updates citation counts for DOI-matched publications only' do
+    it 'updates citation counts for publications with DOIs only' do
       importer.call
 
       expect(publication_with_doi.reload.google_scholar_citation_count).to eq 42
@@ -32,6 +34,34 @@ describe GoogleScholarPublicationCitationImporter do
       end
 
       it 'leaves the publication unchanged' do
+        importer.call
+
+        expect(publication_with_doi.reload.google_scholar_citation_count).to be_nil
+      end
+    end
+
+    context 'when the returned title matches the stored title by more than 85%' do
+      before do
+        allow(scraper).to receive(:fetch_publication_by_doi)
+          .with('https://doi.org/10.123/example')
+          .and_return(doi: '10.123/example', title: 'Machine Learning in Librariex', citations: 7)
+      end
+
+      it 'updates the citation count' do
+        importer.call
+
+        expect(publication_with_doi.reload.google_scholar_citation_count).to eq 7
+      end
+    end
+
+    context 'when the returned title does not match the stored title by more than 85%' do
+      before do
+        allow(scraper).to receive(:fetch_publication_by_doi)
+          .with('https://doi.org/10.123/example')
+          .and_return(doi: '10.123/example', title: 'Completely Different Publication', citations: 99)
+      end
+
+      it 'does not update the citation count' do
         importer.call
 
         expect(publication_with_doi.reload.google_scholar_citation_count).to be_nil
