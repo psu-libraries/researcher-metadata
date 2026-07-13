@@ -8,9 +8,13 @@ module Webhooks
     def work_withdrawn
       if params[:publication_url].present?
         locations = OpenAccessLocation.where(source: Source::SCHOLARSPHERE, url: params[:publication_url])
-        return head(:not_found) if locations.none?
+        scholarsphere_work_deposits = ScholarsphereWorkDeposit.where(draft_scholarsphere_work_deposit_url: params[:publication_url],
+                                                                     status: ['Success', 'Pending'])
+
+        return head(:not_found) if locations.none? && scholarsphere_work_deposits.none?
 
         locations.destroy_all
+        scholarsphere_work_deposits.destroy_all
         head :no_content
       else
         head :bad_request
@@ -21,10 +25,7 @@ module Webhooks
       return head(:bad_request) if params[:scholarsphere_work_url].blank?
 
       deposit = ScholarsphereWorkDeposit.find_by(draft_scholarsphere_work_deposit_url: params[:scholarsphere_work_url])
-      if deposit
-        full_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{params[:scholarsphere_work_url]}"
-        deposit.record_success(full_url)
-      end
+      deposit&.record_success(params[:scholarsphere_work_url])
       render plain: 'ok'
     end
 
