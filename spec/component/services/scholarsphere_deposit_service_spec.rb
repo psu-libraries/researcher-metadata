@@ -48,7 +48,7 @@ describe ScholarsphereDepositService do
       service.create_draft
       expect(deposit).to have_received(:update).with(
         {
-          draft_scholarsphere_work_deposit_url: '/the-url',
+          draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/the-url',
           scholarsphere_edit_url: 'https://scholarsphere.test/the-edit-url?external_entry=true'
         }
       )
@@ -57,6 +57,20 @@ describe ScholarsphereDepositService do
     it 'returns the edit_url from the body' do
       resp = service.create_draft
       expect(resp).to eq('https://scholarsphere.test/the-edit-url?external_entry=true')
+    end
+
+    context 'when the response includes an edit URL but has a status other than 201' do
+      let(:status) { 200 }
+
+      it 'saves the draft URLs and returns the edit URL' do
+        expect(service.create_draft).to eq('https://scholarsphere.test/the-edit-url?external_entry=true')
+        expect(deposit).to have_received(:update).with(
+          {
+            draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/the-url',
+            scholarsphere_edit_url: 'https://scholarsphere.test/the-edit-url?external_entry=true'
+          }
+        )
+      end
     end
 
     context 'if the scholarsphere client does not return successfully' do

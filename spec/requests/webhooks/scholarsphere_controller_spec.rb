@@ -139,11 +139,52 @@ describe Webhooks::ScholarsphereController do
           expect(response).to have_http_status :no_content
         end
       end
+
+      context 'when given a publication_url param that matches ScholarSphere work deposits' do
+        let!(:pending_deposit) {
+          create(
+            :scholarsphere_work_deposit,
+            draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/resources/withdrawn-work'
+          )
+        }
+        let!(:successful_deposit) {
+          create(
+            :scholarsphere_work_deposit,
+            status: 'Success',
+            draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/resources/withdrawn-work'
+          )
+        }
+        let!(:failed_deposit) {
+          create(
+            :scholarsphere_work_deposit,
+            status: 'Failed',
+            draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/resources/withdrawn-work'
+          )
+        }
+
+        it 'deletes matching pending and successful deposits, but keeps failed deposits' do
+          post(
+            webhooks_scholarsphere_work_withdrawn_path,
+            headers: { 'X-API-KEY' => 'webhooksecret123' },
+            params: { publication_url: 'https://scholarsphere.test/resources/withdrawn-work' }
+          )
+
+          expect(response).to have_http_status :no_content
+          expect { pending_deposit.reload }.to raise_error ActiveRecord::RecordNotFound
+          expect { successful_deposit.reload }.to raise_error ActiveRecord::RecordNotFound
+          expect { failed_deposit.reload }.not_to raise_error
+        end
+      end
     end
   end
 
   describe 'POST /webhooks/scholarsphere/open_access_work_published' do
-    let!(:deposit) { create(:scholarsphere_work_deposit, draft_scholarsphere_work_deposit_url: '/resources/some-uuid') }
+    let!(:deposit) {
+      create(
+        :scholarsphere_work_deposit,
+        draft_scholarsphere_work_deposit_url: 'https://scholarsphere.test/resources/some-uuid'
+      )
+    }
 
     context 'when not given an API key header' do
       it 'returns 401' do
@@ -187,7 +228,7 @@ describe Webhooks::ScholarsphereController do
           post(
             webhooks_scholarsphere_open_access_work_published_path,
             headers: { 'X-API-KEY' => 'webhooksecret123' },
-            params: { scholarsphere_work_url: '/resources/unknown-uuid' }
+            params: { scholarsphere_work_url: 'https://scholarsphere.test/resources/unknown-uuid' }
           )
 
           expect(response).to have_http_status :ok
@@ -200,7 +241,7 @@ describe Webhooks::ScholarsphereController do
           post(
             webhooks_scholarsphere_open_access_work_published_path,
             headers: { 'X-API-KEY' => 'webhooksecret123' },
-            params: { scholarsphere_work_url: '/resources/some-uuid' }
+            params: { scholarsphere_work_url: 'https://scholarsphere.test/resources/some-uuid' }
           )
 
           expect(response).to have_http_status :ok
@@ -211,7 +252,7 @@ describe Webhooks::ScholarsphereController do
           post(
             webhooks_scholarsphere_open_access_work_published_path,
             headers: { 'X-API-KEY' => 'webhooksecret123' },
-            params: { scholarsphere_work_url: '/resources/some-uuid' }
+            params: { scholarsphere_work_url: 'https://scholarsphere.test/resources/some-uuid' }
           )
 
           expect(deposit.reload.status).to eq 'Success'
@@ -221,7 +262,7 @@ describe Webhooks::ScholarsphereController do
           post(
             webhooks_scholarsphere_open_access_work_published_path,
             headers: { 'X-API-KEY' => 'webhooksecret123' },
-            params: { scholarsphere_work_url: '/resources/some-uuid' }
+            params: { scholarsphere_work_url: 'https://scholarsphere.test/resources/some-uuid' }
           )
 
           oal = deposit.publication.open_access_locations.find_by(source: Source::SCHOLARSPHERE)
