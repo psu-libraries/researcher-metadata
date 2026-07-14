@@ -30,7 +30,7 @@ describe ScholarsphereDepositService do
   end
 
   describe '#create_draft' do
-    let(:response_body) { %{{"url": "https://scholarsphere.test/the-url", "edit_url":"https://scholarsphere.test/the-edit-url"}} }
+    let(:response_body) { %{{"url": "/the-url", "edit_url":"/the-edit-url"}} }
     let(:status) { 201 }
 
     before do
