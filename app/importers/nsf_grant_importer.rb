@@ -50,6 +50,15 @@ class NSFGrantImporter
         pbar.increment
       end
       pbar.finish
+    rescue StandardError => e
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: e,
+        metadata: {
+          year: year,
+          query_url: query_url
+        }
+      )
     end
   end
 end

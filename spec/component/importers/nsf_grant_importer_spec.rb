@@ -139,5 +139,25 @@ describe NSFGrantImporter do
         expect(g2.import_source).to eq 'NSF'
       end
     end
+
+    context 'when there is an error within the top-level year loop' do
+      before do
+        allow(HTTParty).to receive(:get).with("https://api.nsf.gov/services/v1/awards.json?dateStart=01%2F01%2F#{Date.current.year}&dateEnd=12%2F31%2F#{Date.current.year}&rpp=3000&offset=0&awardeeName=%22Pennsylvania+State+Univ%22").and_raise(Net::OpenTimeout)
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(Net::OpenTimeout),
+          metadata: a_hash_including(
+            year: Date.current.year,
+            query_url: a_string_including("dateStart=01%2F01%2F#{Date.current.year}")
+          )
+        )
+      end
+    end
   end
 end
