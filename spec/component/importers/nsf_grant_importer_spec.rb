@@ -147,7 +147,7 @@ describe NSFGrantImporter do
       end
 
       it 'logs the error' do
-        importer.call
+        expect { importer.call }.not_to raise_error
 
         expect(ImporterErrorLog).to have_received(:log_error).with(
           importer_class: described_class,
