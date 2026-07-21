@@ -25,6 +25,6 @@ class PresentationContributionsController < UserController
   private
 
     def contribution_params
-      params.require(:presentation_contribution).permit(:visible_in_profile)
+      params.expect(presentation_contribution: [:visible_in_profile])
     end
 end

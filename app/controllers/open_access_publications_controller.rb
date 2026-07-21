@@ -69,6 +69,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   private
 
     def form_params
-      params.require(:open_access_url_form).permit([:open_access_url])
+      params.expect(open_access_url_form: [[:open_access_url]])
     end
 end

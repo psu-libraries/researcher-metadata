@@ -50,7 +50,6 @@ Rails.application.routes.draw do
   get '/resources' => 'public#resources', as: :resources
   get '/api_docs' => 'public#api_docs', as: :api_docs
 
-
   namespace :v1, path: 'v1', module: 'api/v1' do
     get 'publications' => 'publications#index', as: :publications
     patch 'publications' => 'publications#update_all'

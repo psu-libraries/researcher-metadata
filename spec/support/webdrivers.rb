@@ -36,9 +36,9 @@ ENV['SE_CACHE_PATH'] = '/tmp/selenium_cache'
 # This is a modified version of :selenium_chrome_headless copied from lib/capybara/registrations/drivers.rb so we can
 # monitor a directory for downloaded files.
 Capybara.register_driver :rmd_chrome_headless do |app|
-  version = Capybara::Selenium::Driver.load_selenium
+  Capybara::Selenium::Driver.load_selenium
   browser_options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
-    opts.binary = "/usr/bin/google-chrome-stable"
+    opts.binary = '/usr/bin/google-chrome-stable'
     opts.add_argument('--headless=new') # 'new' headless mode, required for Chrome >= 112
     opts.add_argument('--disable-gpu') if Gem.win_platform?
     opts.add_argument('--disable-site-isolation-trials')

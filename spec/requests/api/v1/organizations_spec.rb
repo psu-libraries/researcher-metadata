@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe API::V1::OrganizationsController, type: :request  do
+describe API::V1::OrganizationsController do
   describe 'GET /v1/organizations' do
     context 'when no authorization header is included in the request' do
       it 'returns 401 Unauthorized' do
