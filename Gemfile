@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.2'
+gem 'rails', '~> 8.1'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem 'rails_admin', '~> 3.3.0'
@@ -85,10 +85,9 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-its'
   gem 'rspec-rails'
-  gem 'selenium-webdriver', '~> 4.10'
+  gem 'selenium-webdriver', '~> 4.46'
   gem 'shoulda-matchers', '~> 6.4'
   gem 'simplecov', '~> 0.18'
   gem 'vcr'
-  gem 'webdrivers', '~> 5.3.1'
   gem 'webmock'
 end

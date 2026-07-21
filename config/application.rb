@@ -10,13 +10,18 @@ Bundler.require(*Rails.groups)
 
 module ResearcherMetadata
   class Application < Rails::Application
-    # Initialize configuration defaults for Rails 7.2 (includes zeitwerk).
+    # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
     require 'healthchecks'
 
-    config.autoload_paths << Rails.root.join('lib')
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Mail settings
+    # Ignore bad email addresses and do not raise email delivery errors.
     config.action_mailer.perform_caching = false
     config.action_mailer.perform_deliveries = Settings.action_mailer.perform_deliveries
     config.action_mailer.delivery_method = Settings.action_mailer.delivery_method.to_sym
@@ -24,9 +29,6 @@ module ResearcherMetadata
     config.action_mailer.default_url_options = { protocol: Settings.default_url_options.protocol, host: Settings.default_url_options.host }
     config.action_mailer.raise_delivery_errors = Settings.action_mailer.raise_delivery_errors
     config.action_mailer.preview_paths = ["#{Rails.root}/lib/mailer_previews"]
-
-    # Ignore bad email addresses and do not raise email delivery errors.
-
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

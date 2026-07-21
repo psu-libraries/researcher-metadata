@@ -50,26 +50,25 @@ Rails.application.routes.draw do
   get '/resources' => 'public#resources', as: :resources
   get '/api_docs' => 'public#api_docs', as: :api_docs
 
-  scope module: 'api' do
-    namespace :v1 do
-      get 'publications' => 'publications#index', as: :publications
-      patch 'publications' => 'publications#update_all'
-      get 'publications/:id' => 'publications#show', as: :publication
-      get 'publications/:id/grants' => 'publications#grants', as: :publication_grants
 
-      get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
-      get 'users/:webaccess_id/grants' => 'users#grants', as: :user_grants
-      get 'users/:webaccess_id/news_feed_items' => 'users#news_feed_items', as: :user_news_feed_items
-      get 'users/:webaccess_id/performances' => 'users#performances', as: :user_performances
-      post 'users/publications' => 'users#users_publications', as: :users_publications
-      get 'users/:webaccess_id/etds' => 'users#etds', as: :user_etds
-      get 'users/:webaccess_id/presentations' => 'users#presentations', as: :user_presentations
-      get 'users/:webaccess_id/organization_memberships' => 'users#organization_memberships', as: :user_organization_memberships
-      get 'users/:webaccess_id/profile' => 'users#profile', as: :user_profile
+  namespace :v1, path: 'v1', module: 'api/v1' do
+    get 'publications' => 'publications#index', as: :publications
+    patch 'publications' => 'publications#update_all'
+    get 'publications/:id' => 'publications#show', as: :publication
+    get 'publications/:id/grants' => 'publications#grants', as: :publication_grants
 
-      get 'organizations' => 'organizations#index', as: :organizations
-      get 'organizations/:id/publications' => 'organizations#publications', as: :organization_publications
-    end
+    get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
+    get 'users/:webaccess_id/grants' => 'users#grants', as: :user_grants
+    get 'users/:webaccess_id/news_feed_items' => 'users#news_feed_items', as: :user_news_feed_items
+    get 'users/:webaccess_id/performances' => 'users#performances', as: :user_performances
+    post 'users/publications' => 'users#users_publications', as: :users_publications
+    get 'users/:webaccess_id/etds' => 'users#etds', as: :user_etds
+    get 'users/:webaccess_id/presentations' => 'users#presentations', as: :user_presentations
+    get 'users/:webaccess_id/organization_memberships' => 'users#organization_memberships', as: :user_organization_memberships
+    get 'users/:webaccess_id/profile' => 'users#profile', as: :user_profile
+
+    get 'organizations' => 'organizations#index', as: :organizations
+    get 'organizations/:id/publications' => 'organizations#publications', as: :organization_publications
   end
 
   get 'profiles/:webaccess_id' => 'profiles#show', as: :profile
