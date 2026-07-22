@@ -11,7 +11,7 @@ Bundler.require(*Rails.groups)
 module ResearcherMetadata
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.2
+    config.load_defaults 8.1
     require 'healthchecks'
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
