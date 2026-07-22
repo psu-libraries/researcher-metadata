@@ -9,6 +9,6 @@ class EducationHistoryItemsController < UserController
   private
 
     def education_history_item_params
-      params.expect(education_history_item: [:visible_in_profile])
+      params.require(:education_history_item).permit(:visible_in_profile)
     end
 end

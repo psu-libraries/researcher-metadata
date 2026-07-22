@@ -22,6 +22,6 @@ class InternalPublicationWaiversController < OpenAccessWorkflowController
   private
 
     def waiver_params
-      params.expect(waiver: [[:reason_for_waiver]])
+      params.require(:waiver).permit([:reason_for_waiver])
     end
 end

@@ -35,10 +35,10 @@ class AuthorshipsController < UserController
   private
 
     def authorship_create_params
-      params.expect(authorship: [[:publication_id, :author_number]])
+      params.require(:authorship).permit([:publication_id, :author_number])
     end
 
     def authorship_update_params
-      params.expect(authorship: [:visible_in_profile])
+      params.require(:authorship).permit(:visible_in_profile)
     end
 end

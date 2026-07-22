@@ -18,6 +18,6 @@ class UserPerformancesController < UserController
   private
 
     def up_params
-      params.expect(user_performance: [:visible_in_profile])
+      params.require(:user_performance).permit(:visible_in_profile)
     end
 end
