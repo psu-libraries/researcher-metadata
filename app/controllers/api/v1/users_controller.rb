@@ -4,6 +4,8 @@ module API::V1
   class UsersController < APIController
     include ActionController::MimeResponds
 
+    skip_before_action :authenticate_request!, only: [:profile]
+
     def presentations
       user = api_token.all_current_users.find_by(webaccess_id: params[:webaccess_id])
       if user

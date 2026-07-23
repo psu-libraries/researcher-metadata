@@ -2,7 +2,7 @@
 
 module API::V1
   class APIController < ActionController::API
-    before_action :authenticate_request!, except: [:profile]
+    before_action :authenticate_request!
 
     rescue_from ActiveRecord::RecordNotFound do |exception|
       render json: { message: exception, code: 404 }, status: :not_found
