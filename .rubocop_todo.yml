@@ -261,7 +261,7 @@ RSpec/SpecFilePathFormat:
     - 'spec/component/importers/etd_csv_importer_spec.rb'
     - 'spec/component/importers/psu_hr_user_importer_spec.rb'
     - 'spec/component/lib/healthchecks/delayed_job_errors_spec.rb'
-    - 'spec/component/lib/omniauth/strategies/azure_oauth_spec.rb'
+    - 'spec/component/lib/omni_auth/strategies/azure_oauth_spec.rb'
     - 'spec/component/models/orcid_integration_spec.rb'
     - 'spec/requests/activity_insight_oa_workflow/wrong_file_version_curation/email_author_spec.rb'
     - 'spec/requests/api/v1/organizations_spec.rb'
