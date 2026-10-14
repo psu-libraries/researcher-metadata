@@ -33,9 +33,6 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"
-  CLUSTERS_ULPROD:
-    type: string
     default: "ulprod"
   REGISTRY_HOST:
     type: string
@@ -334,7 +331,7 @@ workflows:
           context:
             - org-global
           name: "Release"
-          clusters: << pipeline.parameters.CLUSTERS_PROD >>,<< pipeline.parameters.CLUSTERS_ULPROD >>
+          clusters: << pipeline.parameters.CLUSTERS_PROD >>
           from_tag: "<< pipeline.git.revision >>"
           to_tag: "<< pipeline.git.tag >>"
           filters:
