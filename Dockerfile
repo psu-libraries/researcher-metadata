@@ -1,5 +1,5 @@
 
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22-yarn-4.16.0 AS base
+FROM harbor.libraries.psu.edu/library/ruby-3.4.11-node-22-yarn-4.18.1 AS base
 # Isilon has issues with uid 2000 for some reason
 # change the app to run as 201
 ARG UID=201
