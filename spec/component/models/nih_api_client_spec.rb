@@ -125,8 +125,7 @@ describe NIHAPIClient do # rubocop:disable RSpec/SpecFilePathFormat
       it 'creates an ImporterErrorLog record' do
         # Mock JSON.parse to override top level mocks
         allow(JSON).to receive(:parse).with(
-          { project_number: 'abc123', pmid: 'pm123' }.to_json,
-          {}
+          { project_number: 'abc123', pmid: 'pm123' }.to_json
         ).and_return({ 'project_number' => 'abc123', 'pmid' => 'pm123' })
         expect { client.publications_by_project('abc123') }.to change(ImporterErrorLog, :count).by(1)
         # Allow JSON.parse to operate normally for downstream calls

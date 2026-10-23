@@ -36,7 +36,7 @@ parameters:
     default: "ulprod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"
+    default: "harbor.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
