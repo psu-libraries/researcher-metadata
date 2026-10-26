@@ -38,7 +38,6 @@ CMD ["/app/bin/start"]
 FROM base AS dev
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-
 # Add Google Chrome signing key and repo (modern Debian/Ubuntu way)
 USER root
 RUN mkdir -p /etc/apt/keyrings \
@@ -49,6 +48,7 @@ RUN mkdir -p /etc/apt/keyrings \
 RUN apt-get update && apt-get install -y --no-install-recommends \
   rsync \
   google-chrome-stable \
+  postgresql-client \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /app/node_modules/.cache/ \
   && rm -rf /app/tmp/
