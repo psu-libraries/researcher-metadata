@@ -228,7 +228,12 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: bundle install
+      # - run: 
+      #     name: Bundle Install
+      #     command: |
+      #       bundle install
+      - ruby/install-deps
+      # If above does not work, move all up to Niftany up here
       - node/install:
           node-version: '22'
       - run: 
