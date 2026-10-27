@@ -221,27 +221,9 @@ jobs:
             cd $CONFIG_REPO_NAME
             ./bin/ci-delete-manifest
 
-  prep-test:
-    docker:
-      - image: cimg/ruby:3.4.11-browsers
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - node/install:
-          node-version: '22'
-      - run: 
-          name: Check Node Version
-          command: |
-            node --version
-      - persist_to_workspace:
-          root: .
-          paths:
-            - '*'
-
   test-application:
     docker:
-      - image: cimg/ruby:3.4.11-browsers
+      - image: cimg/ruby:3.4.1-browsers
       - image: cimg/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
@@ -258,40 +240,30 @@ jobs:
     # A series of steps to run, some are similar to those in "build".
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - attach_workspace:
-          at: .
+      - run: bundle install
+      - node/install:
+        node-version: '22'
+      - run: node --version
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
-      - run: 
-          name: Bundle Install
-          command: |
-            bundle install
       - run:
           name: Configure Rspec
-          command: |
-            cp .rspec.ci .rspec
+          command: cp .rspec.ci .rspec
       - run:
           name: Wait for DB
-          command: |
-            dockerize -wait tcp://localhost:5432 -timeout 1m
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: |
-            bundle exec rails db:schema:load --trace
+          command: bundle exec rails db:schema:load --trace
       - run:
           name: Check current version of node
-          command: |
-            node -v
+          command: node -v
       - run:
           name: Niftany
-          command: |
-            bundle exec niftany
+          command: bundle exec niftany
       - run:
           name: RSpec
-          command: |
-            bundle exec rspec --profile
+          command: bundle exec rspec
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
@@ -312,7 +284,6 @@ workflows:
     unless:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
-      - prep-test
       - push-image:
           name: push-image
           context:
@@ -325,7 +296,6 @@ workflows:
           requires:
             - build-image
             - test-application
-
       - build-image:
           name: build-image
           context:
@@ -345,9 +315,6 @@ workflows:
           filters:
             branches:
               only: /.*/
-          requires: 
-            - prep-test
-
       - deploy-application:
           name: deploy-application
           context:
@@ -360,7 +327,6 @@ workflows:
                 - /preview\/.*/
           requires:
             - push-image
-
       - release-image:
           context:
             - org-global
