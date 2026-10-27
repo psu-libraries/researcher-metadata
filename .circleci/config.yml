@@ -241,8 +241,11 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - ruby/install-deps:
-          clean-bundle: true
+      - run:
+          name: Bundle Install
+          command: |
+            bundle install
+      # move all up to Niftany up here (add database wait below)
       - node/install:
           node-version: '22'
       - run: 
@@ -292,6 +295,10 @@ jobs:
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:
+          name: Bundle Install
+          command: |
+            bundle install
+      - run:
           name: Wait for DB
           command: |
             dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -333,6 +340,10 @@ jobs:
           at: .
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
+      - run:
+          name: Bundle Install
+          command: |
+            bundle install
       - run:
           name: Wait for DB
           command: |
