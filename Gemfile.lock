@@ -745,7 +745,7 @@ DEPENDENCIES
   rss
   rswag-specs
   sass-rails
-  scholarsphere-client (= 0.5.3)
+  scholarsphere-client (~> 0.3)
   selenium-webdriver (~> 4.46)
   shoulda-matchers (~> 6.4)
   simple_form
