@@ -431,7 +431,7 @@ workflows:
           filters:
             branches:
               only: /.*/
-          requires: 
+          # requires: 
             # - prep-test
 
       - deploy-application:
