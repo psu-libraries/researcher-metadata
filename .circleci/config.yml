@@ -245,7 +245,6 @@ jobs:
           clean-bundle: true
       - node/install:
           node-version: '22'
-      - run: yarn install
       - run: 
           name: Check Node Version
           command: |
