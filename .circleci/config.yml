@@ -266,7 +266,7 @@ jobs:
           paths:
             - '*'
 
-  test-application:
+  niftany-tests:
     docker:
       - image: cimg/ruby:3.4.11-browsers
       - image: cimg/postgres:12.7
@@ -306,7 +306,45 @@ jobs:
       - run:
           name: RSpec
           command: |
-            bundle exec rspec --profile
+            bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
+
+  integration-tests:
+    docker:
+      - image: cimg/ruby:3.4.11-browsers
+      - image: cimg/postgres:12.7
+        environment:
+          POSTGRES_USER: psu_research_metadata_test
+          POSTGRES_DB: psu_research_metadata_test
+          POSTGRES_PASSWORD: "password"
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: psu_research_metadata_test
+      PGPASSWORD: "password"
+      RAILS_ENV: test
+    # A series of steps to run, some are similar to those in "build".
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: .
+      # Here we make sure that the secondary container boots
+      # up before we run operations on the database.
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Check current version of node
+          command: |
+            node -v
+      - run:
+          name: RSpec
+          command: |
+            bundle exec rspec ./spec/integration
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
@@ -339,7 +377,8 @@ workflows:
                 - /preview\/.*/
           requires:
             - build-image
-            - test-application
+            - niftany-tests
+            - integration-tests
 
       - build-image:
           name: build-image
@@ -351,8 +390,20 @@ workflows:
                 - main
                 - /preview\/.*/
 
-      - test-application:         # Then run test,
-          name: test-application
+      - niftany-tests:         # Then run test,
+          name: niftany-tests
+          # requires:   # Test requires that build passes for it to run.
+            # - build-image   # Finally, run the build job.
+          context:
+            - org-global
+          filters:
+            branches:
+              only: /.*/
+          requires: 
+            - prep-test
+
+      - integration-tests:         # Then run test,
+          name: integration-tests
           # requires:   # Test requires that build passes for it to run.
             # - build-image   # Finally, run the build job.
           context:
