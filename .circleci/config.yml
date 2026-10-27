@@ -265,7 +265,6 @@ jobs:
           at: .
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
-      - ruby/install-deps
       - run:
           name: Configure Rspec
           command: |
