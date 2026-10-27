@@ -229,14 +229,14 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run: 
-        - name: Bundle Install
-        - command: |
+          name: Bundle Install
+          command: |
             bundle install
       - node/install:
           node-version: '22'
       - run: 
-        - name: Check Node Version
-        - command: |
+          name: Check Node Version
+          command: |
             node --version
       - persist_to_workspace:
           root: .
