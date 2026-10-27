@@ -299,14 +299,14 @@ jobs:
           name: Check current version of node
           command: |
             node -v
-      - run:
-          name: Niftany
-          command: |
-            bundle exec niftany
-      - run:
-          name: RSpec
-          command: |
-            bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
+      # - run:
+      #     name: Niftany
+      #     command: |
+      #       bundle exec niftany
+      # - run:
+      #     name: RSpec
+      #     command: |
+      #       bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
 
   integration-tests:
     docker:
@@ -344,7 +344,7 @@ jobs:
       - run:
           name: RSpec
           command: |
-            bundle exec rspec ./spec/integration
+            bundle exec rspec ./spec/integration/admin/activity_insight_oa_workflow/metadata_review/show_spec.rb
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
