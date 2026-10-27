@@ -228,10 +228,6 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: 
-          name: Bundle Install
-          command: |
-            bundle install
       - node/install:
           node-version: '22'
       - run: 
@@ -268,6 +264,10 @@ jobs:
           at: .
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
+      - run: 
+          name: Bundle Install
+          command: |
+            bundle install
       - run:
           name: Configure Rspec
           command: |
