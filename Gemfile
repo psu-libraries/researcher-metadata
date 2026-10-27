@@ -51,7 +51,7 @@ gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
 gem 'puma', '~> 7.2'                    # use Puma as the app server
 gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
-gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
+gem 'scholarsphere-client', '0.5.3'     # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
 gem 'smarter_csv'                       # simple, efficient CSV processing for Ruby
 gem 'string-similarity'                 # use for string comparison
