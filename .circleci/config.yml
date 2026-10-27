@@ -253,6 +253,14 @@ jobs:
           name: Configure Rspec
           command: |
             cp .rspec.ci .rspec
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: |
+            bundle exec rails db:schema:load --trace
       - persist_to_workspace:
           root: .
           paths:
@@ -295,10 +303,10 @@ jobs:
           name: Niftany
           command: |
             bundle exec niftany
-      # - run:
-      #     name: RSpec
-      #     command: |
-      #       bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
+      - run:
+          name: RSpec
+          command: |
+            bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
 
   integration-tests:
     docker:
@@ -330,21 +338,13 @@ jobs:
           command: |
             dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
-          name: Database setup
-          command: |
-            bundle exec rails db:schema:load --trace
-      - run:
           name: Check current version of node
           command: |
             node -v
-      # - run:
-      #     name: RSpec
-      #     command: |
-      #       bundle exec rspec ./spec/integration
       - run:
           name: RSpec
           command: |
-            bundle exec rspec ./spec/integration/admin/activity_insight_oa_workflow/metadata_review/show_spec.rb
+            bundle exec rspec ./spec/integration
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
