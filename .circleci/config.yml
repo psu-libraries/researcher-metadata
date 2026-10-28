@@ -224,7 +224,7 @@ jobs:
   test-application:
     resource_class: large
     docker:
-      - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/ruby:3.4.11-browsers
       - image: cimg/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
