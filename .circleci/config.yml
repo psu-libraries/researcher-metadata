@@ -3,7 +3,7 @@ orbs:
   docker: circleci/docker@3.0.1
   ruby: circleci/ruby@2.6.0
   node: circleci/node@7.2.1
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@2.4.0
 
 parameters:
 
@@ -223,7 +223,7 @@ jobs:
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/ruby:3.4.11-browsers
       - image: cimg/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
