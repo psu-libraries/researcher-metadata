@@ -17,7 +17,7 @@ gem 'activerecord-import'               # library for bulk inserting data using 
 gem 'bootstrap', '5.3'
 gem 'bugsnag', '~> 6.26'                # notify the team of any exceptions
 gem 'cancancan', '~> 3.3'               # for authorization
-gem 'carrierwave'                       # file uploading
+gem 'carrierwave', '2.2.7'              # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'config', '~> 5.1'
@@ -32,14 +32,12 @@ gem 'ffaker'                            # For generating fake data in test, deve
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
 gem 'httparty', '>= 0.24.0'             # HTTP client (updated to resolve net-http/uri vulnerabilities)
-gem 'image_processing', '~> 2.0'
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'kaminari', '~> 1.2'                # Pagination within Rails
 gem 'lograge'                           # Structured logging for production
-gem 'mini_magick', '~> 5.0'
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
