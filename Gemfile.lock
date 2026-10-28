@@ -687,7 +687,7 @@ DEPENDENCIES
   cancancan (~> 3.3)
   capybara (>= 2.15, < 4.0)
   capybara-email
-  carrierwave
+  carrierwave (~> 3.1.4)
   cocoon
   coffee-rails (~> 5)
   config (~> 5.1)
