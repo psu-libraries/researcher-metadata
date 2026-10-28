@@ -11,7 +11,7 @@ describe 'API documentation home page', :js, type: :feature do
     end
 
     it 'shows the home page content' do
-      expect(page).to have_content 'Researcher Metadata Database API'
+      expect(page).to have_content 'Researcher Metadata Database'
     end
 
     it 'shows a link to the home page' do
@@ -42,7 +42,7 @@ describe 'API documentation home page', :js, type: :feature do
     before { visit 'api_docs' }
 
     it 'shows the home page content' do
-      expect(page).to have_content 'Researcher Metadata Database API'
+      expect(page).to have_content 'Researcher Metadata Database'
     end
 
     it 'shows a link for publications API' do
