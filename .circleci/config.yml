@@ -222,6 +222,7 @@ jobs:
             ./bin/ci-delete-manifest
 
   test-application:
+    resource_class: large
     docker:
       - image: cimg/ruby:3.4.1-browsers
       - image: cimg/postgres:12.7
