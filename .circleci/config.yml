@@ -224,6 +224,19 @@ jobs:
   prep-test:
     docker:
       - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/postgres:12.7
+        environment:
+          POSTGRES_USER: psu_research_metadata_test
+          POSTGRES_DB: psu_research_metadata_test
+          POSTGRES_PASSWORD: "password"
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: psu_research_metadata_test
+      PGPASSWORD: "password"
+      RAILS_ENV: test
     steps:
       - checkout
       - setup_remote_docker:
@@ -240,6 +253,14 @@ jobs:
           name: Configure Rspec
           command: |
             cp .rspec.ci .rspec
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: |
+            bundle exec rails db:schema:load --trace
       - persist_to_workspace:
           root: .
           paths:
@@ -248,19 +269,19 @@ jobs:
   niftany-tests:
     docker:
       - image: cimg/ruby:3.4.1-browsers
-    #   - image: cimg/postgres:12.7
-    #     environment:
-    #       POSTGRES_USER: psu_research_metadata_test
-    #       POSTGRES_DB: psu_research_metadata_test
-    #       POSTGRES_PASSWORD: "password"
-    # # environment variables specific to Ruby/Rails, applied to the primary container.
-    # environment:
-    #   BUNDLE_JOBS: "3"
-    #   BUNDLE_RETRY: "3"
-    #   PGHOST: 127.0.0.1
-    #   PGUSER: psu_research_metadata_test
-    #   PGPASSWORD: "password"
-    #   RAILS_ENV: test
+      - image: cimg/postgres:12.7
+        environment:
+          POSTGRES_USER: psu_research_metadata_test
+          POSTGRES_DB: psu_research_metadata_test
+          POSTGRES_PASSWORD: "password"
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: psu_research_metadata_test
+      PGPASSWORD: "password"
+      RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
       - checkout
@@ -270,10 +291,10 @@ jobs:
           at: .
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
-      # - run:
-      #     name: Wait for DB
-      #     command: |
-      #       dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Check current version of node
           command: |
@@ -316,10 +337,6 @@ jobs:
           name: Wait for DB
           command: |
             dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: Database setup
-          command: |
-            bundle exec rails db:schema:load --trace
       - run:
           name: Check current version of node
           command: |
