@@ -66,11 +66,12 @@ describe 'editing profile preferences' do
       context 'when logged in as that user' do
         before do
           authenticate_as(user)
+          sleep 1
           visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         it 'displays a link to manage the profile' do
-          expect(page).to have_link 'Manage my profile', href: profile_bio_path, wait: 2
+          expect(page).to have_link 'Manage my profile', href: profile_bio_path, wait: 1
         end
       end
 
