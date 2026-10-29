@@ -29,6 +29,6 @@ class ActivityInsightFileUploader < CarrierWave::Uploader::Base
   end
 
   def remove_file_directory
-    FileUtils.remove_dir(model_object_dir)
+    FileUtils.rm_rf(model_object_dir)
   end
 end
