@@ -80,7 +80,6 @@ describe 'Admin duplicate publication group detail page', type: :feature do
   context 'when the current user is an admin' do
     before do
       authenticate_admin_user
-      sleep 1
     end
 
     context 'when the group has more than one publication' do
