@@ -122,6 +122,7 @@ describe 'editing profile preferences' do
 
           create(:deputy_assignment, primary: user, deputy: deputy)
           authenticate_as(deputy)
+          sleep 1
           visit profile_path(webaccess_id: user.webaccess_id)
         end
 
@@ -479,6 +480,7 @@ describe 'editing profile preferences' do
     context 'when the user is signed in' do
       before do
         authenticate_as(user)
+        sleep 1
         visit edit_profile_presentations_path
       end
 
