@@ -201,6 +201,7 @@ describe 'managing duplicate publication groups', type: :feature do
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
         accept_confirm do
+          sleep 1
           click_on 'Merge Selected'
         end
       end

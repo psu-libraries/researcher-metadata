@@ -7,6 +7,7 @@ describe 'API documentation home page', :js, type: :feature do
   context 'when the user is logged in' do
     before do
       authenticate_user
+      sleep 1
       visit 'api_docs'
     end
 

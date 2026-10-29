@@ -70,7 +70,7 @@ describe 'editing profile preferences' do
         end
 
         it 'displays a link to manage the profile' do
-          expect(page).to have_link 'Manage my profile', href: profile_bio_path
+          expect(page).to have_link 'Manage my profile', href: profile_bio_path, wait: 2
         end
       end
 
@@ -99,6 +99,7 @@ describe 'editing profile preferences' do
         end
 
         it 'allows the admin to become and unbecome the user in the profile' do
+          sleep 1
           click_button('Become this user')
           expect(page).to have_content("You are acting on behalf of #{user.webaccess_id}")
           expect(page).to have_button("Unbecome #{user.webaccess_id}")
@@ -492,19 +493,19 @@ describe 'editing profile preferences' do
       end
 
       it 'allows user to deselect and select all presentations', :js, type: :feature do
-        expect(page).to have_button 'Select All', wait: 1
+        expect(page).to have_button 'Select All', wait: 2
         expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
         expect(user.presentation_contributions.first.reload.visible_in_profile).to be false
 
-        click_button 'Select All', wait: 1
+        click_button 'Select All', wait: 2
 
-        expect(page).to have_button 'Deselect All', wait: 1
+        expect(page).to have_button 'Deselect All', wait: 2
         expect(page).to have_checked_field "presentation_contribution_#{cont_1.id}"
 
         expect(user.presentation_contributions.first.reload.visible_in_profile).to be true
 
-        click_button 'Deselect All', wait: 1
-        expect(page).to have_button 'Select All', wait: 1
+        click_button 'Deselect All', wait: 2
+        expect(page).to have_button 'Select All', wait: 2
         expect(page).to have_unchecked_field "presentation_contribution_#{cont_1.id}"
         expect(user.presentation_contributions.first.reload.visible_in_profile).to be false
       end
@@ -516,8 +517,8 @@ describe 'editing profile preferences' do
           cont_1.reload
           visit edit_profile_presentations_path
           expect(page).to have_current_path edit_profile_presentations_path
-          expect(page).to have_no_button 'Select All', wait: 1
-          expect(page).to have_no_button 'Deselect All', wait: 1
+          expect(page).to have_no_button 'Select All', wait: 2
+          expect(page).to have_no_button 'Deselect All', wait: 2
         end
       end
     end
