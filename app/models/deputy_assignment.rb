@@ -26,7 +26,7 @@
 
 class DeputyAssignment < ApplicationRecord
   after_initialize :set_defaults
-  after_save :set_active_uniqueness_key_if_inactive
+  after_commit :set_active_uniqueness_key_if_inactive
 
   belongs_to :primary,
              class_name: 'User',
