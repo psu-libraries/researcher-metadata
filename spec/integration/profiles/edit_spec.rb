@@ -96,11 +96,11 @@ describe 'editing profile preferences' do
           allow(person).to receive(:as_json).and_return({ 'data' => {} })
 
           authenticate_admin_user
+          sleep 1
           visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         it 'allows the admin to become and unbecome the user in the profile' do
-          sleep 1
           click_button('Become this user')
           expect(page).to have_content("You are acting on behalf of #{user.webaccess_id}")
           expect(page).to have_button("Unbecome #{user.webaccess_id}")

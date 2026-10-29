@@ -15,6 +15,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
 
   before do
     authenticate_admin_user
+    sleep 1
     allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
     visit activity_insight_oa_workflow_file_version_review_path
   end

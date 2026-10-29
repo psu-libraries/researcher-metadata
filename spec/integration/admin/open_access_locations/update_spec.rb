@@ -11,6 +11,7 @@ describe 'updating an open access location via the admin interface', type: :feat
   context 'when the current user is an admin' do
     before do
       authenticate_admin_user
+      sleep 1
       visit rails_admin.edit_path(model_name: :open_access_location, id: oal.id)
     end
 
