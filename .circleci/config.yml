@@ -221,7 +221,48 @@ jobs:
             cd $CONFIG_REPO_NAME
             ./bin/ci-delete-manifest
 
-  test-application:
+  prep-test:
+    resource_class: large
+    docker:
+      - image: cimg/ruby:3.4.11-browsers
+      - image: cimg/postgres:12.7
+        environment:
+          POSTGRES_USER: psu_research_metadata_test
+          POSTGRES_DB: psu_research_metadata_test
+          POSTGRES_PASSWORD: "password"
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: psu_research_metadata_test
+      PGPASSWORD: "password"
+      RAILS_ENV: test
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - ruby/install-deps:
+          clean-bundle: true
+      - node/install:
+          node-version: '22'
+      - run: 
+          name: Check Node Version
+          command: |
+            node --version
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: |
+            bundle exec rails db:schema:load --trace
+      - persist_to_workspace:
+          root: .
+          paths:
+            - '*'
+
+  niftany-tests:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.11-browsers
@@ -241,30 +282,76 @@ jobs:
     # A series of steps to run, some are similar to those in "build".
     steps:
       - checkout
-      - run: bundle install
-      - node/install:
-        node-version: '22'
-      - run: node --version
-      # Here we make sure that the secondary container boots
-      # up before we run operations on the database.
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: .
       - run:
           name: Configure Rspec
-          command: cp .rspec.ci .rspec
+          command: |
+            cp .rspec.ci .rspec
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: bundle exec rails db:schema:load --trace
+          command: |
+            bundle exec rails db:schema:load --trace
       - run:
           name: Check current version of node
-          command: node -v
+          command: |
+            node -v
       - run:
           name: Niftany
-          command: bundle exec niftany
+          command: |
+            bundle exec niftany
       - run:
           name: RSpec
-          command: bundle exec rspec
+          command: |
+            bundle exec rspec --exclude-pattern "spec/integration/admin/**/*_spec.rb"
+
+  integration-admin-tests:
+    resource_class: large
+    docker:
+      - image: cimg/ruby:3.4.11-browsers
+      - image: cimg/postgres:12.7
+        environment:
+          POSTGRES_USER: psu_research_metadata_test
+          POSTGRES_DB: psu_research_metadata_test
+          POSTGRES_PASSWORD: "password"
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: psu_research_metadata_test
+      PGPASSWORD: "password"
+      RAILS_ENV: test
+    # A series of steps to run, some are similar to those in "build".
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: .
+      # Here we make sure that the secondary container boots
+      # up before we run operations on the database.
+      - run:
+          name: Configure Rspec
+          command: |
+            cp .rspec.ci .rspec
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Check current version of node
+          command: |
+            node -v
+      - run:
+          name: RSpec
+          command: |
+            bundle exec rspec --pattern "spec/integration/admin/**/*_spec.rb"
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
@@ -285,6 +372,7 @@ workflows:
     unless:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
+      - prep-test
       - push-image:
           name: push-image
           context:
@@ -296,7 +384,9 @@ workflows:
                 - /preview\/.*/
           requires:
             - build-image
-            - test-application
+            - niftany-tests
+            - integration-admin-tests
+
       - build-image:
           name: build-image
           context:
@@ -307,8 +397,8 @@ workflows:
                 - main
                 - /preview\/.*/
 
-      - test-application:         # Then run test,
-          name: test-application
+      - niftany-tests:         # Then run test,
+          name: niftany-tests
           # requires:   # Test requires that build passes for it to run.
             # - build-image   # Finally, run the build job.
           context:
@@ -316,6 +406,21 @@ workflows:
           filters:
             branches:
               only: /.*/
+          requires: 
+            - prep-test
+
+      - integration-admin-tests:         # Then run test,
+          name: integration-admin-tests
+          # requires:   # Test requires that build passes for it to run.
+            # - build-image   # Finally, run the build job.
+          context:
+            - org-global
+          filters:
+            branches:
+              only: /.*/
+          requires: 
+            - prep-test
+
       - deploy-application:
           name: deploy-application
           context:
@@ -328,6 +433,7 @@ workflows:
                 - /preview\/.*/
           requires:
             - push-image
+
       - release-image:
           context:
             - org-global
