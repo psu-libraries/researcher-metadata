@@ -330,16 +330,31 @@ jobs:
     # A series of steps to run, some are similar to those in "build".
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - attach_workspace:
-          at: .
+      # - setup_remote_docker:
+      #     docker_layer_caching: true
+      # - attach_workspace:
+      #     at: .
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
+      - run: bundle install
+      - node/install:
+          node-version: '22'
+      # - run: 
+      #     name: Check Node Version
+      #     command: |
+      #       node --version
       - run:
           name: Configure Rspec
           command: |
             cp .rspec.ci .rspec
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: |
+            bundle exec rails db:schema:load --trace
       - run:
           name: Wait for DB
           command: |
