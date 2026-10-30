@@ -70,7 +70,7 @@ describe 'editing profile preferences' do
         end
 
         it 'displays a link to manage the profile' do
-          expect(page).to have_link 'Manage my profile', href: profile_bio_path, wait: 1
+          expect(page).to have_link 'Manage my profile', href: profile_bio_path
         end
       end
 
