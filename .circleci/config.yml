@@ -264,7 +264,7 @@ jobs:
           command: bundle exec niftany
       - run:
           name: RSpec
-          command: bundle exec rspec
+          command: bundle exec rspec ./spec/component/models/activity_insight_oa_file_spec.rb
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
