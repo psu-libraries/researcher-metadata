@@ -372,9 +372,7 @@ workflows:
     unless:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
-      - prep-test:
-          context:
-            - org-global
+      - prep-test
       - push-image:
           name: push-image
           context:
