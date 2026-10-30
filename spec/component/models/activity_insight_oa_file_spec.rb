@@ -83,6 +83,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     it 'removes the file download directory' do
       expect(File.exist?(file_download_directory)).to be true
+      sleep 20
       aif1.destroy
       expect(File.exist?(file_download_directory)).to be false
     end
