@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ActivityInsightOAFile < ApplicationRecord
-  # after_destroy :remove_file_download_location!
-
   NOT_ARTICLE_FILE = 'notArticleFile'
   ALLOWED_VERSIONS = [
     I18n.t('file_versions.accepted_version'),
