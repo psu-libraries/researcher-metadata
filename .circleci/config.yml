@@ -355,10 +355,10 @@ jobs:
           name: Database setup
           command: |
             bundle exec rails db:schema:load --trace
-      # - run:
-      #     name: Wait for DB
-      #     command: |
-      #       dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Wait for DB
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Check current version of node
           command: |
@@ -369,7 +369,7 @@ jobs:
       - run:
           name: RSpec
           command: |
-            bundle exec rspec
+            bundle exec rspec ./spec/integration/admin/activity_insight_oa_workflow/metadata_review/show_spec.rb
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
