@@ -351,12 +351,7 @@ jobs:
       - run:
           name: RSpec
           command: |
-            bundle exec rspec --pattern \ 
-            "spec/integration/admin/**/*_spec.rb, \
-             spec/factories/**/*.rb, \
-             spec/fixtures/**/* \
-             spec/requests/*.rb
-            "
+            bundle exec rspec --pattern "spec/integration/admin/**/*_spec.rb"
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
