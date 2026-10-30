@@ -27,4 +27,8 @@ class ActivityInsightFileUploader < CarrierWave::Uploader::Base
       Rails.root.join "uploads/activity_insight_file_uploads/#{model&.id || object_id}"
     end
   end
+
+  def remove_file_directory
+    FileUtils.rm_rf(model_object_dir, secure: true)
+  end
 end
