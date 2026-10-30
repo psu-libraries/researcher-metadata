@@ -308,9 +308,9 @@ jobs:
       - run:
           name: RSpec
           command: |
-            bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
+            bundle exec rspec --exclude-pattern "spec/integration/admin/**/*_spec.rb"
 
-  integration-tests:
+  integration-admin-tests:
     resource_class: large
     docker:
       - image: cimg/ruby:3.4.11-browsers
@@ -351,7 +351,7 @@ jobs:
       - run:
           name: RSpec
           command: |
-            bundle exec rspec --profile ./spec/integration
+            bundle exec rspec --profile ./spec/integration/admin
 
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
@@ -385,7 +385,7 @@ workflows:
           requires:
             - build-image
             - niftany-tests
-            - integration-tests
+            - integration-admin-tests
 
       - build-image:
           name: build-image
@@ -409,8 +409,8 @@ workflows:
           requires: 
             - prep-test
 
-      - integration-tests:         # Then run test,
-          name: integration-tests
+      - integration-admin-tests:         # Then run test,
+          name: integration-admin-tests
           # requires:   # Test requires that build passes for it to run.
             # - build-image   # Finally, run the build job.
           context:
