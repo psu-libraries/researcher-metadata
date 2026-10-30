@@ -279,7 +279,7 @@ jobs:
     environment:
       BUNDLE_JOBS: "3"
       BUNDLE_RETRY: "3"
-      PGHOST: 127.0.0.1
+      PGHOST: 127.0.0.2
       PGUSER: psu_research_metadata_test
       PGPASSWORD: "password"
       RAILS_ENV: test
@@ -323,7 +323,7 @@ jobs:
     environment:
       BUNDLE_JOBS: "3"
       BUNDLE_RETRY: "3"
-      PGHOST: 127.0.0.1
+      PGHOST: 127.0.0.3
       PGUSER: psu_research_metadata_test
       PGPASSWORD: "password"
       RAILS_ENV: test
