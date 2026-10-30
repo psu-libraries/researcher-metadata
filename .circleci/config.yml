@@ -339,10 +339,10 @@ jobs:
       - run: bundle install
       - node/install:
           node-version: '22'
-      # - run: 
-      #     name: Check Node Version
-      #     command: |
-      #       node --version
+      - run: 
+          name: Check Node Version
+          command: |
+            node --version
       - run:
           name: Configure Rspec
           command: |
@@ -363,6 +363,9 @@ jobs:
           name: Check current version of node
           command: |
             node -v
+      - run:
+          name: Niftany
+          command: bundle exec niftany
       - run:
           name: RSpec
           command: |
@@ -433,8 +436,8 @@ workflows:
           filters:
             branches:
               only: /.*/
-          requires: 
-            - prep-test
+          # requires: 
+          #   - prep-test
 
       - deploy-application:
           name: deploy-application
