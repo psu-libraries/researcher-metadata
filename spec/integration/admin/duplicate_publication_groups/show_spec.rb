@@ -78,9 +78,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
   end
 
   context 'when the current user is an admin' do
-    before do
-      authenticate_admin_user
-    end
+    before { authenticate_admin_user }
 
     context 'when the group has more than one publication' do
       let(:pub1_group) { group }
