@@ -354,7 +354,7 @@ jobs:
             bundle exec rspec --pattern \
             " \
               spec/integration/admin/**/*_spec.rb, \
-              spec/integration/*.rb, \
+              spec/integration/*_helper.rb, \
               spec/*.rb, \
               spec/support/**/*.rb \
             "
