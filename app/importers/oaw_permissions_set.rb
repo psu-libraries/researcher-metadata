@@ -12,7 +12,7 @@ class OAWPermissionsSet
   end
 
   def can_deposit_published_version?
-    can_deposit?(I18n.t('file_versions.published_version'))
+    can_deposit?(ActivityInsightOAFile::PUBLISHED_VERSION)
   end
 
   private

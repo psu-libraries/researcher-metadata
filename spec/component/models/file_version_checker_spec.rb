@@ -47,7 +47,7 @@ describe FileVersionChecker do
       let(:test_file) { 'pdf_check_published_versionS123456abc.pdf' }
 
       it 'returns published version' do
-        expect(pdf_file_version.version).to eq I18n.t('file_versions.published_version')
+        expect(pdf_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
         expect(pdf_file_version.score).to eq 4
       end
     end

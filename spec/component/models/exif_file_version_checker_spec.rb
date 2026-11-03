@@ -69,7 +69,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { journal_article_version: 'p' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -77,7 +77,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { journal_article_version: 'vor' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -85,7 +85,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { rights_en_gb: ExifFileVersionChecker::RIGHTS_EN_GB_TEXT } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -93,7 +93,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { wps_journaldoi: 'wps_journaldoi' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -102,7 +102,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { subject: journal } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -110,7 +110,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { subject: 'downloaded from xyz' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -118,7 +118,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { subject: 'journal pre-proof' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -126,7 +126,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { subject: ['other', 'journal pre-proof'] } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -134,7 +134,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { rendition_class: 'proof:pdf' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -142,7 +142,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { creator: ExifFileVersionChecker::PUBLISHED_VERSION_CREATORS.sample } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -158,7 +158,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { creator_tool: ExifFileVersionChecker::PUBLISHED_VERSION_CREATORS.sample } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
 
@@ -174,7 +174,7 @@ describe ExifFileVersionChecker do
           let(:exif_data) { { producer: 'Project MUSE' } }
 
           it 'returns Final Published Version' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::PUBLISHED_VERSION
           end
         end
       end

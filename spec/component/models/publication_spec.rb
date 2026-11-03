@@ -1748,7 +1748,7 @@ describe Publication, type: :model do
 
     context 'when the preferred version is given an acceptable version' do
       it 'saves preferred version to that version' do
-        pub.preferred_version = I18n.t('file_versions.published_version')
+        pub.preferred_version = ActivityInsightOAFile::PUBLISHED_VERSION
         expect(pub.preferred_version).to eq 'publishedVersion'
       end
     end

@@ -6,7 +6,7 @@ describe OAWPermissionsService do
   let(:service) { described_class.new(doi, version) }
 
   context 'when version is valid' do
-    let(:version) { I18n.t('file_versions.published_version') }
+    let(:version) { ActivityInsightOAFile::PUBLISHED_VERSION }
     let(:doi) { '10.1231/abcd.54321' }
 
     context 'when a network error is raised' do
@@ -198,7 +198,7 @@ describe OAWPermissionsService do
 
           context 'when published version is present and accepted version is not' do
             before do
-              allow(service).to receive_messages(accepted_version: {}, published_version: { 'version' => I18n.t('file_versions.published_version') })
+              allow(service).to receive_messages(accepted_version: {}, published_version: { 'version' => ActivityInsightOAFile::PUBLISHED_VERSION })
             end
 
             it 'returns true' do

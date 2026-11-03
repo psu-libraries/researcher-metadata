@@ -5,7 +5,7 @@ class OAWPermissionsClient
   attr_reader :doi, :version
 
   VALID_VERSIONS = [ActivityInsightOAFile::ACCEPTED_VERSION,
-                    I18n.t('file_versions.published_version')].freeze
+                    ActivityInsightOAFile::PUBLISHED_VERSION].freeze
 
   private
 
@@ -43,7 +43,7 @@ class OAWPermissionsClient
     def published_version
       if all_permissions.present?
         all_permissions
-          .select { |perm| perm if perm['version'] == I18n.t('file_versions.published_version') }
+          .select { |perm| perm if perm['version'] == ActivityInsightOAFile::PUBLISHED_VERSION }
           .first
           .presence || {}
       else
