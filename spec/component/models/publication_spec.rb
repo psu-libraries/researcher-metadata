@@ -1744,7 +1744,7 @@ describe Publication, type: :model do
 
   describe '#preferred_version' do
     let(:pub) { create(:publication,
-                       preferred_version: I18n.t('file_versions.accepted_version')) }
+                       preferred_version: ActivityInsightOAFile::ACCEPTED_VERSION) }
 
     context 'when the preferred version is given an acceptable version' do
       it 'saves preferred version to that version' do

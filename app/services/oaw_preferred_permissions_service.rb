@@ -12,7 +12,7 @@ class OAWPreferredPermissionsService < OAWPermissionsClient
     elsif permissions.can_deposit_published_version?
       I18n.t('file_versions.published_version')
     elsif permissions.can_deposit_accepted_version?
-      I18n.t('file_versions.accepted_version')
+      ActivityInsightOAFile::ACCEPTED_VERSION
     else
       Publication::NO_VERSION
     end

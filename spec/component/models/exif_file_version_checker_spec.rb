@@ -50,7 +50,7 @@ describe ExifFileVersionChecker do
         let(:exif_data) { { journal_article_version: 'am', subject: 'downloaded from' } }
 
         it 'returns Accepted Manuscript' do
-          expect(exif_file_version.version).to eq I18n.t('file_versions.accepted_version')
+          expect(exif_file_version.version).to eq ActivityInsightOAFile::ACCEPTED_VERSION
         end
       end
 
@@ -59,7 +59,7 @@ describe ExifFileVersionChecker do
 
         context 'when journal article version field is "am"' do
           it 'returns Accepted Manuscript' do
-            expect(exif_file_version.version).to eq I18n.t('file_versions.accepted_version')
+            expect(exif_file_version.version).to eq ActivityInsightOAFile::ACCEPTED_VERSION
           end
         end
       end

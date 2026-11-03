@@ -4,7 +4,7 @@ class OAWPermissionsClient
   class InvalidVersion < StandardError; end
   attr_reader :doi, :version
 
-  VALID_VERSIONS = [I18n.t('file_versions.accepted_version'),
+  VALID_VERSIONS = [ActivityInsightOAFile::ACCEPTED_VERSION,
                     I18n.t('file_versions.published_version')].freeze
 
   private
@@ -32,7 +32,7 @@ class OAWPermissionsClient
     def accepted_version
       if all_permissions.present?
         all_permissions
-          .select { |perm| perm if perm['version'] == I18n.t('file_versions.accepted_version') }
+          .select { |perm| perm if perm['version'] == ActivityInsightOAFile::ACCEPTED_VERSION }
           .first
           .presence || {}
       else

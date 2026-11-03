@@ -14,7 +14,7 @@ class FileVersionChecker
 
   def version
     if contains_arxiv_watermark?(reader) || @score.negative?
-      I18n.t('file_versions.accepted_version')
+      ActivityInsightOAFile::ACCEPTED_VERSION
     elsif
       @score.positive?
       I18n.t('file_versions.published_version')

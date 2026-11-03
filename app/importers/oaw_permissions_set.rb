@@ -8,7 +8,7 @@ class OAWPermissionsSet
   end
 
   def can_deposit_accepted_version?
-    can_deposit?(I18n.t('file_versions.accepted_version'))
+    can_deposit?(ActivityInsightOAFile::ACCEPTED_VERSION)
   end
 
   def can_deposit_published_version?

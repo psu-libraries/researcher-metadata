@@ -176,7 +176,7 @@ describe OAWPermissionsService do
 
       describe '#other_version_preferred?' do
         context 'when this_version is present' do
-          before { allow(service).to receive(:this_version).and_return({ 'version' => I18n.t('file_versions.accepted_version') }) }
+          before { allow(service).to receive(:this_version).and_return({ 'version' => ActivityInsightOAFile::ACCEPTED_VERSION }) }
 
           it 'returns false' do
             expect(service.other_version_preferred?).to be false
@@ -188,7 +188,7 @@ describe OAWPermissionsService do
 
           context 'when accepted version is present and published version is not' do
             before do
-              allow(service).to receive_messages(accepted_version: { 'version' => I18n.t('file_versions.accepted_version') }, published_version: {})
+              allow(service).to receive_messages(accepted_version: { 'version' => ActivityInsightOAFile::ACCEPTED_VERSION }, published_version: {})
             end
 
             it 'returns true' do
