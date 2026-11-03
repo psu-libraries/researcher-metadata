@@ -4,7 +4,6 @@ require 'component/component_spec_helper'
 
 describe ScholarsphereVersionCheckJob, type: :job do
   describe '.perform_later' do
-    ActiveJob::Base.queue_adapter = :test
     let(:args) { { file_path: [], publication_id: [] } }
 
     it 'enqueues a job' do
@@ -13,7 +12,6 @@ describe ScholarsphereVersionCheckJob, type: :job do
   end
 
   describe '#perform' do
-    ActiveJob::Base.queue_adapter = :test
     let(:job) { described_class.new }
     let(:file_path) { 'path/to/test/file' }
     let(:publication) { create(:publication, { title: 'test_pub_title', published_on: '2000' }) }

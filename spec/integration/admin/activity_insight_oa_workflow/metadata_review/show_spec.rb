@@ -26,23 +26,6 @@ describe 'Admin Metadata Review publication detail', type: :feature do
     )
   }
 
-  let(:metadata) { double 'metadata' }
-  let(:files) { double 'files' }
-  let(:ingest) { double 'scholarsphere client ingest', create: response }
-  let(:response) { double 'scholarsphere client response', status: status, body: response_body }
-  let(:response_body) { %{{"url": "/the-url"}} }
-  let(:status) { 200 }
-
-  before do
-    allow(Scholarsphere::Client::Ingest).to receive(:new).with(
-      {
-        metadata: metadata,
-        files: files,
-        depositor: 'abc123'
-      }
-    ).and_return ingest
-  end
-
   context 'when the user is signed in as an admin' do
     before { authenticate_admin_user }
 
