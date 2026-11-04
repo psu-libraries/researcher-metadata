@@ -249,14 +249,6 @@ jobs:
           name: Check Node Version
           command: |
             node --version
-      - run:
-          name: Wait for DB
-          command: |
-            dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: Database setup
-          command: |
-            bundle exec rails db:schema:load --trace
       - persist_to_workspace:
           root: .
           paths:
@@ -345,6 +337,10 @@ jobs:
           command: |
             dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
+          name: Database setup
+          command: |
+            bundle exec rails db:schema:load --trace
+      - run:
           name: Check current version of node
           command: |
             node -v
@@ -397,10 +393,8 @@ workflows:
                 - main
                 - /preview\/.*/
 
-      - niftany-tests:         # Then run test,
+      - niftany-tests:
           name: niftany-tests
-          # requires:   # Test requires that build passes for it to run.
-            # - build-image   # Finally, run the build job.
           context:
             - org-global
           filters:
@@ -409,10 +403,8 @@ workflows:
           requires: 
             - prep-test
 
-      - integration-admin-tests:         # Then run test,
+      - integration-admin-tests:
           name: integration-admin-tests
-          # requires:   # Test requires that build passes for it to run.
-            # - build-image   # Finally, run the build job.
           context:
             - org-global
           filters:
