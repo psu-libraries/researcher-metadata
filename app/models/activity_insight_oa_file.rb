@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class ActivityInsightOAFile < ApplicationRecord
+  ACCEPTED_VERSION = 'acceptedVersion'
+  PUBLISHED_VERSION = 'publishedVersion'
   NOT_ARTICLE_FILE = 'notArticleFile'
+
   ALLOWED_VERSIONS = [
-    I18n.t('file_versions.accepted_version'),
-    I18n.t('file_versions.published_version'),
+    ACCEPTED_VERSION,
+    PUBLISHED_VERSION,
     'unknown',
     NOT_ARTICLE_FILE
   ].freeze
@@ -126,9 +129,9 @@ class ActivityInsightOAFile < ApplicationRecord
   end
 
   def version_status_display
-    return I18n.t('file_versions.published_version_display') if version == I18n.t('file_versions.published_version')
+    return I18n.t('file_versions.published_version_display') if version == PUBLISHED_VERSION
 
-    return I18n.t('file_versions.accepted_version_display') if version == I18n.t('file_versions.accepted_version')
+    return I18n.t('file_versions.accepted_version_display') if version == ACCEPTED_VERSION
 
     return I18n.t('file_versions.not_article_file_display') if version == NOT_ARTICLE_FILE
 

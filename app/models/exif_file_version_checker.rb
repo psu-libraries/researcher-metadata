@@ -15,9 +15,9 @@ class ExifFileVersionChecker
     @version ||= if exif.blank?
                    nil
                  elsif accepted?
-                   I18n.t('file_versions.accepted_version')
+                   ActivityInsightOAFile::ACCEPTED_VERSION
                  elsif published?
-                   I18n.t('file_versions.published_version')
+                   ActivityInsightOAFile::PUBLISHED_VERSION
                  # LaTeX formats papers like a published version, but it's often used for both accepted and published
                  # versions.  This makes it too confusing for our checkers to determine, so default to 'unknown'.
                  elsif latex?
