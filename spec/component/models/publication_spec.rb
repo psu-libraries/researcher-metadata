@@ -4787,4 +4787,22 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#short_title' do
+    context 'if the publication title is six words long or less' do
+      let(:pub) { described_class.new(title: "This song's just six words long") }
+
+      it 'displays the full title' do
+        expect(pub.short_title).to eq "This song's just six words long"
+      end
+    end
+
+    context 'if the publication title is over six words long' do
+      let(:pub) { described_class.new(title: 'Red Orange Yellow Green Blue Indigo Violet') }
+
+      it 'displays the first six words and an ellipsis' do
+        expect(pub.short_title).to eq 'Red Orange Yellow Green Blue Indigo...'
+      end
+    end
+  end
 end

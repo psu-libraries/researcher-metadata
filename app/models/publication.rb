@@ -862,6 +862,10 @@ class Publication < ApplicationRecord
     doi.present? && doi_verified
   end
 
+  def short_title
+    title.truncate_words(6)
+  end
+
   private
 
     def merge(publications_to_merge)
