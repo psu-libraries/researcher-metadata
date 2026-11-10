@@ -33,6 +33,7 @@ class Journal < ApplicationRecord
     end
 
     show do
+      field(:edited_manually)
       field(:title)
       field(:pure_uuid)
       field(:publisher)
