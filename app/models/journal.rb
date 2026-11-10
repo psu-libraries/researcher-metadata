@@ -41,6 +41,18 @@ class Journal < ApplicationRecord
       field(:publications)
     end
 
+    edit do
+      field(:title)
+      field(:pure_uuid)
+      field(:publisher)
+      field(:publication_count) { read_only true }
+      field(:psu_publication_count) do
+        label 'PSU publication count'
+        read_only true
+      end
+      field(:publications)
+    end
+
     export do
       configure(:publication_count) { show }
       configure(:psu_publication_count) { show }
