@@ -23,6 +23,12 @@ class Journal < ApplicationRecord
     publications.published_during_membership.count
   end
 
+  def mark_as_updated_by_user
+    if has_changes_to_save?
+      self.edited_manually = true
+    end
+  end
+
   rails_admin do
     list do
       scopes [:ordered_by_title, :ordered_by_publication_count, :ordered_by_psu_publication_count]
