@@ -42,14 +42,17 @@ class Journal < ApplicationRecord
     end
 
     edit do
+      field(:edited_manually) { read_only true }
       field(:title)
       field(:pure_uuid)
       field(:publisher)
       field(:publication_count) { read_only true }
+
       field(:psu_publication_count) do
         label 'PSU publication count'
         read_only true
       end
+
       field(:publications)
     end
 
