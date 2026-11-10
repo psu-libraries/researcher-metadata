@@ -30,6 +30,7 @@ class Journal < ApplicationRecord
       field(:title)
       field(:publication_count)
       field(:psu_publication_count) { label 'PSU publication count' }
+      field(:edited_manually)
     end
 
     show do
