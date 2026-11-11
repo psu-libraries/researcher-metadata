@@ -10,6 +10,7 @@ class PureJournalsImporter < PureImporter
 
       journals['items'].each do |item|
         j = Journal.find_by(pure_uuid: item['uuid']) || Journal.new
+
         unless j.edited_manually
           j.pure_uuid = item['uuid'] if j.new_record?
           j.title = item['titles'].first['title']

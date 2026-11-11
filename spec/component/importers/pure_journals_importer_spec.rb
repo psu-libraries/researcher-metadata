@@ -62,6 +62,38 @@ describe PureJournalsImporter do
           expect(found_journal_2.title).to eq 'Zuchtungskunde'
           expect(found_journal_2.publisher).to be_nil
         end
+
+        describe 'edited_manually' do
+          context 'is set to true' do
+            let!(:existing_journal) { create(:journal,
+                                             pure_uuid: 'b387416f-17e0-4ee3-a030-2f15b890380d',
+                                             title: 'manual title',
+                                             publisher: existing_publisher,
+                                             edited_manually: true)}
+
+            it 'does not overwrite the existing journal' do
+              importer.call
+
+              expect(existing_journal.reload.title).to eq 'manual title'
+              expect(existing_journal.reload.publisher).to eq existing_publisher
+            end
+          end
+
+          context 'is set to false' do
+            let!(:existing_journal) { create(:journal,
+                                             pure_uuid: 'b387416f-17e0-4ee3-a030-2f15b890380d',
+                                             title: 'manual title',
+                                             publisher: existing_publisher,
+                                             edited_manually: false)}
+
+            it 'does overwrite the existing journal' do
+              importer.call
+
+              expect(existing_journal.reload.title).to eq 'Tsitologiya'
+              expect(existing_journal.reload.publisher).to eq existing_publisher
+            end
+          end
+        end
       end
 
       context "when the imported data doesn't include publisher information" do
