@@ -193,9 +193,18 @@ class Publication < ApplicationRecord
       .includes(:activity_insight_oa_files)
       .order('activity_insight_oa_files.created_at ASC')
   }
-  scope :nonflagged_activity_insight_oa_publication, -> {
+  scope :nonspecial_attn_activity_insight_oa_publication, -> {
     activity_insight_oa_publication
       .where('flagged_for_review != true OR flagged_for_review IS NULL')
+      .where('doi_error != true OR doi_error IS NULL')
+      .where(%{
+        NOT EXISTS (
+          SELECT *
+          FROM activity_insight_oa_files
+          WHERE activity_insight_oa_files.publication_id = publications.id
+            AND activity_insight_oa_files.version = 'notArticleFile'
+        )
+      })
   }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
@@ -204,7 +213,7 @@ class Publication < ApplicationRecord
       .order('activity_insight_oa_files.created_at ASC')
   }
   scope :doi_failed_verification, -> {
-    nonflagged_activity_insight_oa_publication
+    nonspecial_attn_activity_insight_oa_publication
       .where('doi_verified = false')
       .where('doi_error != true OR doi_error IS NULL')
   }
@@ -225,7 +234,7 @@ class Publication < ApplicationRecord
             .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
         }
   scope :file_version_check_failed, -> {
-    nonflagged_activity_insight_oa_publication
+    nonspecial_attn_activity_insight_oa_publication
       .filter_oa_status_from_workflow
       .where.not(preferred_version: nil)
       .where.not(preferred_version: NO_VERSION)
@@ -234,7 +243,7 @@ class Publication < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :wrong_file_version_base, -> {
-    nonflagged_activity_insight_oa_publication
+    nonspecial_attn_activity_insight_oa_publication
       .where.not(preferred_version: nil)
       .where.not(preferred_version: NO_VERSION)
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
@@ -264,19 +273,19 @@ class Publication < ApplicationRecord
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
   scope :needs_manual_preferred_version_check, -> {
-    activity_insight_oa_publication
+    nonspecial_attn_activity_insight_oa_publication
       .filter_oa_status_from_workflow
       .where.not(permissions_last_checked_at: nil)
       .where(preferred_version: nil)
   }
   scope :preferred_file_version_none, -> {
-                                        nonflagged_activity_insight_oa_publication
+                                        nonspecial_attn_activity_insight_oa_publication
                                           .where(%{preferred_version = '#{NO_VERSION}'})
                                           .includes(:activity_insight_oa_files)
                                           .order('activity_insight_oa_files.created_at ASC')
                                       }
   scope :needs_manual_permissions_review, -> {
-    nonflagged_activity_insight_oa_publication
+    nonspecial_attn_activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
       .where(
         <<-SQL.squish
@@ -311,7 +320,7 @@ class Publication < ApplicationRecord
       )
   }
   scope :ready_for_metadata_review, -> {
-    nonflagged_activity_insight_oa_publication
+    nonspecial_attn_activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
       .where(
         <<-SQL.squish

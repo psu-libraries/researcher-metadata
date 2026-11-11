@@ -1308,7 +1308,7 @@ describe Publication, type: :model do
 
     describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
-        expect(described_class.needs_manual_preferred_version_check).to contain_exactly(pub9b, pub9k)
+        expect(described_class.needs_manual_preferred_version_check).to contain_exactly(pub9b)
       end
     end
 
@@ -1337,6 +1337,40 @@ describe Publication, type: :model do
     describe '.flagged_for_review' do
       it 'returns activity_insight_oa_publications that have been flagged for review' do
         expect(described_class.flagged_for_review).to contain_exactly(pub2c, pub4b, pub8c, pub9k, pub10b, pub11c, pub11d, pub12c, pub13o, pub14e)
+      end
+    end
+
+    describe '.nonspecial_attn_activity_insight_oa_publication' do
+      it 'returns activity_insight_oa_publications that are not flagged for review, do not have a doi error, and do not have a file version of notArticleFile' do
+        expect(described_class.nonspecial_attn_activity_insight_oa_publication).to contain_exactly(
+          pub2,
+          pub3,
+          pub4,
+          pub6,
+          pub8,
+          pub9a,
+          pub9b,
+          pub9c,
+          pub9d,
+          pub9e,
+          pub9f,
+          pub9g,
+          pub9h,
+          pub9i,
+          pub9j,
+          pub10,
+          pub11,
+          pub11b,
+          pub12,
+          pub12d,
+          pub13a,
+          pub13b,
+          pub13c,
+          pub13d,
+          pub14a,
+          pub14b,
+          pub14c
+        )
       end
     end
   end
