@@ -90,7 +90,7 @@ describe PureJournalsImporter do
               importer.call
 
               expect(existing_journal.reload.title).to eq 'Tsitologiya'
-              expect(existing_journal.reload.publisher).to eq existing_publisher
+              expect(existing_journal.reload.publisher).to eq publisher
             end
           end
         end
