@@ -12,7 +12,7 @@ namespace :database_data do
 
   def download_from_s3
     bucket = ENV.fetch('AWS_BUCKET', 'edu.psu.libraries.devteam.rmd-backup')
-    prefix = ENV.fetch('DB_PREFIX', 'db')
+    prefix = ENV.fetch('DB_PREFIX', 'uploads/ulprod')
     prompt = TTY::Prompt.new
     client = Aws::S3::Client.new
 
