@@ -887,6 +887,12 @@ describe Publication, type: :model do
                            preferred_version: 'acceptedVersion',
                            doi_verified: nil)
     }
+    let!(:pub12e) { create(:publication,
+                           title: 'pub12e',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'acceptedVersion',
+                           doi_verified: nil)
+    }
     let!(:pub13a) { create(:publication,
                            title: 'pub13a',
                            publication_type: 'Journal Article',
@@ -1045,6 +1051,8 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file12b) { create(:activity_insight_oa_file, publication: pub12b, version: 'notArticleFile') }
     let!(:activity_insight_oa_file12c) { create(:activity_insight_oa_file, publication: pub12c, version: 'publishedVersion') }
     let!(:activity_insight_oa_file12d) { create(:activity_insight_oa_file, publication: pub12d, version: 'publishedVersion', wrong_version_emails_sent: 1) }
+    let!(:activity_insight_oa_file12e_1) { create(:activity_insight_oa_file, publication: pub12e, version: 'notArticleFile') }
+    let!(:activity_insight_oa_file12e_2) { create(:activity_insight_oa_file, publication: pub12e) }
     let!(:activity_insight_oa_file13o) { create(:activity_insight_oa_file, publication: pub13o) }
     let!(:activity_insight_oa_file13a_1) {
       create(
@@ -1188,6 +1196,7 @@ describe Publication, type: :model do
           pub12b,
           pub12c,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,
@@ -1219,6 +1228,7 @@ describe Publication, type: :model do
           pub12,
           pub12c,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,
@@ -1246,6 +1256,7 @@ describe Publication, type: :model do
           pub12,
           pub12c,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,
@@ -1363,6 +1374,7 @@ describe Publication, type: :model do
           pub11b,
           pub12,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,

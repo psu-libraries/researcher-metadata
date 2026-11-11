@@ -198,11 +198,11 @@ class Publication < ApplicationRecord
       .where('flagged_for_review != true OR flagged_for_review IS NULL')
       .where('doi_error != true OR doi_error IS NULL')
       .where(%{
-        NOT EXISTS (
+        EXISTS (
           SELECT *
           FROM activity_insight_oa_files
           WHERE activity_insight_oa_files.publication_id = publications.id
-            AND activity_insight_oa_files.version = 'notArticleFile'
+            AND activity_insight_oa_files.version IS DISTINCT FROM 'notArticleFile'
         )
       })
   }
