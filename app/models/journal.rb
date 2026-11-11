@@ -15,6 +15,10 @@ class Journal < ApplicationRecord
   }
   scope :ordered_by_title, -> { order(:title) }
 
+  attr_accessor :init_pub_ids
+
+  after_find :set_init_pub_ids
+
   def publication_count
     publications.count
   end
@@ -24,7 +28,9 @@ class Journal < ApplicationRecord
   end
 
   def mark_as_updated_by_user
-    if has_changes_to_save?
+    save_pub_ids = publication_ids.to_set
+
+    if has_changes_to_save? || (init_pub_ids != save_pub_ids)
       self.edited_manually = true
     end
   end
@@ -69,4 +75,10 @@ class Journal < ApplicationRecord
       configure(:psu_publication_count) { show }
     end
   end
+
+  private
+
+    def set_init_pub_ids
+      self.init_pub_ids = publication_ids.to_set
+    end
 end
