@@ -139,10 +139,8 @@ class PurePublicationImporter < PureImporter
         volume: publication['volume'],
         issue: publication['journalNumber'],
         journal: if persisted
-                   byebug
                    journal_unless_edited_manually(publication)
                  else
-                   byebug
                    journal_present?(publication) ? journal(publication) : nil
                  end,
         issn: journal_present?(publication) ? issn(publication) : nil,
