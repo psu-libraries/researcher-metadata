@@ -213,7 +213,7 @@ class PurePublicationImporter < PureImporter
     def journal_unless_edited_manually(publication)
       if journal_present?(publication)
         j = journal(publication)
-        byebug
+
         unless j.edited_manually || j.nil?
           j
         end
