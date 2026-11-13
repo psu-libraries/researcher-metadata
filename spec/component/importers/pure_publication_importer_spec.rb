@@ -534,10 +534,10 @@ describe PurePublicationImporter do
           end
 
           context 'when the journal has not been edited manually' do
-            let!(:existing_journal) { create(:journal,
-                                             title: 'new title',
-                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                             edited_manually: false) }
+            let(:existing_journal) { create(:journal,
+                                            title: 'new title',
+                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
+                                            edited_manually: false) }
 
             it 'does link to the publication' do
               importer.call
@@ -548,10 +548,10 @@ describe PurePublicationImporter do
           end
 
           context 'when the journal has been edited manually' do
-            let!(:existing_journal) { create(:journal,
-                                             title: 'new title',
-                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                             edited_manually: true) }
+            let(:existing_journal) { create(:journal,
+                                            title: 'new title',
+                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
+                                            edited_manually: true) }
 
             it 'does not link to the publication' do
               importer.call
@@ -781,24 +781,24 @@ describe PurePublicationImporter do
           end
 
           context 'when the journal has not been edited manually' do
-            let!(:existing_journal) { create(:journal,
-                                             title: 'new title',
-                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                             edited_manually: false) }
+            let(:existing_journal) { create(:journal,
+                                            title: 'new title',
+                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
+                                            edited_manually: false) }
 
             it 'does link to the publication' do
               importer.call
 
               existing_pub_reloaded = existing_pub.reload
-              expect(existing_pub_reloaded.journal.title).to eq 'new title'
+              expect(existing_pub_reloaded.journal).to eq existing_journal
             end
           end
 
           context 'when the journal has been edited manually' do
-            let!(:existing_journal) { create(:journal,
-                                             title: 'new title',
-                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                             edited_manually: true) }
+            let(:existing_journal) { create(:journal,
+                                            title: 'new title',
+                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
+                                            edited_manually: true) }
 
             it 'does not link to the publication' do
               importer.call

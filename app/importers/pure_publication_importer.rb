@@ -32,9 +32,11 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
+          @persisted = pi.persisted?
+
           pi.source_updated_at = publication['modifiedDate']
 
-          if pi.persisted?
+          if @persisted
             if p.updated_by_user_at.present?
               attrs = {}
 
@@ -48,7 +50,7 @@ class PurePublicationImporter < PureImporter
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update!(attrs)
             else
-              pi.publication.update!(pub_attrs(publication, persisted: true))
+              pi.publication.update!(pub_attrs(publication))
             end
           else
             p = Publication.create!(pub_attrs(publication))
@@ -130,7 +132,7 @@ class PurePublicationImporter < PureImporter
 
   private
 
-    def pub_attrs(publication, persisted: false)
+    def pub_attrs(publication)
       {
         title: title(publication),
         secondary_title: nil,
@@ -138,11 +140,7 @@ class PurePublicationImporter < PureImporter
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
-        journal: if persisted
-                   journal_unless_edited_manually(publication)
-                 else
-                   journal_present?(publication) ? journal(publication) : nil
-                 end,
+        journal: verify_journal(publication),
         issn: journal_present?(publication) ? issn(publication) : nil,
         status: status_value(publication),
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -214,9 +212,21 @@ class PurePublicationImporter < PureImporter
       if journal_present?(publication)
         j = journal(publication)
 
-        unless j.edited_manually || j.nil?
+        if j.nil?
+          return nil
+        end
+
+        unless j.edited_manually
           j
         end
+      end
+    end
+
+    def verify_journal(publication)
+      if @persisted
+        journal_unless_edited_manually(publication)
+      else
+        journal_present?(publication) ? journal(publication) : nil
       end
     end
 
