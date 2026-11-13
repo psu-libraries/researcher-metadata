@@ -32,12 +32,16 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
+          @persisted = pi.persisted?
+
           pi.source_updated_at = publication['modifiedDate']
 
-          if pi.persisted?
+          if @persisted
             if p.updated_by_user_at.present?
               attrs = {}
-              attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+
+              attrs[:journal] = journal_unless_edited_manually(publication)
+
               if !p.published?
                 attrs[:status] = status_value(publication)
               end
@@ -136,7 +140,7 @@ class PurePublicationImporter < PureImporter
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
-        journal: journal_present?(publication) ? journal(publication) : nil,
+        journal: verify_journal(publication),
         issn: journal_present?(publication) ? issn(publication) : nil,
         status: status_value(publication),
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -202,6 +206,28 @@ class PurePublicationImporter < PureImporter
 
     def journal_present?(publication)
       publication['journalAssociation'].present?
+    end
+
+    def journal_unless_edited_manually(publication)
+      if journal_present?(publication)
+        j = journal(publication)
+
+        if j.nil?
+          return nil
+        end
+
+        unless j.edited_manually
+          j
+        end
+      end
+    end
+
+    def verify_journal(publication)
+      if @persisted
+        journal_unless_edited_manually(publication)
+      else
+        journal_present?(publication) ? journal(publication) : nil
+      end
     end
 
     def importable?(publication)

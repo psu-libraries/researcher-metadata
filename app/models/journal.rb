@@ -15,12 +15,24 @@ class Journal < ApplicationRecord
   }
   scope :ordered_by_title, -> { order(:title) }
 
+  attr_accessor :init_pub_ids
+
+  after_find :set_init_pub_ids
+
   def publication_count
     publications.count
   end
 
   def psu_publication_count
     publications.published_during_membership.count
+  end
+
+  def mark_as_updated_by_user
+    save_pub_ids = publication_ids.to_set
+
+    if has_changes_to_save? || (init_pub_ids != save_pub_ids)
+      self.edited_manually = true
+    end
   end
 
   rails_admin do
@@ -30,9 +42,11 @@ class Journal < ApplicationRecord
       field(:title)
       field(:publication_count)
       field(:psu_publication_count) { label 'PSU publication count' }
+      field(:edited_manually)
     end
 
     show do
+      field(:edited_manually)
       field(:title)
       field(:pure_uuid)
       field(:publisher)
@@ -41,9 +55,30 @@ class Journal < ApplicationRecord
       field(:publications)
     end
 
+    edit do
+      field(:edited_manually) { read_only true }
+      field(:title)
+      field(:pure_uuid) { read_only true }
+      field(:publisher) { read_only true }
+      field(:publication_count) { read_only true }
+
+      field(:psu_publication_count) do
+        label 'PSU publication count'
+        read_only true
+      end
+
+      field(:publications)
+    end
+
     export do
       configure(:publication_count) { show }
       configure(:psu_publication_count) { show }
     end
   end
+
+  private
+
+    def set_init_pub_ids
+      self.init_pub_ids = publication_ids.to_set
+    end
 end
