@@ -838,6 +838,7 @@ describe ActivityInsightImporter do
           expect(p1.published_on).to eq Date.new(2019, 1, 1)
           expect(p1.updated_by_user_at).to be_nil
           expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+          expect(p1.doi_verified).to be false
 
           expect(p2.title).to eq 'Second Test Publication'
           expect(p2.publication_type).to eq 'In-house Journal Article'
@@ -859,6 +860,7 @@ describe ActivityInsightImporter do
           expect(p2.visible).to be true
           expect(p2.updated_by_user_at).to be_nil
           expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+          expect(p2.doi_verified).to be false
 
           expect(p3.title).to eq 'Fifth Test Publication'
           expect(p3.publication_type).to eq 'Book'
@@ -879,6 +881,7 @@ describe ActivityInsightImporter do
           expect(p3.visible).to be true
           expect(p3.updated_by_user_at).to be_nil
           expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          expect(p3.doi_verified).to be false
 
           expect(p4.title).to eq 'Journal Article In Press'
           expect(p4.publication_type).to eq 'Journal Article'
@@ -900,10 +903,12 @@ describe ActivityInsightImporter do
           expect(p4.visible).to be true
           expect(p4.updated_by_user_at).to be_nil
           expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+          expect(p4.doi_verified).to be false
 
           expect(p5.issn).to eq '1234-9876'
           expect(p5.isbn).to eq '978-0-596-52068-7'
           expect(p5.doi).to eq 'https://doi.org/10.1186/s40543-020-00348-w'
+          expect(p5.doi_verified).to be false
         end
 
         it 'groups duplicates of new publication records' do
@@ -1553,6 +1558,7 @@ describe ActivityInsightImporter do
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to be_nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+            expect(p1.doi_verified).to be false
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
@@ -1573,6 +1579,7 @@ describe ActivityInsightImporter do
             expect(p2.visible).to be false
             expect(p2.updated_by_user_at).to be_nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.doi_verified).to be false
 
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
@@ -1593,6 +1600,7 @@ describe ActivityInsightImporter do
             expect(p3.visible).to be true
             expect(p3.updated_by_user_at).to be_nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.doi_verified).to be false
 
             expect(p4.title).to eq 'Journal Article In Press'
             expect(p4.publication_type).to eq 'Journal Article'
@@ -1614,6 +1622,8 @@ describe ActivityInsightImporter do
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+            # DOI did not change, so doi_verified should not change
+            expect(p4.doi_verified).to be existing_pub3.doi_verified
 
             # testing that publication activity insight postprint status does not revert to nil when existing record status is 'In Progress'
             expect(p5.activity_insight_postprint_status).to eq 'In Progress'
@@ -4187,6 +4197,7 @@ describe ActivityInsightImporter do
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to be_nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+            expect(p1.doi_verified).to be false
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
@@ -4207,6 +4218,7 @@ describe ActivityInsightImporter do
             expect(p2.visible).to be true
             expect(p2.updated_by_user_at).to be_nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.doi_verified).to be false
 
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
@@ -4227,6 +4239,7 @@ describe ActivityInsightImporter do
             expect(p3.visible).to be true
             expect(p3.updated_by_user_at).to be_nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.doi_verified).to be false
 
             expect(p4.title).to eq 'Journal Article In Press'
             expect(p4.publication_type).to eq 'Journal Article'
@@ -4248,6 +4261,7 @@ describe ActivityInsightImporter do
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+            expect(p4.doi_verified).to be false
           end
 
           it 'groups duplicates of new publication records' do
@@ -4742,6 +4756,7 @@ describe ActivityInsightImporter do
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to be_nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+              expect(p1.doi_verified).to be false
 
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'In-house Journal Article'
@@ -4762,6 +4777,7 @@ describe ActivityInsightImporter do
               expect(p2.visible).to be false
               expect(p2.updated_by_user_at).to be_nil
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+              expect(p2.doi_verified).to be false
 
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
@@ -4782,6 +4798,7 @@ describe ActivityInsightImporter do
               expect(p3.visible).to be true
               expect(p3.updated_by_user_at).to be_nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.doi_verified).to be false
 
               expect(p4.title).to eq 'Journal Article In Press'
               expect(p4.publication_type).to eq 'Journal Article'
@@ -4803,6 +4820,7 @@ describe ActivityInsightImporter do
               expect(p4.visible).to be true
               expect(p4.updated_by_user_at).to be_nil
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+              expect(p4.doi_verified).to be false
             end
 
             it 'groups duplicates of new publication records' do

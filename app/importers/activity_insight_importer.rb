@@ -173,7 +173,9 @@ class ActivityInsightImporter
           activity_insight_file_location = pub.postprints&.first&.location
 
           if pi.persisted?
+            original_doi = pub_record.doi
             update_pub_record(pub_record, pub)
+            DOIVerificationJob.perform_later unless original_doi == pub_record.doi
           else
             unless pub_record.doi_verified == true
               pub_record.update(oa_workflow_state: 'automatic DOI verification pending') if pub_record.can_receive_new_ai_oa_files? && activity_insight_file_location.present?
@@ -267,7 +269,7 @@ class ActivityInsightImporter
 
     def update_pub_record(pub_record, ai_pub)
       if pub_record.updated_by_user_at.blank?
-        pub_record.update!(pub_attrs(ai_pub))
+        pub_record.update!(pub_attrs(ai_pub, prev_pub: pub_record))
       else
         # If the publication has been updated by an admin, we only want to
         # overwrite a subset of its attributes.
@@ -289,7 +291,8 @@ class ActivityInsightImporter
       attrs
     end
 
-    def pub_attrs(pub)
+    def pub_attrs(pub, prev_pub: nil)
+      doi_changed = pub.doi != prev_pub&.doi
       attrs = {
         title: pub.title,
         publication_type: pub.publication_type,
@@ -311,6 +314,9 @@ class ActivityInsightImporter
       }
       if pub.activity_insight_postprint_status.present?
         attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
+      end
+      if doi_changed
+        attrs[:doi_verified] = false
       end
       attrs
     end
