@@ -59,10 +59,12 @@ Style/Semicolon:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/importers/activity_insight_importer.rb'
+    - 'app/importers/pure_publication_importer.rb'
 
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/importers/activity_insight_importer.rb'
+    - 'app/importers/pure_publication_importer.rb'
 
 RSpec/PendingWithoutReason:
   Exclude:

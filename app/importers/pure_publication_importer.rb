@@ -37,7 +37,9 @@ class PurePublicationImporter < PureImporter
           if pi.persisted?
             if p.updated_by_user_at.present?
               attrs = {}
-              attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+
+              attrs[:journal] = journal_unless_edited_manually(publication)
+
               if !p.published?
                 attrs[:status] = status_value(publication)
               end
@@ -46,7 +48,7 @@ class PurePublicationImporter < PureImporter
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update!(attrs)
             else
-              pi.publication.update!(pub_attrs(publication))
+              pi.publication.update!(pub_attrs(publication, persisted: true))
             end
           else
             p = Publication.create!(pub_attrs(publication))
@@ -128,7 +130,7 @@ class PurePublicationImporter < PureImporter
 
   private
 
-    def pub_attrs(publication)
+    def pub_attrs(publication, persisted: false)
       {
         title: title(publication),
         secondary_title: nil,
@@ -136,7 +138,13 @@ class PurePublicationImporter < PureImporter
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
-        journal: journal_present?(publication) ? journal(publication) : nil,
+        journal: if persisted
+                   byebug
+                   journal_unless_edited_manually(publication)
+                 else
+                   byebug
+                   journal_present?(publication) ? journal(publication) : nil
+                 end,
         issn: journal_present?(publication) ? issn(publication) : nil,
         status: status_value(publication),
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -202,6 +210,16 @@ class PurePublicationImporter < PureImporter
 
     def journal_present?(publication)
       publication['journalAssociation'].present?
+    end
+
+    def journal_unless_edited_manually(publication)
+      if journal_present?(publication)
+        j = journal(publication)
+        byebug
+        unless j.edited_manually || j.nil?
+          j
+        end
+      end
     end
 
     def importable?(publication)
