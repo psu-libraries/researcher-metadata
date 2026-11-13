@@ -5156,7 +5156,7 @@ describe ActivityInsightImporter do
                                          source_identifier: '271620739072').publication
 
           expect(p5.activity_insight_oa_files).to eq []
-          expect(p5.doi_verified).to be_nil
+          expect(p5.doi_verified).to be false
         end
 
         it 'does not import ActivityInsightOAFiles for imported publications without an open access publication type (cannot receive new ai oa files)' do
