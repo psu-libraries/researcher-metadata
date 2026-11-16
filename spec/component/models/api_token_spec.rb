@@ -68,6 +68,7 @@ describe APIToken, type: :model do
     let!(:token) { create(:api_token) }
     let!(:org1) { create(:organization) }
     let!(:org2) { create(:organization) }
+    let!(:org3) { create(:organization) }
 
     before do
       create(:organization_api_permission, organization: org1, api_token: token)
@@ -76,6 +77,13 @@ describe APIToken, type: :model do
 
     it 'returns the number of organization with which the API token is associated' do
       expect(token.organization_count).to eq 2
+    end
+
+    context 'if the token has universal access' do
+      it 'returns all organizations' do
+        token.update!(universal_access: true)
+        expect(token.organization_count).to eq 3
+      end
     end
   end
 
@@ -142,17 +150,41 @@ describe APIToken, type: :model do
           memberships in associated organizations and their descendants" do
         expect(token.all_publications).to contain_exactly(pub1, pub2_1, pub3_1, pub3_2)
       end
+
+      context 'if the token has universal access' do
+        before { token.update!(universal_access: true) }
+
+        it 'returns valid publications by the users of all organizations and their descendants' do
+          expect(token.all_publications).to contain_exactly(pub1, pub2_1, pub3_1, pub3_2, pub4)
+        end
+      end
     end
 
     describe '#all_current_users' do
       it 'returns users that are currently members of associated organizations and their descendants' do
         expect(token.all_current_users).to contain_exactly(user1, user2, user3_1)
       end
+
+      context 'if the token has universal access' do
+        before { token.update!(universal_access: true) }
+
+        it 'returns current users of all organizations and their descendants' do
+          expect(token.all_current_users).to contain_exactly(user1, user2, user3_1, user4)
+        end
+      end
     end
 
     describe '#all_organizations' do
       it 'returns organizations that are associated organizations and their descendants' do
         expect(token.all_organizations).to contain_exactly(org1, org2, org3)
+      end
+
+      context 'if the token has universal access' do
+        before { token.update!(universal_access: true) }
+
+        it 'returns all organizations and their descendants' do
+          expect(token.all_organizations).to contain_exactly(org1, org2, org3, org4)
+        end
       end
     end
   end

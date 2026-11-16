@@ -30,6 +30,8 @@ class APIToken < ApplicationRecord
   end
 
   def organization_count
+    return Organization.count if universal_access
+
     organizations.count
   end
 
@@ -75,6 +77,8 @@ class APIToken < ApplicationRecord
   private
 
     def descendant_org_ids
+      return Organization.ids if universal_access
+
       organizations.map(&:descendant_ids).flatten
     end
 
