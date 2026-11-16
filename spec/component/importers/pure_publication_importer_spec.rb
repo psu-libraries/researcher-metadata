@@ -397,9 +397,20 @@ describe PurePublicationImporter do
             expect { importer.call }.to change(Publication, :count).by 2
           end
 
-          it 'does not call the DOI Verification Job' do
+          it 'calls the DOI Verification Job' do
             importer.call
-            expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
+            expect(DOIVerificationJob).to have_received(:perform_later).with(existing_pub.id)
+          end
+
+          context 'if the DOI does not change' do
+            # Sets the DOIs to what we expect to import from our pure_publications json files
+            let(:doi) { 'https://doi.org/10.1016/S0962-1849(05)80014-9' }
+            let(:doi2) { 'https://doi.org/10.1016/S0962-1849(05)80014-0' }
+
+            it 'does not call the DOI Verification Job' do
+              importer.call
+              expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
+            end
           end
 
           context 'when no contributor records exist' do
@@ -505,6 +516,7 @@ describe PurePublicationImporter do
             expect(updated_pub.abstract).to be_nil
             expect(updated_pub.visible).to be true
             expect(updated_pub.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
+            expect(updated_pub.doi_verified).to be false
           end
 
           it 'creates new publications with the correct data' do
