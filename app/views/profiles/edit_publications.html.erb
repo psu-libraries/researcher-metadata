@@ -1,51 +1,51 @@
 <div class="manage-profile-list">
   <h1 class="h4">Manage Profile Publications</h1>
-  <span aria-hidden="true" tabindex="-1">
-  <div id="icon-key">
-    <h2 class="h5">Icon key:</h2>
-    <h3 class="h6">Open Access Status</h3>
-    <table class="legend">
-      <tr>
-        <td><%= fa_icon('unlock-alt') %></td>
-        <td>The publication has a known open access version.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('lock') %></td>
-        <td>Open access obligations have been waived for this publication.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('hourglass-half') %></td>
-        <td>An open access version of this publication is currently being added to ScholarSphere.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('exclamation-circle') %></td>
-        <td>Adding this publication to ScholarSphere failed. Please try again in a little while or contact <%= link_to "support", 'mailto:L-FAMS@lists.psu.edu?subject=Researcher Metadata Database Profile Support', target: '_blank' %> for assistance.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('question') %></td>
-        <td>The open access status of this publication is currently unknown. Click the title to add information or submit a waiver.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('circle-o-notch') %></td>
-        <td>This publication is in press and will not be subject to the open access policy until it is published.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('upload') %></td>
-        <td>A file for the publication was uploaded in Activity Insight and is being processed for deposit in ScholarSphere.</td>
-      </tr>
-    </table>
-    <h3 class="h6">Authorship Confirmation</h3>
-    <table class="legend">
-      <tr>
-        <td><%= fa_icon('check') %></td>
-        <td>Your authorship of the publication has been confirmed.</td>
-      </tr>
-      <tr>
-        <td><%= fa_icon('minus') %></td>
-        <td>Confirmation of your authorship of the publication is pending review by an RMD administrator.</td>
-      </tr>
-    </table>
-  </div>
+  <span tabindex="-1">
+    <div id="icon-key">
+      <h2 class="h5">Icon key:</h2>
+      <h3 class="h6">Open Access Status</h3>
+      <table class="legend">
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('unlock-alt') %></td>
+          <td>The publication has a known open access version.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('lock') %></td>
+          <td>Open access obligations have been waived for this publication.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('hourglass-half') %></td>
+          <td>An open access version of this publication is currently being added to ScholarSphere.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('exclamation-circle') %></td>
+          <td>Adding this publication to ScholarSphere failed. Please try again in a little while or contact <%= link_to "support", 'mailto:L-FAMS@lists.psu.edu?subject=Researcher Metadata Database Profile Support', target: '_blank' %> for assistance.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('question') %></td>
+          <td>The open access status of this publication is currently unknown. Click the title to add information or submit a waiver.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('circle-o-notch') %></td>
+          <td>This publication is in press and will not be subject to the open access policy until it is published.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('upload') %></td>
+          <td>A file for the publication was uploaded in Activity Insight and is being processed for deposit in ScholarSphere.</td>
+        </tr>
+      </table>
+      <h3 class="h6">Authorship Confirmation</h3>
+      <table class="legend">
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('check') %></td>
+          <td>Your authorship of the publication has been confirmed.</td>
+        </tr>
+        <tr>
+          <td aria-hidden="true"><%= fa_icon('minus') %></td>
+          <td>Confirmation of your authorship of the publication is pending review by an RMD administrator.</td>
+        </tr>
+      </table>
+    </div>
   </span>
   <p>
     The university's open access policy does not apply to articles that you completed work on at another institution
