@@ -245,10 +245,6 @@ jobs:
           clean-bundle: true
       - node/install:
           node-version: '22'
-      - run:
-          name: Precompile Assets
-          command: | 
-            bundle exec rails assets:precompile
       - run: 
           name: Check Node Version
           command: |
