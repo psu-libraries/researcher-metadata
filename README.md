@@ -531,6 +531,35 @@ docker compose build
 docker compose up
 ```
 
+### Loading a Development Database Backup
+
+The `database_data:download_from_s3` task uses AWS SSO credentials to list and download database backups. Install the AWS CLI and configure an SSO profile on your host:
+
+```bash
+brew install awscli
+aws configure sso
+```
+
+During `aws configure sso`, provide the SSO start URL, SSO region, AWS account, role name, and default AWS region supplied by another developer or the DevOps team. When prompted for a profile name, enter `default` so these commands use this profile automatically. You can configure additional named profiles later if needed. If you name this profile something other than `default`, pass `--profile <profile-name>` to each AWS CLI command below.
+
+```bash
+aws sso login
+eval "$(aws configure export-credentials --format env)"
+```
+
+With the app running, pass those exported credentials to the `web` container when starting the task:
+
+```bash
+docker compose exec \
+    -e AWS_ACCESS_KEY_ID \
+    -e AWS_SECRET_ACCESS_KEY \
+    -e AWS_SESSION_TOKEN \
+    -e AWS_REGION=us-east-1 \
+    web bundle exec rake database_data:download_from_s3
+```
+
+The task defaults to the `edu.psu.libraries.devteam.rmd-backup` bucket and the `db` prefix. SSO sessions expire; log in and export credentials again when needed.
+
 ---
 
 This project was developed by the The Pennsylvania State University Libraries Digital Scholarship and Repository Development team in collaboration with [West Arete](https://westarete.com).

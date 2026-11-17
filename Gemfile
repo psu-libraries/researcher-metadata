@@ -9,7 +9,7 @@ gem 'rails', '~> 8.1.4'
 gem 'rails_admin', '~> 3.3.0'
 
 # Support for Penn State Azure Active Directory authentication
-gem 'omniauth', '~> 2.1'
+gem 'omniauth', '~> 2.2'
 gem 'omniauth-oauth2', '~> 1.8'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 

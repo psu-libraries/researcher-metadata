@@ -887,6 +887,12 @@ describe Publication, type: :model do
                            preferred_version: 'acceptedVersion',
                            doi_verified: nil)
     }
+    let!(:pub12e) { create(:publication,
+                           title: 'pub12e',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'acceptedVersion',
+                           doi_verified: nil)
+    }
     let!(:pub13a) { create(:publication,
                            title: 'pub13a',
                            publication_type: 'Journal Article',
@@ -1045,6 +1051,8 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file12b) { create(:activity_insight_oa_file, publication: pub12b, version: 'notArticleFile') }
     let!(:activity_insight_oa_file12c) { create(:activity_insight_oa_file, publication: pub12c, version: 'publishedVersion') }
     let!(:activity_insight_oa_file12d) { create(:activity_insight_oa_file, publication: pub12d, version: 'publishedVersion', wrong_version_emails_sent: 1) }
+    let!(:activity_insight_oa_file12e_1) { create(:activity_insight_oa_file, publication: pub12e, version: 'notArticleFile') }
+    let!(:activity_insight_oa_file12e_2) { create(:activity_insight_oa_file, publication: pub12e) }
     let!(:activity_insight_oa_file13o) { create(:activity_insight_oa_file, publication: pub13o) }
     let!(:activity_insight_oa_file13a_1) {
       create(
@@ -1188,6 +1196,7 @@ describe Publication, type: :model do
           pub12b,
           pub12c,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,
@@ -1219,6 +1228,7 @@ describe Publication, type: :model do
           pub12,
           pub12c,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,
@@ -1246,6 +1256,7 @@ describe Publication, type: :model do
           pub12,
           pub12c,
           pub12d,
+          pub12e,
           pub13a,
           pub13b,
           pub13c,
@@ -1308,7 +1319,7 @@ describe Publication, type: :model do
 
     describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
-        expect(described_class.needs_manual_preferred_version_check).to contain_exactly(pub9b, pub9k)
+        expect(described_class.needs_manual_preferred_version_check).to contain_exactly(pub9b)
       end
     end
 
@@ -1337,6 +1348,41 @@ describe Publication, type: :model do
     describe '.flagged_for_review' do
       it 'returns activity_insight_oa_publications that have been flagged for review' do
         expect(described_class.flagged_for_review).to contain_exactly(pub2c, pub4b, pub8c, pub9k, pub10b, pub11c, pub11d, pub12c, pub13o, pub14e)
+      end
+    end
+
+    describe '.nonspecial_attn_activity_insight_oa_publication' do
+      it 'returns activity_insight_oa_publications that are not flagged for review, do not have a doi error, and do not have a file version of notArticleFile' do
+        expect(described_class.nonspecial_attn_activity_insight_oa_publication).to contain_exactly(
+          pub2,
+          pub3,
+          pub4,
+          pub6,
+          pub8,
+          pub9a,
+          pub9b,
+          pub9c,
+          pub9d,
+          pub9e,
+          pub9f,
+          pub9g,
+          pub9h,
+          pub9i,
+          pub9j,
+          pub10,
+          pub11,
+          pub11b,
+          pub12,
+          pub12d,
+          pub12e,
+          pub13a,
+          pub13b,
+          pub13c,
+          pub13d,
+          pub14a,
+          pub14b,
+          pub14c
+        )
       end
     end
   end
