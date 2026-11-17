@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_20_142612) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_16_171510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -76,6 +76,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_20_142612) do
     t.integer "total_requests", default: 0
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "write_access", default: false
+    t.boolean "universal_access", default: false, null: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
   end
 
