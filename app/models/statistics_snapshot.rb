@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class StatisticsSnapshot < ApplicationRecord
+  has_many :publication_year_snapshots
+
   def self.record
     create(total_article_count: Publication.oa_publication.count,
            open_access_article_count: Publication.oa_publication.open_access.count)
