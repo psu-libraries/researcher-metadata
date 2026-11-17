@@ -40,7 +40,13 @@ class PurePublicationImporter < PureImporter
             if p.updated_by_user_at.present?
               attrs = {}
 
-              attrs[:journal] = journal_unless_edited_manually(publication)
+              journal_edited_manually = if journal_present?(publication)
+                                          journal(publication).edited_manually
+                                        end
+
+              unless journal_edited_manually
+                attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+              end
 
               if !p.published?
                 attrs[:status] = status_value(publication)
@@ -133,14 +139,13 @@ class PurePublicationImporter < PureImporter
   private
 
     def pub_attrs(publication)
-      {
+      attrs = {
         title: title(publication),
         secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['en_US']),
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
-        journal: verify_journal(publication),
         issn: journal_present?(publication) ? issn(publication) : nil,
         status: status_value(publication),
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -150,6 +155,16 @@ class PurePublicationImporter < PureImporter
         visible: true,
         doi: doi(publication)
       }
+
+      journal_edited_manually = if journal_present?(publication)
+                                  journal(publication).edited_manually
+                                end
+
+      if (@persisted && !journal_edited_manually) || !@persisted
+        attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+      end
+
+      attrs
     end
 
     def title(publication)
@@ -206,28 +221,6 @@ class PurePublicationImporter < PureImporter
 
     def journal_present?(publication)
       publication['journalAssociation'].present?
-    end
-
-    def journal_unless_edited_manually(publication)
-      if journal_present?(publication)
-        j = journal(publication)
-
-        if j.nil?
-          return nil
-        end
-
-        unless j.edited_manually
-          j
-        end
-      end
-    end
-
-    def verify_journal(publication)
-      if @persisted
-        journal_unless_edited_manually(publication)
-      else
-        journal_present?(publication) ? journal(publication) : nil
-      end
     end
 
     def importable?(publication)
