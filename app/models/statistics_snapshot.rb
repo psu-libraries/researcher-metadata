@@ -36,6 +36,7 @@ class StatisticsSnapshot < ApplicationRecord
       field(:total_article_count)
       field(:open_access_article_count)
       field(:percent_open_access)
+      field(:publication_year_snapshots)
     end
   end
 

@@ -5,18 +5,14 @@ class PublicationYearSnapshot < ApplicationRecord
 
   belongs_to :statistics_snapshot
 
-  rails_admin do
-    list do
-      field(:created_at)
-      field(:year)
-      field(:total_article_count)
-      field(:open_access_article_count)
-      field(:percent_open_access) { label '% open access' }
-    end
+  def admin_label
+    publication_year.to_s
+  end
 
+  rails_admin do
     show do
       field(:created_at)
-      field(:year)
+      field(:publication_year)
       field(:total_article_count)
       field(:open_access_article_count)
       field(:percent_open_access)
