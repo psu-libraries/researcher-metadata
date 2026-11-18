@@ -76,6 +76,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_141333) do
     t.integer "total_requests", default: 0
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "write_access", default: false
+    t.boolean "universal_access", default: false, null: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
   end
 
