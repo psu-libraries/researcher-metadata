@@ -27,7 +27,7 @@ describe UserController, type: :controller do
 
     it 'sets the current user to the user' do
       perform_request
-      expect(CurrentUserBuilder).to have_received(:call)
+      expect(CurrentUserBuilder).to have_received(:call).twice
       expect(request.env['warden']).to have_received(:authenticate!)
     end
   end
