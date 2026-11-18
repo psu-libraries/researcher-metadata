@@ -269,7 +269,7 @@ class ActivityInsightImporter
 
     def update_pub_record(pub_record, ai_pub)
       if pub_record.updated_by_user_at.blank?
-        pub_record.update!(pub_attrs(ai_pub, prev_pub: pub_record))
+        pub_record.update!(pub_attrs(ai_pub, prev_doi: pub_record.doi))
       else
         # If the publication has been updated by an admin, we only want to
         # overwrite a subset of its attributes.
@@ -291,8 +291,8 @@ class ActivityInsightImporter
       attrs
     end
 
-    def pub_attrs(pub, prev_pub: nil)
-      doi_changed = pub.doi != prev_pub&.doi
+    def pub_attrs(pub, prev_doi: nil)
+      doi_changed = pub.doi != prev_doi
       attrs = {
         title: pub.title,
         publication_type: pub.publication_type,

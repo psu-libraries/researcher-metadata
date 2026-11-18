@@ -47,7 +47,7 @@ class PurePublicationImporter < PureImporter
               pi.publication.update!(attrs)
             else
               original_doi = p.doi
-              pi.publication.update!(pub_attrs(publication, prev_pub: p))
+              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi))
               DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
@@ -130,8 +130,8 @@ class PurePublicationImporter < PureImporter
 
   private
 
-    def pub_attrs(publication, prev_pub: nil)
-      doi_changed = doi(publication) != prev_pub&.doi
+    def pub_attrs(publication, prev_doi: nil)
+      doi_changed = doi(publication) != prev_doi
       attrs = {
         title: title(publication),
         secondary_title: nil,
