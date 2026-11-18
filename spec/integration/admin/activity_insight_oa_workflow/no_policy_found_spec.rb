@@ -3,15 +3,16 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin No Policy Found dashboard', type: :feature do
-  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, user: user) }
-  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, user: user) }
+  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, user: user, created_at: Time.now - 1.year) }
+  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, user: user, created_at: Time.now - 1.year) }
   let!(:pub1) {
     create(
       :publication,
       title: 'Pub1',
       permissions_last_checked_at: Time.now,
       preferred_version: 'noPolicyFound',
-      doi: 'https://doi.org/10.123/def123'
+      doi: 'https://doi.org/10.123/def123',
+      preferred_version_updated_at: Time.now - 1.month
     )
   }
   let!(:pub2) {
@@ -48,19 +49,16 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       expect(page).to have_text(pub1.created_at.strftime('%m/%d/%Y'))
       expect(page).to have_no_text(pub2.title)
 
-      visit rails_admin.edit_path(model_name: :publication, id: pub1.id)
+      visit rails_admin.edit_path(model_name: :publication, id: pub2.id)
 
-      within '[data-input-for="publication_preferred_version"]' do
-        find('.dropdown-toggle').click
-        click_on 'No Policy Found'
-      end
-
+      find('#publication_preferred_version_field [title="Show All Items"]').click
+      find('.ui-autocomplete .ui-menu-item', exact_text: 'No Policy Found').click
       click_on 'Save'
       visit activity_insight_oa_workflow_no_policy_found_path
       expect(page).to have_text(pub2.title)
       expect(page).to have_text(pub2.created_at.strftime('%m/%d/%Y'))
       expect(page).to have_text('abc123')
-      expect(page).to have_text(within(1.minute.ago.strftime('%m/%d/%Y')))
+      expect(page).to have_text(Time.now.strftime('%m/%d/%Y'))
     end
   end
 
