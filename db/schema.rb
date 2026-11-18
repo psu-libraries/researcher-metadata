@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_20_142612) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_141333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -496,6 +496,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_20_142612) do
     t.datetime "permissions_last_checked_at", precision: nil
     t.boolean "preferred_file_version_none_email_sent"
     t.string "preferred_version"
+    t.datetime "preferred_version_updated_at"
+    t.string "preferred_version_updated_by"    
     t.string "publication_type", null: false
     t.date "published_on"
     t.text "publisher_name"

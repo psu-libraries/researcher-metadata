@@ -24,6 +24,14 @@
       ) %>
   <br>
     <%= render DashboardCardComponent.new(
+        count: no_policy_found_count,
+        title: 'no_policy_found_curation_title',
+        description: 'no_policy_found_curation_description',
+        path: activity_insight_oa_workflow_no_policy_found_path,
+        card_id: 'no-policy-found-check-card'
+      ) %>
+  <br>
+    <%= render DashboardCardComponent.new(
         count: wrong_file_version_count,
         title: 'wrong_file_version_curation_title',
         description: 'wrong_file_version_curation_description',
