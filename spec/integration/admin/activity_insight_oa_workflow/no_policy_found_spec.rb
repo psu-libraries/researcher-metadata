@@ -19,7 +19,7 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       :publication,
       title: 'Pub2',
       permissions_last_checked_at: Time.now,
-      preferred_version: 'noPolicyFound',
+      preferred_version: nil,
       doi: 'https://doi.org/10.123/def123'
     )
   }
