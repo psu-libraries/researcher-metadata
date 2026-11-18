@@ -8,9 +8,9 @@ class StatisticsSnapshot < ApplicationRecord
   def self.record
     @oa_publication = Publication.oa_publication
     snapshot = create(total_article_count: @oa_publication.count,
-           open_access_article_count: @oa_publication.open_access.count)
+                      open_access_article_count: @oa_publication.open_access.count)
     range = 2019..DateTime.now.year
-    range.each { |year|
+    range.each do |year|
       articles = @oa_publication.where(published_on: DateTime.new(year).all_year)
       if articles.present?
         snapshot.publication_year_snapshots.create(
@@ -19,7 +19,7 @@ class StatisticsSnapshot < ApplicationRecord
           open_access_article_count: articles.open_access.count
         )
       end
-    }
+    end
     snapshot
   end
 
@@ -39,8 +39,4 @@ class StatisticsSnapshot < ApplicationRecord
       field(:publication_year_snapshots)
     end
   end
-
-  private
-    def create_snapshots_by_year
-    end
 end

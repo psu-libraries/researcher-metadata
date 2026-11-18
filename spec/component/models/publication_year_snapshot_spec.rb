@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+
 require 'component/component_spec_helper'
-require 'rails_helper'
 
 describe 'the statistics_snapshots table', type: :model do
   subject { PublicationYearSnapshot.new }
@@ -18,11 +18,11 @@ end
 describe PublicationYearSnapshot, type: :model do
   describe '#percent_open_access' do
     it 'returns the percentage of articles that were open access at the time the snapshot was taken' do
-      py_snapshot = PublicationYearSnapshot.new(
+      py_snapshot = described_class.new(
         publication_year: 2026,
         total_article_count: 10,
         open_access_article_count: 5
-        )
+      )
       expect(py_snapshot.percent_open_access).to eq 50
     end
   end
