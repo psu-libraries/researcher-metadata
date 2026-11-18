@@ -31,19 +31,19 @@ class Journal < ApplicationRecord
     save_pub_ids = publication_ids.to_set
     pub_ids_changed = init_pub_ids != save_pub_ids
 
-    byebug
-
     if has_changes_to_save? || pub_ids_changed
       self.edited_manually = true
 
       if pub_ids_changed
+        # init_pub_ids - save_pub_ids : The change(s) in the non-associated publications
+        # save_pub_ids - init_pub_ids : The change(s) in the associated publications
         changed_associations = (init_pub_ids - save_pub_ids).merge(save_pub_ids - init_pub_ids)
 
         changed_associations.each do |id|
           # Set journal_assignment_overridden to true for each publication that had its association changed
 
           # publications.where(id: id).update(journal_assignment_overridden: true)
-          publications.assign_journal_assignment_overridden(id)
+          Publication.assign_journal_assignment_overridden(id)
         end
       end
     end

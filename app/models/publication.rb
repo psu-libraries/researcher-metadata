@@ -424,13 +424,11 @@ class Publication < ApplicationRecord
   end
 
   def self.assign_journal_assignment_overridden(id)
-    byebug
     # where(id: id).update!(journal_assignment_overridden: true)
     # Publication.find(id).update(journal_assignment_overridden: true)
-    test = Publication.find(1)
-    byebug
+    # Update
+    test = Publication.find(id)
     test.journal_assignment_overridden = true
-    byebug
     test.save
   end
 
