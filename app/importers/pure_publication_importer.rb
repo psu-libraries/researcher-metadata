@@ -40,12 +40,10 @@ class PurePublicationImporter < PureImporter
             if p.updated_by_user_at.present?
               attrs = {}
 
-              journal_edited_manually = if journal_present?(publication)
-                                          journal(publication).edited_manually
-                                        end
+              target_journal = journal_present?(publication) ? journal(publication) : nil
 
-              unless journal_edited_manually
-                attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+              if JournalAssignmentPolicy.allow?(p, target_journal, @persisted)
+                attrs[:journal] = target_journal
               end
 
               if !p.published?
@@ -156,12 +154,10 @@ class PurePublicationImporter < PureImporter
         doi: doi(publication)
       }
 
-      journal_edited_manually = if journal_present?(publication)
-                                  journal(publication).edited_manually
-                                end
+      target_journal = journal_present?(publication) ? journal(publication) : nil
 
-      if (@persisted && !journal_edited_manually) || !@persisted
-        attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+      if JournalAssignmentPolicy.allow?(p, target_journal, @persisted)
+        attrs[:journal] = target_journal
       end
 
       attrs
