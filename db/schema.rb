@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_171510) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_152935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -512,6 +512,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_171510) do
     t.boolean "visible", default: true
     t.string "volume"
     t.datetime "wrong_oa_version_notification_sent_at", precision: nil
+    t.boolean "journal_assignment_overridden", default: false, null: false
     t.index "EXTRACT(year FROM published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"

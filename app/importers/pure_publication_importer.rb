@@ -32,18 +32,14 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
-          @persisted = pi.persisted?
-
           pi.source_updated_at = publication['modifiedDate']
 
-          if @persisted
+          if pi.persisted?
             if p.updated_by_user_at.present?
               attrs = {}
 
-              target_journal = journal_present?(publication) ? journal(publication) : nil
-
-              if JournalAssignmentPolicy.allow?(p, target_journal, @persisted)
-                attrs[:journal] = target_journal
+              unless publication['journalAssignmentOverridden']
+                attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
               end
 
               if !p.published?
@@ -154,10 +150,9 @@ class PurePublicationImporter < PureImporter
         doi: doi(publication)
       }
 
-      target_journal = journal_present?(publication) ? journal(publication) : nil
-
-      if JournalAssignmentPolicy.allow?(p, target_journal, @persisted)
-        attrs[:journal] = target_journal
+      byebug
+      unless publication['journalAssignmentOverridden']
+        attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
       end
 
       attrs
