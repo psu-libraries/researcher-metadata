@@ -13,7 +13,7 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       preferred_version: 'noPolicyFound',
       doi: 'https://doi.org/10.123/def123'
     )
-  }  
+  }
   let!(:pub2) {
     create(
       :publication,
@@ -22,7 +22,7 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       preferred_version: 'noPolicyFound',
       doi: 'https://doi.org/10.123/def123'
     )
-  } 
+  }
   let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'xyz123') }
   let!(:admin_user) { create(:user, is_admin: true, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
@@ -37,7 +37,7 @@ describe 'Admin No Policy Found dashboard', type: :feature do
   end
 
   describe 'listing publications that have no policy found' do
-    it 'show a table with header and the proper data for the publications and files in the table', js: true do
+    it 'show a table with header and the proper data for the publications and files in the table', :js do
       expect(page).to have_text('Author')
       expect(page).to have_text('Title')
       expect(page).to have_text('Preferred Version Set On')
@@ -45,8 +45,8 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       expect(page).to have_text('File Created On')
       expect(page).to have_text('xyz123')
       expect(page).to have_text(pub1.title)
-      expect(page).to have_text(pub1.created_at.strftime("%m/%d/%Y"))
-      expect(page).not_to have_text(pub2.title)
+      expect(page).to have_text(pub1.created_at.strftime('%m/%d/%Y'))
+      expect(page).to have_no_text(pub2.title)
 
       visit rails_admin.edit_path(model_name: :publication, id: pub1.id)
 
@@ -58,9 +58,9 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       click_on 'Save'
       visit activity_insight_oa_workflow_no_policy_found_path
       expect(page).to have_text(pub2.title)
-      expect(page).to have_text(pub2.created_at.strftime("%m/%d/%Y"))
+      expect(page).to have_text(pub2.created_at.strftime('%m/%d/%Y'))
       expect(page).to have_text('abc123')
-      expect(page).to have_text(within(1.minute.ago.strftime("%m/%d/%Y")))
+      expect(page).to have_text(within(1.minute.ago.strftime('%m/%d/%Y')))
     end
   end
 
@@ -73,7 +73,6 @@ describe 'Admin No Policy Found dashboard', type: :feature do
 
   describe 'clicking a link to edit a publication' do
     it "redirects to that publication's edit page" do
-        save_and_open_page
       click_link(pub1.title, match: :first)
       expect(page).to have_current_path rails_admin.edit_path(model_name: :publication, id: pub1.id)
     end
