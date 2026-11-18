@@ -35,14 +35,14 @@ class Journal < ApplicationRecord
       self.edited_manually = true
 
       if pub_ids_changed
-        # init_pub_ids - save_pub_ids : The change(s) in the non-associated publications
-        # save_pub_ids - init_pub_ids : The change(s) in the associated publications
-        changed_associations = (init_pub_ids - save_pub_ids).merge(save_pub_ids - init_pub_ids)
+        nonassoc_pub_changes = init_pub_ids - save_pub_ids
+        assoc_pub_changes = save_pub_ids - init_pub_ids
+
+        changed_associations = nonassoc_pub_changes.merge(assoc_pub_changes)
 
         changed_associations.each do |id|
           # Set journal_assignment_overridden to true for each publication that had its association changed
 
-          # publications.where(id: id).update(journal_assignment_overridden: true)
           Publication.assign_journal_assignment_overridden(id)
         end
       end

@@ -424,12 +424,7 @@ class Publication < ApplicationRecord
   end
 
   def self.assign_journal_assignment_overridden(id)
-    # where(id: id).update!(journal_assignment_overridden: true)
-    # Publication.find(id).update(journal_assignment_overridden: true)
-    # Update
-    test = Publication.find(id)
-    test.journal_assignment_overridden = true
-    test.save
+    find(id).update(journal_assignment_overridden: true)
   end
 
   rails_admin do
