@@ -29,9 +29,23 @@ class Journal < ApplicationRecord
 
   def mark_as_updated_by_user
     save_pub_ids = publication_ids.to_set
+    pub_ids_changed = init_pub_ids != save_pub_ids
 
-    if has_changes_to_save? || (init_pub_ids != save_pub_ids)
+    byebug
+
+    if has_changes_to_save? || pub_ids_changed
       self.edited_manually = true
+
+      if pub_ids_changed
+        changed_associations = (init_pub_ids - save_pub_ids).merge(save_pub_ids - init_pub_ids)
+
+        changed_associations.each do |id|
+          # Set journal_assignment_overridden to true for each publication that had its association changed
+
+          # publications.where(id: id).update(journal_assignment_overridden: true)
+          publications.assign_journal_assignment_overridden(id)
+        end
+      end
     end
   end
 
