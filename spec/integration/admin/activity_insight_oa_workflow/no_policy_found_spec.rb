@@ -23,13 +23,14 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       doi: 'https://doi.org/10.123/def123'
     )
   } 
-  let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'abc123') }
+  let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'xyz123') }
+  let!(:admin_user) { create(:user, is_admin: true, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }
 
   before do
-    authenticate_admin_user
+    authenticate_as(admin_user)
     allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
     allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id)
     visit activity_insight_oa_workflow_no_policy_found_path
@@ -42,6 +43,7 @@ describe 'Admin No Policy Found dashboard', type: :feature do
       expect(page).to have_text('Preferred Version Set On')
       expect(page).to have_text('Preferred Version Set By')
       expect(page).to have_text('File Created On')
+      expect(page).to have_text('xyz123')
       expect(page).to have_text(pub1.title)
       expect(page).to have_text(pub1.created_at.strftime("%m/%d/%Y"))
       expect(page).not_to have_text(pub2.title)
