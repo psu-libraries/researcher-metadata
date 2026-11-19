@@ -175,7 +175,7 @@ class ActivityInsightImporter
           if pi.persisted?
             original_doi = pub_record.doi
             update_pub_record(pub_record, pub)
-            DOIVerificationJob.perform_later unless original_doi == pub_record.doi
+            DOIVerificationJob.perform_later(pub_record.id) unless original_doi == pub_record.doi
           else
             unless pub_record.doi_verified == true
               pub_record.update(oa_workflow_state: 'automatic DOI verification pending') if pub_record.can_receive_new_ai_oa_files? && activity_insight_file_location.present?
