@@ -397,9 +397,11 @@ describe PurePublicationImporter do
             expect { importer.call }.to change(Publication, :count).by 2
           end
 
-          it 'calls the DOI Verification Job' do
-            importer.call
-            expect(DOIVerificationJob).to have_received(:perform_later).with(existing_pub.id)
+          context 'if the DOI value changes' do
+            it 'calls the DOI Verification Job' do
+              importer.call
+              expect(DOIVerificationJob).to have_received(:perform_later).with(existing_pub.id)
+            end
           end
 
           context 'if the DOI does not change' do

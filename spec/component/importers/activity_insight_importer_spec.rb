@@ -5,6 +5,20 @@ require 'component/component_spec_helper'
 describe ActivityInsightImporter do
   let(:importer) { described_class.new }
   let(:now) { Time.new(2025, 1, 29, 15, 20, 0) }
+  let(:source_id_1) { '190706413568' }
+  let(:source_id_2) { '171620739072' }
+  let(:source_id_3) { '271620739072' }
+  let(:source_id_4) { '837619053822' }
+  let(:source_id_5) { '92747188475' }
+  let(:source_id_6) { '190707482930' }
+  let(:source_id_7) { '171620739090' }
+
+  let(:original_doi_1) { 'https://doi.org/10.1186/s40168-020-00798-w' }
+  let(:original_doi_2) { 'https://doi.org/10.1001/amajethics.2019.239' }
+  let(:original_doi_3) { 'https://doi.org/10.1186/s40543-020-00348-w' }
+  # The fourth publication from our sample xml file has no doi
+  let(:original_doi_5) { 'https://doi.org/10.1001/archderm.139.10.1363-g' }
+  let(:original_doi_6) { 'https://doi.org/10.1186/s40543-020-00345-w' }
 
   before do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',
@@ -768,13 +782,13 @@ describe ActivityInsightImporter do
           expect { importer.call }.to change(SourcePublication, :count).by 7
 
           import = Import.last
-          sp1 = SourcePublication.find_by(source_identifier: '190706413568')
-          sp2 = SourcePublication.find_by(source_identifier: '171620739072')
-          sp3 = SourcePublication.find_by(source_identifier: '271620739072')
-          sp4 = SourcePublication.find_by(source_identifier: '837619053822')
-          sp5 = SourcePublication.find_by(source_identifier: '92747188475')
-          sp6 = SourcePublication.find_by(source_identifier: '190707482930')
-          sp7 = SourcePublication.find_by(source_identifier: '171620739090')
+          sp1 = SourcePublication.find_by(source_identifier: source_id_1)
+          sp2 = SourcePublication.find_by(source_identifier: source_id_2)
+          sp3 = SourcePublication.find_by(source_identifier: source_id_3)
+          sp4 = SourcePublication.find_by(source_identifier: source_id_4)
+          sp5 = SourcePublication.find_by(source_identifier: source_id_5)
+          sp6 = SourcePublication.find_by(source_identifier: source_id_6)
+          sp7 = SourcePublication.find_by(source_identifier: source_id_7)
 
           expect(sp1.import).to eq import
           expect(sp1.status).to eq 'Published'
@@ -810,15 +824,15 @@ describe ActivityInsightImporter do
           importer.call
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190706413568').publication
+                                         source_identifier: source_id_1).publication
           p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '171620739072').publication
+                                         source_identifier: source_id_2).publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '92747188475').publication
+                                         source_identifier: source_id_5).publication
           p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190707482930').publication
+                                         source_identifier: source_id_6).publication
           p5 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '271620739072').publication
+                                         source_identifier: source_id_3).publication
 
           expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
           expect(p1.publication_type).to eq 'Journal Article'
@@ -837,7 +851,7 @@ describe ActivityInsightImporter do
           expect(p1.authors_et_al).to be true
           expect(p1.published_on).to eq Date.new(2019, 1, 1)
           expect(p1.updated_by_user_at).to be_nil
-          expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+          expect(p1.doi).to eq original_doi_1
           expect(p1.doi_verified).to be false
 
           expect(p2.title).to eq 'Second Test Publication'
@@ -851,7 +865,7 @@ describe ActivityInsightImporter do
           expect(p2.issue).to be_nil
           expect(p2.edition).to be_nil
           expect(p2.page_range).to be_nil
-          expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+          expect(p2.url).to eq original_doi_2
           expect(p2.issn).to be_nil
           expect(p2.isbn).to be_nil
           expect(p2.abstract).to be_nil
@@ -859,7 +873,7 @@ describe ActivityInsightImporter do
           expect(p2.published_on).to eq Date.new(2019, 1, 1)
           expect(p2.visible).to be true
           expect(p2.updated_by_user_at).to be_nil
-          expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+          expect(p2.doi).to eq original_doi_2
           expect(p2.doi_verified).to be false
 
           expect(p3.title).to eq 'Fifth Test Publication'
@@ -880,7 +894,7 @@ describe ActivityInsightImporter do
           expect(p3.published_on).to eq Date.new(2010, 1, 1)
           expect(p3.visible).to be true
           expect(p3.updated_by_user_at).to be_nil
-          expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          expect(p3.doi).to eq original_doi_5
           expect(p3.doi_verified).to be false
 
           expect(p4.title).to eq 'Journal Article In Press'
@@ -902,12 +916,12 @@ describe ActivityInsightImporter do
           expect(p4.published_on).to eq Date.new(2019, 1, 2)
           expect(p4.visible).to be true
           expect(p4.updated_by_user_at).to be_nil
-          expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+          expect(p4.doi).to eq original_doi_6
           expect(p4.doi_verified).to be false
 
           expect(p5.issn).to eq '1234-9876'
           expect(p5.isbn).to eq '978-0-596-52068-7'
-          expect(p5.doi).to eq 'https://doi.org/10.1186/s40543-020-00348-w'
+          expect(p5.doi).to eq original_doi_3
           expect(p5.doi_verified).to be false
         end
 
@@ -915,7 +929,7 @@ describe ActivityInsightImporter do
           expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190706413568').publication
+                                         source_identifier: source_id_1).publication
 
           group = p1.duplicate_group
 
@@ -926,14 +940,14 @@ describe ActivityInsightImporter do
           importer.call
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190706413568').publication
+                                         source_identifier: source_id_1).publication
 
           expect(p1.visible).to be false
         end
 
         context 'when some publications can be automerged' do
           let!(:identical_publication) { create(:publication, title: 'First Test Publication With a Really Unique Title',
-                                                              doi: 'https://doi.org/10.1186/s40168-020-00798-w') }
+                                                              doi: original_doi_1) }
 
           it 'automatically merges them' do
             # This is a bit wonky but by creating a publication that will match the removal criteria
@@ -955,13 +969,13 @@ describe ActivityInsightImporter do
           u = User.find_by(webaccess_id: 'abc123')
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190706413568').publication
+                                         source_identifier: source_id_1).publication
           p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '171620739072').publication
+                                         source_identifier: source_id_2).publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '92747188475').publication
+                                         source_identifier: source_id_5).publication
           p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190707482930').publication
+                                         source_identifier: source_id_6).publication
           a1 = Authorship.find_by(publication: p1, user: u)
           a2 = Authorship.find_by(publication: p2, user: u)
           a3 = Authorship.find_by(publication: p3, user: u)
@@ -987,13 +1001,13 @@ describe ActivityInsightImporter do
         it 'saves the correct attributes with each new contributor name' do
           importer.call
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190706413568').publication
+                                         source_identifier: source_id_1).publication
           p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '171620739072').publication
+                                         source_identifier: source_id_2).publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '92747188475').publication
+                                         source_identifier: source_id_5).publication
           p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190707482930').publication
+                                         source_identifier: source_id_6).publication
 
           expect(ContributorName.find_by(publication: p1,
                                          first_name: 'Elizabeth',
@@ -1058,15 +1072,15 @@ describe ActivityInsightImporter do
       context 'when an included publication exists in the database' do
         let!(:existing_import) { create(:publication_import,
                                         source: 'Activity Insight',
-                                        source_identifier: '171620739072',
+                                        source_identifier: source_id_2,
                                         publication: existing_pub)}
         let!(:existing_import_two) { create(:publication_import,
                                             source: 'Activity Insight',
-                                            source_identifier: '271620739072',
+                                            source_identifier: source_id_3,
                                             publication: existing_pub2)}
         let!(:existing_import_three) { create(:publication_import,
                                               source: 'Activity Insight',
-                                              source_identifier: '190707482930',
+                                              source_identifier: source_id_6,
                                               publication: existing_pub3)}
         let!(:existing_import_three_p2) { create(:publication_import,
                                                  source: 'Activity Insight',
@@ -1131,7 +1145,7 @@ describe ActivityInsightImporter do
                                      published_on: Date.new(2019, 1, 2),
                                      updated_by_user_at: timestamp,
                                      visible: true,
-                                     doi: 'https://doi.org/10.1186/s40543-020-00345-w') }
+                                     doi: original_doi_6) }
 
         context 'when the existing publication has been modified by an admin user' do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
@@ -1152,13 +1166,13 @@ describe ActivityInsightImporter do
             expect { importer.call }.to change(SourcePublication, :count).by 7
 
             import = Import.last
-            sp1 = SourcePublication.find_by(source_identifier: '190706413568')
-            sp2 = SourcePublication.find_by(source_identifier: '171620739072')
-            sp3 = SourcePublication.find_by(source_identifier: '271620739072')
-            sp4 = SourcePublication.find_by(source_identifier: '837619053822')
-            sp5 = SourcePublication.find_by(source_identifier: '92747188475')
-            sp6 = SourcePublication.find_by(source_identifier: '190707482930')
-            sp7 = SourcePublication.find_by(source_identifier: '171620739090')
+            sp1 = SourcePublication.find_by(source_identifier: source_id_1)
+            sp2 = SourcePublication.find_by(source_identifier: source_id_2)
+            sp3 = SourcePublication.find_by(source_identifier: source_id_3)
+            sp4 = SourcePublication.find_by(source_identifier: source_id_4)
+            sp5 = SourcePublication.find_by(source_identifier: source_id_5)
+            sp6 = SourcePublication.find_by(source_identifier: source_id_6)
+            sp7 = SourcePublication.find_by(source_identifier: source_id_7)
 
             expect(sp1.import).to eq import
             expect(sp1.status).to eq 'Published'
@@ -1194,15 +1208,15 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
             p5 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '271620739072').publication
+                                           source_identifier: source_id_3).publication
 
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -1221,7 +1235,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to be_nil
-            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+            expect(p1.doi).to eq original_doi_1
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -1261,7 +1275,7 @@ describe ActivityInsightImporter do
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
             expect(p3.visible).to be true
             expect(p3.updated_by_user_at).to be_nil
-            expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.doi).to eq original_doi_5
 
             # should not update title or status because there are multiple records but should update postprint status
             expect(p4.title).to eq 'Existing Title 3'
@@ -1282,7 +1296,7 @@ describe ActivityInsightImporter do
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
-            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+            expect(p4.doi).to eq original_doi_6
 
             # testing that publication status does not revert to 'in press' when existing record status is 'published'
             expect(p5.status).to eq 'Published'
@@ -1294,7 +1308,7 @@ describe ActivityInsightImporter do
             expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             group = p1.duplicate_group
 
@@ -1305,7 +1319,7 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             expect(p1.visible).to be false
           end
@@ -1327,11 +1341,11 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
@@ -1357,13 +1371,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
@@ -1394,13 +1408,13 @@ describe ActivityInsightImporter do
             importer.call
             u = User.find_by(activity_insight_identifier: '1649499')
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
 
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -1488,13 +1502,13 @@ describe ActivityInsightImporter do
             expect { importer.call }.to change(SourcePublication, :count).by 7
 
             import = Import.last
-            sp1 = SourcePublication.find_by(source_identifier: '190706413568')
-            sp2 = SourcePublication.find_by(source_identifier: '171620739072')
-            sp3 = SourcePublication.find_by(source_identifier: '271620739072')
-            sp4 = SourcePublication.find_by(source_identifier: '837619053822')
-            sp5 = SourcePublication.find_by(source_identifier: '92747188475')
-            sp6 = SourcePublication.find_by(source_identifier: '190707482930')
-            sp7 = SourcePublication.find_by(source_identifier: '171620739090')
+            sp1 = SourcePublication.find_by(source_identifier: source_id_1)
+            sp2 = SourcePublication.find_by(source_identifier: source_id_2)
+            sp3 = SourcePublication.find_by(source_identifier: source_id_3)
+            sp4 = SourcePublication.find_by(source_identifier: source_id_4)
+            sp5 = SourcePublication.find_by(source_identifier: source_id_5)
+            sp6 = SourcePublication.find_by(source_identifier: source_id_6)
+            sp7 = SourcePublication.find_by(source_identifier: source_id_7)
 
             expect(sp1.import).to eq import
             expect(sp1.status).to eq 'Published'
@@ -1530,15 +1544,15 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
             p5 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '271620739072').publication
+                                           source_identifier: source_id_3).publication
 
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -1557,7 +1571,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to be_nil
-            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+            expect(p1.doi).to eq original_doi_1
             expect(p1.doi_verified).to be false
 
             expect(p2.title).to eq 'Second Test Publication'
@@ -1571,14 +1585,14 @@ describe ActivityInsightImporter do
             expect(p2.issue).to be_nil
             expect(p2.edition).to be_nil
             expect(p2.page_range).to be_nil
-            expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.url).to eq original_doi_2
             expect(p2.issn).to be_nil
             expect(p2.abstract).to be_nil
             expect(p2.authors_et_al).to be false
             expect(p2.published_on).to eq Date.new(2019, 1, 1)
             expect(p2.visible).to be false
             expect(p2.updated_by_user_at).to be_nil
-            expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.doi).to eq original_doi_2
             expect(p2.doi_verified).to be false
 
             expect(p3.title).to eq 'Fifth Test Publication'
@@ -1599,7 +1613,7 @@ describe ActivityInsightImporter do
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
             expect(p3.visible).to be true
             expect(p3.updated_by_user_at).to be_nil
-            expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.doi).to eq original_doi_5
             expect(p3.doi_verified).to be false
 
             expect(p4.title).to eq 'Journal Article In Press'
@@ -1621,7 +1635,7 @@ describe ActivityInsightImporter do
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to be_nil
-            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+            expect(p4.doi).to eq original_doi_6
             # DOI did not change, so doi_verified should not change
             expect(p4.doi_verified).to be existing_pub3.doi_verified
 
@@ -1633,7 +1647,7 @@ describe ActivityInsightImporter do
             expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             group = p1.duplicate_group
 
@@ -1644,7 +1658,7 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             expect(p1.visible).to be false
           end
@@ -1666,13 +1680,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
@@ -1702,13 +1716,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
@@ -1742,13 +1756,13 @@ describe ActivityInsightImporter do
             u = User.find_by(activity_insight_identifier: '1649499')
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
 
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -2589,13 +2603,13 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
 
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -2614,7 +2628,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to be_nil
-            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+            expect(p1.doi).to eq original_doi_1
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
@@ -2627,14 +2641,14 @@ describe ActivityInsightImporter do
             expect(p2.issue).to be_nil
             expect(p2.edition).to be_nil
             expect(p2.page_range).to be_nil
-            expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.url).to eq original_doi_2
             expect(p2.issn).to be_nil
             expect(p2.abstract).to be_nil
             expect(p2.authors_et_al).to be false
             expect(p2.published_on).to eq Date.new(2019, 1, 1)
             expect(p2.visible).to be true
             expect(p2.updated_by_user_at).to be_nil
-            expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.doi).to eq original_doi_2
 
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
@@ -2654,7 +2668,7 @@ describe ActivityInsightImporter do
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
             expect(p3.visible).to be true
             expect(p3.updated_by_user_at).to be_nil
-            expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.doi).to eq original_doi_5
 
             expect(p4.title).to eq 'Journal Article In Press'
             expect(p4.publication_type).to eq 'Journal Article'
@@ -2675,14 +2689,14 @@ describe ActivityInsightImporter do
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to be_nil
-            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+            expect(p4.doi).to eq original_doi_6
           end
 
           it 'groups duplicates of new publication records' do
             expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             group = p1.duplicate_group
 
@@ -2693,7 +2707,7 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             expect(p1.visible).to be false
           end
@@ -2707,13 +2721,13 @@ describe ActivityInsightImporter do
             u = User.find_by(webaccess_id: 'abc123')
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
             a1 = Authorship.find_by(publication: p1, user: u)
             a2 = Authorship.find_by(publication: p2, user: u)
             a3 = Authorship.find_by(publication: p3, user: u)
@@ -2739,13 +2753,13 @@ describe ActivityInsightImporter do
           it 'saves the correct attributes with each new contributor name' do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
 
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -2810,7 +2824,7 @@ describe ActivityInsightImporter do
         context 'when an included publication exists in the database' do
           let!(:existing_import) { create(:publication_import,
                                           source: 'Activity Insight',
-                                          source_identifier: '171620739072',
+                                          source_identifier: source_id_2,
                                           publication: existing_pub) }
           let(:existing_pub) { create(:publication,
                                       title: 'Existing Title',
@@ -2856,13 +2870,13 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -2882,7 +2896,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to be_nil
-              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+              expect(p1.doi).to eq original_doi_1
 
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -2921,7 +2935,7 @@ describe ActivityInsightImporter do
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
               expect(p3.visible).to be true
               expect(p3.updated_by_user_at).to be_nil
-              expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.doi).to eq original_doi_5
 
               expect(p4.title).to eq 'Journal Article In Press'
               expect(p4.publication_type).to eq 'Journal Article'
@@ -2942,14 +2956,14 @@ describe ActivityInsightImporter do
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
               expect(p4.visible).to be true
               expect(p4.updated_by_user_at).to be_nil
-              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+              expect(p4.doi).to eq original_doi_6
             end
 
             it 'groups duplicates of new publication records' do
               expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               group = p1.duplicate_group
 
@@ -2960,7 +2974,7 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               expect(p1.visible).to be false
             end
@@ -2981,13 +2995,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -3017,13 +3031,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -3057,13 +3071,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -3150,13 +3164,13 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -3175,7 +3189,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to be_nil
-              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+              expect(p1.doi).to eq original_doi_1
 
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'In-house Journal Article'
@@ -3188,14 +3202,14 @@ describe ActivityInsightImporter do
               expect(p2.issue).to be_nil
               expect(p2.edition).to be_nil
               expect(p2.page_range).to be_nil
-              expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+              expect(p2.url).to eq original_doi_2
               expect(p2.issn).to be_nil
               expect(p2.abstract).to be_nil
               expect(p2.authors_et_al).to be false
               expect(p2.published_on).to eq Date.new(2019, 1, 1)
               expect(p2.visible).to be false
               expect(p2.updated_by_user_at).to be_nil
-              expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+              expect(p2.doi).to eq original_doi_2
 
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
@@ -3215,7 +3229,7 @@ describe ActivityInsightImporter do
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
               expect(p3.visible).to be true
               expect(p3.updated_by_user_at).to be_nil
-              expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.doi).to eq original_doi_5
 
               expect(p4.title).to eq 'Journal Article In Press'
               expect(p4.publication_type).to eq 'Journal Article'
@@ -3236,14 +3250,14 @@ describe ActivityInsightImporter do
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
               expect(p4.visible).to be true
               expect(p4.updated_by_user_at).to be_nil
-              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+              expect(p4.doi).to eq original_doi_6
             end
 
             it 'groups duplicates of new publication records' do
               expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               group = p1.duplicate_group
 
@@ -3254,9 +3268,28 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               expect(p1.visible).to be false
+            end
+
+            context 'when the doi has been changed' do
+              it 'runs the DOIVerificationJob' do
+                expect(existing_pub.doi).not_to eq original_doi_2
+                importer.call
+                expect(DOIVerificationJob).to have_received(:perform_later).with(existing_pub.id)
+              end
+            end
+
+            context 'when the doi has not been changed' do
+              before do
+                existing_pub.update!(doi: original_doi_2)
+              end
+
+              it 'does not run the DOIVerificationJob' do
+                importer.call
+                expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
+              end
             end
 
             context 'when authorships already exist for the existing publication' do
@@ -3275,13 +3308,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -3311,13 +3344,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -3351,13 +3384,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -4171,13 +4204,13 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
 
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -4196,7 +4229,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to be_nil
-            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+            expect(p1.doi).to eq original_doi_1
             expect(p1.doi_verified).to be false
 
             expect(p2.title).to eq 'Second Test Publication'
@@ -4210,14 +4243,14 @@ describe ActivityInsightImporter do
             expect(p2.issue).to be_nil
             expect(p2.edition).to be_nil
             expect(p2.page_range).to be_nil
-            expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.url).to eq original_doi_2
             expect(p2.issn).to be_nil
             expect(p2.abstract).to be_nil
             expect(p2.authors_et_al).to be false
             expect(p2.published_on).to eq Date.new(2019, 1, 1)
             expect(p2.visible).to be true
             expect(p2.updated_by_user_at).to be_nil
-            expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.doi).to eq original_doi_2
             expect(p2.doi_verified).to be false
 
             expect(p3.title).to eq 'Fifth Test Publication'
@@ -4238,7 +4271,7 @@ describe ActivityInsightImporter do
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
             expect(p3.visible).to be true
             expect(p3.updated_by_user_at).to be_nil
-            expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.doi).to eq original_doi_5
             expect(p3.doi_verified).to be false
 
             expect(p4.title).to eq 'Journal Article In Press'
@@ -4260,7 +4293,7 @@ describe ActivityInsightImporter do
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to be_nil
-            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+            expect(p4.doi).to eq original_doi_6
             expect(p4.doi_verified).to be false
           end
 
@@ -4268,7 +4301,7 @@ describe ActivityInsightImporter do
             expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             group = p1.duplicate_group
 
@@ -4279,7 +4312,7 @@ describe ActivityInsightImporter do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
 
             expect(p1.visible).to be false
           end
@@ -4293,13 +4326,13 @@ describe ActivityInsightImporter do
             u = User.find_by(webaccess_id: 'abc123')
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
             a1 = Authorship.find_by(publication: p1, user: u)
             a2 = Authorship.find_by(publication: p2, user: u)
             a3 = Authorship.find_by(publication: p3, user: u)
@@ -4325,13 +4358,13 @@ describe ActivityInsightImporter do
           it 'saves the correct attributes with each new contributor name' do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190706413568').publication
+                                           source_identifier: source_id_1).publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '171620739072').publication
+                                           source_identifier: source_id_2).publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '92747188475').publication
+                                           source_identifier: source_id_5).publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                           source_identifier: '190707482930').publication
+                                           source_identifier: source_id_6).publication
 
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -4396,7 +4429,7 @@ describe ActivityInsightImporter do
         context 'when an included publication exists in the database' do
           let!(:existing_import) { create(:publication_import,
                                           source: 'Activity Insight',
-                                          source_identifier: '171620739072',
+                                          source_identifier: source_id_2,
                                           publication: existing_pub) }
           let(:existing_pub) { create(:publication,
                                       title: 'Existing Title',
@@ -4437,13 +4470,13 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -4463,7 +4496,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to be_nil
-              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+              expect(p1.doi).to eq original_doi_1
 
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -4502,7 +4535,7 @@ describe ActivityInsightImporter do
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
               expect(p3.visible).to be true
               expect(p3.updated_by_user_at).to be_nil
-              expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.doi).to eq original_doi_5
 
               expect(p4.title).to eq 'Journal Article In Press'
               expect(p4.publication_type).to eq 'Journal Article'
@@ -4523,14 +4556,14 @@ describe ActivityInsightImporter do
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
               expect(p4.visible).to be true
               expect(p4.updated_by_user_at).to be_nil
-              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+              expect(p4.doi).to eq original_doi_6
             end
 
             it 'groups duplicates of new publication records' do
               expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               group = p1.duplicate_group
 
@@ -4541,7 +4574,7 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               expect(p1.visible).to be false
             end
@@ -4562,13 +4595,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -4598,13 +4631,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -4637,13 +4670,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -4730,13 +4763,13 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -4755,7 +4788,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to be_nil
-              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
+              expect(p1.doi).to eq original_doi_1
               expect(p1.doi_verified).to be false
 
               expect(p2.title).to eq 'Second Test Publication'
@@ -4769,14 +4802,14 @@ describe ActivityInsightImporter do
               expect(p2.issue).to be_nil
               expect(p2.edition).to be_nil
               expect(p2.page_range).to be_nil
-              expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+              expect(p2.url).to eq original_doi_2
               expect(p2.issn).to be_nil
               expect(p2.abstract).to be_nil
               expect(p2.authors_et_al).to be false
               expect(p2.published_on).to eq Date.new(2019, 1, 1)
               expect(p2.visible).to be false
               expect(p2.updated_by_user_at).to be_nil
-              expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+              expect(p2.doi).to eq original_doi_2
               expect(p2.doi_verified).to be false
 
               expect(p3.title).to eq 'Fifth Test Publication'
@@ -4797,7 +4830,7 @@ describe ActivityInsightImporter do
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
               expect(p3.visible).to be true
               expect(p3.updated_by_user_at).to be_nil
-              expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.doi).to eq original_doi_5
               expect(p3.doi_verified).to be false
 
               expect(p4.title).to eq 'Journal Article In Press'
@@ -4819,7 +4852,7 @@ describe ActivityInsightImporter do
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
               expect(p4.visible).to be true
               expect(p4.updated_by_user_at).to be_nil
-              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+              expect(p4.doi).to eq original_doi_6
               expect(p4.doi_verified).to be false
             end
 
@@ -4827,7 +4860,7 @@ describe ActivityInsightImporter do
               expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               group = p1.duplicate_group
 
@@ -4838,9 +4871,28 @@ describe ActivityInsightImporter do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
 
               expect(p1.visible).to be false
+            end
+
+            context 'when the doi has been changed' do
+              it 'runs the DOIVerificationJob' do
+                expect(existing_pub.doi).not_to eq original_doi_2
+                importer.call
+                expect(DOIVerificationJob).to have_received(:perform_later).with(existing_pub.id)
+              end
+            end
+
+            context 'when the doi has not been changed' do
+              before do
+                existing_pub.update!(doi: original_doi_2)
+              end
+
+              it 'does not run the DOIVerificationJob' do
+                importer.call
+                expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
+              end
             end
 
             context 'when authorships exist for the existing publication' do
@@ -4859,13 +4911,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -4895,13 +4947,13 @@ describe ActivityInsightImporter do
                 u = User.find_by(activity_insight_identifier: '1649499')
 
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190706413568').publication
+                                               source_identifier: source_id_1).publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '171620739072').publication
+                                               source_identifier: source_id_2).publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '92747188475').publication
+                                               source_identifier: source_id_5).publication
                 p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                               source_identifier: '190707482930').publication
+                                               source_identifier: source_id_6).publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
@@ -4935,13 +4987,13 @@ describe ActivityInsightImporter do
               u = User.find_by(activity_insight_identifier: '1649499')
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190706413568').publication
+                                             source_identifier: source_id_1).publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '171620739072').publication
+                                             source_identifier: source_id_2).publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '92747188475').publication
+                                             source_identifier: source_id_5).publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                             source_identifier: '190707482930').publication
+                                             source_identifier: source_id_6).publication
 
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -5115,11 +5167,11 @@ describe ActivityInsightImporter do
           u = User.find_by(webaccess_id: 'abc123')
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '171620739072').publication
+                                         source_identifier: source_id_2).publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '190707482930').publication
+                                         source_identifier: source_id_6).publication
           p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '171620739090').publication
+                                         source_identifier: source_id_7).publication
 
           f1 = p1.activity_insight_oa_files.first
           f3 = p3.activity_insight_oa_files.first
@@ -5128,17 +5180,17 @@ describe ActivityInsightImporter do
           expect(ActivityInsightOAFile.count).to be 3
           expect(f1.location).to eq('abc123/intellcont/file.pdf')
           expect(f1.user).to eq u
-          expect(f1.intellcont_id).to eq '171620739072'
+          expect(f1.intellcont_id).to eq source_id_2
           expect(f1.post_file_id).to eq '171620739080'
           expect(p1.oa_workflow_state).to eq('automatic DOI verification pending')
           expect(f3.location).to eq('abc123/intellcont/file-5.pdf')
           expect(f3.user).to eq u
-          expect(f3.intellcont_id).to eq '190707482930'
+          expect(f3.intellcont_id).to eq source_id_6
           expect(f3.post_file_id).to eq '271620739081'
           expect(p3.oa_workflow_state).to eq('automatic DOI verification pending')
           expect(f4.location).to eq('abc123/intellcont/file-6.pdf')
           expect(f4.user).to eq u
-          expect(f4.intellcont_id).to eq '171620739090'
+          expect(f4.intellcont_id).to eq source_id_7
           expect(f4.post_file_id).to eq '171620739095'
           expect(p4.oa_workflow_state).to eq('automatic DOI verification pending')
         end
@@ -5146,14 +5198,14 @@ describe ActivityInsightImporter do
         it 'verifies DOI for those publications' do
           importer.call
           p4 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '171620739090').publication
+                                         source_identifier: source_id_7).publication
           expect(DOIVerificationJob).to have_received(:perform_later).with(p4.id)
         end
 
         it 'does not import ActivityInsightOAFiles for imported publications without postprint/open access file locations' do
           importer.call
           p5 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '271620739072').publication
+                                         source_identifier: source_id_3).publication
 
           expect(p5.activity_insight_oa_files).to eq []
           expect(p5.doi_verified).to be false
@@ -5162,7 +5214,7 @@ describe ActivityInsightImporter do
         it 'does not import ActivityInsightOAFiles for imported publications without an open access publication type (cannot receive new ai oa files)' do
           importer.call
           p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '92747188475').publication
+                                         source_identifier: source_id_5).publication
           expect(p2.activity_insight_oa_files).to eq []
         end
       end
@@ -5171,7 +5223,7 @@ describe ActivityInsightImporter do
     context 'when a publication to be imported already exists in the database' do
       let!(:existing_import) { create(:publication_import,
                                       source: 'Activity Insight',
-                                      source_identifier: '171620739072',
+                                      source_identifier: source_id_2,
                                       publication: existing_pub) }
       let!(:existing_pub) { create(:publication) }
 
@@ -5179,12 +5231,12 @@ describe ActivityInsightImporter do
         context 'when there is an ActivityInsightOAFile associated with the publication' do
           let!(:existing_import2) { create(:publication_import,
                                            source: 'Activity Insight',
-                                           source_identifier: '190706413568',
+                                           source_identifier: source_id_1,
                                            publication: pub1) }
           let!(:aif1) { create(:activity_insight_oa_file,
                                publication: pub1, version: 'publishedVersion',
                                file_download_location: fixture_file_open('test_file.pdf'),
-                               intellcont_id: '190706413568') }
+                               intellcont_id: source_id_1) }
           let!(:pub1) { create(:publication, activity_insight_postprint_status: 'In Progress') }
 
           let!(:file_download_directory1) { aif1.file_download_location.model_object_dir }
@@ -5202,7 +5254,7 @@ describe ActivityInsightImporter do
         context 'when there is not an ActivityInsightOAFile associated with the publication' do
           let!(:existing_import2) { create(:publication_import,
                                            source: 'Activity Insight',
-                                           source_identifier: '190706413568',
+                                           source_identifier: source_id_1,
                                            publication: pub1) }
           let!(:pub1) { create(:publication) }
 
@@ -5251,7 +5303,7 @@ describe ActivityInsightImporter do
                                        location: 'abc123/intellcont/some_other_file.pdf') }
           let!(:existing_import2) { create(:publication_import,
                                            source: 'Activity Insight',
-                                           source_identifier: '190707482930',
+                                           source_identifier: source_id_6,
                                            publication: existing_pub2) }
           let!(:existing_pub2) { create(:publication) }
           let!(:existing_aif2) { create(:activity_insight_oa_file,
@@ -5268,7 +5320,7 @@ describe ActivityInsightImporter do
           end
 
           context 'when imported file has a postprint status' do
-            before { existing_import2.update source_identifier: '92747188475' }
+            before { existing_import2.update source_identifier: source_id_5 }
 
             it 'does not update activity_insight_postprint_status or call export job' do
               importer.call
@@ -5298,13 +5350,30 @@ describe ActivityInsightImporter do
               existing_pub.update doi_verified: true
             end
 
-            it 'creates a new ActivityInsightOAFile for that publication but does not kick off the DOIVerificationJob' do
-              expect(DOIVerificationJob).not_to receive(:perform_later).with(existing_pub.id)
+            it 'creates a new ActivityInsightOAFile for that publication and kicks off the DOIVerificationJob' do
               importer.call
 
               expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
                                                                                                 'abc123/intellcont/some_other_file.pdf'].sort)
               expect(existing_pub.oa_workflow_state).to be_nil
+            end
+
+            context 'if the DOI has changed' do
+              it 'performs the DOIVerificationJob' do
+                importer.call
+                expect(DOIVerificationJob).to have_received(:perform_later).with(existing_pub.id)
+              end
+            end
+
+            context 'if the DOI has not changed' do
+              before do
+                existing_pub.update!(doi: original_doi_2)
+              end
+
+              it 'does not perform the DOIVerificationJob' do
+                importer.call
+                expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
+              end
             end
           end
         end
