@@ -40,6 +40,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:doi_error).of_type(:boolean) }
+  it { is_expected.to have_db_column(:journal_assignment_overridden).of_type(:boolean).with_options(null: false) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -1964,6 +1965,16 @@ describe Publication, type: :model do
       it 'returns only the path part of the URL' do
         expect(pub.doi_url_path).to eq '10.1016/S0148-2963(01)00209-0'
       end
+    end
+  end
+
+  describe 'self.assign_journal_assignment_overridden' do
+    let(:pub) { create(:publication) }
+
+    it 'sets journal_assignment_overridden value to true' do
+      Publication.assign_journal_assignment_overridden(pub.id)
+
+      expect(pub.reload.journal_assignment_overridden).to be true
     end
   end
 

@@ -94,7 +94,7 @@ describe Journal, type: :model do
     end
 
     it 'sets journal to edited_manually when associated publications are updated' do
-      j.init_pub_ids = Set[1] # Simulates a change in publication associations, ensuring pub_ids_changed is true
+      j.init_pub_ids = Set[p.id] # Simulates a change in publication associations, ensuring pub_ids_changed is true
       j.mark_as_updated_by_user
       j.save
 
