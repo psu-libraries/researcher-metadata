@@ -547,18 +547,17 @@ describe PurePublicationImporter do
             end
           end
 
-          context 'when the journal has been edited manually' do
+          context 'when publication journal_assignment_overridden is true' do
             let(:existing_journal) { create(:journal,
                                             title: 'new title',
                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
                                             edited_manually: true) }
 
             it 'does not link to the publication' do
-              byebug
               importer.call
-byebug
+
               existing_pub_reloaded = existing_pub.reload
-byebug
+
               expect(existing_pub_reloaded.journal).to be_nil
             end
           end
