@@ -554,10 +554,11 @@ describe PurePublicationImporter do
                                             edited_manually: true) }
 
             it 'does not link to the publication' do
+              byebug
               importer.call
-
+byebug
               existing_pub_reloaded = existing_pub.reload
-
+byebug
               expect(existing_pub_reloaded.journal).to be_nil
             end
           end

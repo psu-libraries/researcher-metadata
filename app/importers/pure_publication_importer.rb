@@ -32,13 +32,19 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
+          @journal_assignment_overridden = begin
+            Publication.find(pi.publication_id).journal_assignment_overridden
+          rescue ActiveRecord::RecordNotFound
+            false
+          end
+
           pi.source_updated_at = publication['modifiedDate']
 
           if pi.persisted?
             if p.updated_by_user_at.present?
               attrs = {}
 
-              unless publication['journalAssignmentOverridden']
+              unless @journal_assignment_overridden
                 attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
               end
 
@@ -150,8 +156,7 @@ class PurePublicationImporter < PureImporter
         doi: doi(publication)
       }
 
-      byebug
-      unless publication['journalAssignmentOverridden']
+      unless @journal_assignment_overridden
         attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
       end
 
