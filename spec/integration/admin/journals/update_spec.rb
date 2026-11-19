@@ -18,7 +18,8 @@ describe 'Admin journal edit page', type: :feature do
       before { click_on 'Save' }
 
       it 'does not update edited_manually field' do
-        expect(journal.edited_manually).to be false
+        reloaded_journal = journal.reload
+        expect(reloaded_journal.edited_manually).to be false
       end
     end
 
