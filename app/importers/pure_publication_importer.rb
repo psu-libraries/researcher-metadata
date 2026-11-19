@@ -32,12 +32,22 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
+          @journal_assignment_overridden = begin
+            Publication.find(pi.publication_id).journal_assignment_overridden
+          rescue ActiveRecord::RecordNotFound
+            false
+          end
+
           pi.source_updated_at = publication['modifiedDate']
 
           if pi.persisted?
             if p.updated_by_user_at.present?
               attrs = {}
-              attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+
+              unless @journal_assignment_overridden
+                attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+              end
+
               if !p.published?
                 attrs[:status] = status_value(publication)
               end
@@ -129,14 +139,13 @@ class PurePublicationImporter < PureImporter
   private
 
     def pub_attrs(publication)
-      {
+      attrs = {
         title: title(publication),
         secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['en_US']),
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
-        journal: journal_present?(publication) ? journal(publication) : nil,
         issn: journal_present?(publication) ? issn(publication) : nil,
         status: status_value(publication),
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -146,6 +155,12 @@ class PurePublicationImporter < PureImporter
         visible: true,
         doi: doi(publication)
       }
+
+      unless @journal_assignment_overridden
+        attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+      end
+
+      attrs
     end
 
     def title(publication)

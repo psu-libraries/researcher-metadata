@@ -82,6 +82,7 @@ end
 group :test do
   gem 'capybara', '>= 2.15', '< 4.0'
   gem 'capybara-email'
+  gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'rails-controller-testing'
