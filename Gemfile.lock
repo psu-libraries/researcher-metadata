@@ -142,6 +142,9 @@ GEM
     capybara-email (3.0.2)
       capybara (>= 2.4, < 4.0)
       mail
+    capybara-screenshot (1.0.27)
+      capybara (>= 1.0, < 4)
+      launchy
     carrierwave (3.1.4)
       activemodel (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -688,6 +691,7 @@ DEPENDENCIES
   cancancan (~> 3.3)
   capybara (>= 2.15, < 4.0)
   capybara-email
+  capybara-screenshot
   carrierwave (~> 3.1.4)
   cocoon
   coffee-rails (~> 5)
