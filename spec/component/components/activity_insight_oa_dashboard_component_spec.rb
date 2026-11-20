@@ -272,6 +272,30 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
+  context 'when publications have no policy found' do
+    let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now, preferred_version: 'noPolicyFound') }
+    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, preferred_version: nil) }
+
+    it 'renders the no policy found card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('no-policy-found-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('no-policy-found-check-card').text).to include('1')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/no_policy_found')
+    end
+  end
+
+  context 'when no publications have no policy found' do
+    let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now, preferred_version: 'acceptedVersion') }
+    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, preferred_version: nil) }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('no-policy-found-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('no-policy-found-check-card').text).to include('0')
+      expect(rendered_content).to have_no_link(href: '/activity_insight_oa_workflow/no_policy_found')
+    end
+  end
+
   context 'when no publications have files that need manual permissions metadata review' do
     let(:pub1) { create(:publication) }
     let(:pub2) { create(:publication) }

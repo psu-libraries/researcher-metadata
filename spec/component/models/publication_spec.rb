@@ -379,7 +379,7 @@ describe Publication, type: :model do
 
   describe '.preferred_versions' do
     it 'returns the list of valid values for preferred version' do
-      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion', 'Published or Accepted', 'None']
+      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion', 'Published or Accepted', 'noPolicyFound', 'None']
     end
   end
 
@@ -389,6 +389,7 @@ describe Publication, type: :model do
         ['Accepted Manuscript', 'acceptedVersion'],
         ['Final Published Version', 'publishedVersion'],
         ['Final Published Version or Accepted Manuscript', 'Published or Accepted'],
+        ['No Policy Found', 'noPolicyFound'],
         ['None', 'None']
       ]
     end
@@ -825,6 +826,12 @@ describe Publication, type: :model do
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
+    let!(:pub9l) { create(:publication,
+                          title: 'pub9l',
+                          preferred_version: 'noPolicyFound',
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
     let!(:pub10) { create(:publication,
                           title: 'pub10',
                           preferred_version: 'acceptedVersion',
@@ -1038,6 +1045,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file7i) { create(:activity_insight_oa_file, publication: pub9i) }
     let!(:activity_insight_oa_file7j) { create(:activity_insight_oa_file, publication: pub9j) }
     let!(:activity_insight_oa_file7k) { create(:activity_insight_oa_file, publication: pub9k) }
+    let!(:activity_insight_oa_file7l) { create(:activity_insight_oa_file, publication: pub9l) }
     let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub10) }
     let!(:activity_insight_oa_file8b) { create(:activity_insight_oa_file, publication: pub10b) }
     let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub11, version: 'unknown') }
@@ -1186,6 +1194,7 @@ describe Publication, type: :model do
           pub9i,
           pub9j,
           pub9k,
+          pub9l,
           pub10,
           pub10b,
           pub11,
@@ -1307,7 +1316,7 @@ describe Publication, type: :model do
 
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
-        expect(described_class.needs_oa_metadata_search).to contain_exactly(pub8, pub8c, pub9a, pub9b, pub9c, pub9d, pub9e, pub9f, pub9g, pub9h, pub9i, pub9j, pub9k, pub10, pub10b, pub12b)
+        expect(described_class.needs_oa_metadata_search).to contain_exactly(pub8, pub8c, pub9a, pub9b, pub9c, pub9d, pub9e, pub9f, pub9g, pub9h, pub9i, pub9j, pub9k, pub9l, pub10, pub10b, pub12b)
       end
     end
 
@@ -1320,6 +1329,12 @@ describe Publication, type: :model do
     describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
         expect(described_class.needs_manual_preferred_version_check).to contain_exactly(pub9b)
+      end
+    end
+
+    describe '.no_policy_found' do
+      it 'returns activity_insight_oa_publications where no policy was found' do
+        expect(described_class.no_policy_found).to contain_exactly(pub9l)
       end
     end
 
@@ -1369,6 +1384,7 @@ describe Publication, type: :model do
           pub9h,
           pub9i,
           pub9j,
+          pub9l,
           pub10,
           pub11,
           pub11b,
@@ -1691,6 +1707,42 @@ describe Publication, type: :model do
       expect(pub1.reload.abstract).to eq 'pub1'
       expect(pub2.reload.abstract).to eq 'pub2'
       expect(pub3.reload.abstract).to eq 'pub3'
+    end
+  end
+
+  describe '.track_preferred_version_change' do
+    context 'when the preferred version is changed by an admin' do
+      let(:pub) { create(:publication, preferred_version: nil) }
+
+      before { allow(Current).to receive(:user).and_return(double('user', webaccess_id: 'abc1234')) }
+
+      it 'sets who updated the preferred version and when' do
+        pub.update(preferred_version: 'noPolicyFound')
+        expect(pub.preferred_version_updated_at).to be_within(1.minute).of(Time.zone.now)
+        expect(pub.preferred_version_updated_by).to eq 'abc1234'
+      end
+    end
+
+    context 'when preferred version is changed by an automated process' do
+      let(:pub) { create(:publication, preferred_version: nil) }
+
+      before { allow(Current).to receive(:user).and_return(nil) }
+
+      it 'sets when the preferred version was updated and by automated process' do
+        pub.update(preferred_version: 'acceptedVersion')
+        expect(pub.preferred_version_updated_at).to be_within(1.minute).of(Time.zone.now)
+        expect(pub.preferred_version_updated_by).to eq 'automated process'
+      end
+    end
+
+    context 'when the preferred version does not change' do
+      let(:pub) { create(:publication, preferred_version: nil) }
+
+      it 'does not track any change' do
+        pub.update(title: 'New Title')
+        expect(pub.preferred_version_updated_at).to be_nil
+        expect(pub.preferred_version_updated_by).to be_nil
+      end
     end
   end
 

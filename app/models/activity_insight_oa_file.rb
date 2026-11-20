@@ -4,12 +4,14 @@ class ActivityInsightOAFile < ApplicationRecord
   ACCEPTED_VERSION = 'acceptedVersion'
   PUBLISHED_VERSION = 'publishedVersion'
   NOT_ARTICLE_FILE = 'notArticleFile'
+  NO_POLICY_FOUND = 'noPolicyFound'
 
   ALLOWED_VERSIONS = [
     ACCEPTED_VERSION,
     PUBLISHED_VERSION,
     'unknown',
-    NOT_ARTICLE_FILE
+    NOT_ARTICLE_FILE,
+    NO_POLICY_FOUND
   ].freeze
 
   def self.export_statuses
