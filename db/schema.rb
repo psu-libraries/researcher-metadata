@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_171510) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_171944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -471,6 +471,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_171510) do
     t.index ["tag_id"], name: "index_publication_taggings_on_tag_id"
   end
 
+  create_table "publication_year_snapshots", force: :cascade do |t|
+    t.integer "publication_year"
+    t.integer "total_article_count"
+    t.integer "open_access_article_count"
+    t.bigint "statistics_snapshot_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["statistics_snapshot_id", "publication_year"], name: "idx_on_statistics_snapshot_id_publication_year_7fcfe77df1", unique: true
+  end
+
   create_table "publications", force: :cascade do |t|
     t.text "abstract"
     t.string "activity_insight_postprint_status"
@@ -744,6 +754,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_171510) do
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
+  add_foreign_key "publication_year_snapshots", "statistics_snapshots"
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
   add_foreign_key "publications", "journals"
   add_foreign_key "research_funds", "grants", name: "research_funds_grant_id_fk", on_delete: :cascade
