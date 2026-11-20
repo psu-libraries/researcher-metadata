@@ -300,7 +300,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_171944) do
     t.string "pure_uuid"
     t.text "title", null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.boolean "edited_manually", default: false, null: false
     t.index ["publisher_id"], name: "index_journals_on_publisher_id"
   end
 
