@@ -62,7 +62,7 @@
   <table class="table">
     <thead>
     <tr>
-      <th></th>
+      <th><%= fa_icon 'sort' %></th>
       <th>Publication</th>
       <th>Visible in profile</th>
       <th>Open Access Status</th>
@@ -73,7 +73,7 @@
     <tbody id="authorships">
       <% @authorships.each do |a| %>
         <tr id="<%= "authorship_row_#{a.id}" %>">
-          <td><%= fa_icon 'arrows-v' %></td>
+          <td class="rearrange-icon"><%= fa_icon 'arrows-v' %></td>
           <td class="pub-title"><%= a.profile_management_label.html_safe %></td>
           <td class="visibility">
             <%= form_with model: a, method: :put, class: 'visibility-control', remote: true do |f| %>
