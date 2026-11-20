@@ -46,7 +46,9 @@ class PurePublicationImporter < PureImporter
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update!(attrs)
             else
-              pi.publication.update!(pub_attrs(publication))
+              original_doi = p.doi
+              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi))
+              DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
             p = Publication.create!(pub_attrs(publication))
@@ -128,8 +130,9 @@ class PurePublicationImporter < PureImporter
 
   private
 
-    def pub_attrs(publication)
-      {
+    def pub_attrs(publication, prev_doi: nil)
+      doi_changed = doi(publication) != prev_doi
+      attrs = {
         title: title(publication),
         secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['en_US']),
@@ -146,6 +149,10 @@ class PurePublicationImporter < PureImporter
         visible: true,
         doi: doi(publication)
       }
+      if doi_changed
+        attrs[:doi_verified] = false
+      end
+      attrs
     end
 
     def title(publication)
