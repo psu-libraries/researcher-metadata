@@ -12,7 +12,7 @@
     "rails_admin": "3.3.0",
     "sass": "^1.80.6",
     "sass-loader": "^13.3.2",
-    "swagger-ui-dist": "5.1.0",
+    "swagger-ui-dist": "5.35.0",
     "webpack": "^5.88.0",
     "webpack-cli": "^5.1.4",
     "webpack-remove-empty-scripts": "^1.0.3"

@@ -1,7 +1,7 @@
 // Color variables
 $white: #fff;
 $light-gray: #ddd;
-$blue: #007bff;
+$blue: #0273EB;
 
 .pagination a,
 .pagination span.current,
@@ -39,6 +39,10 @@ $blue: #007bff;
 
   .intro {
     font-weight: bold;
+  }
+
+  .h4 {
+    margin-bottom: 16px;
   }
 }
 
