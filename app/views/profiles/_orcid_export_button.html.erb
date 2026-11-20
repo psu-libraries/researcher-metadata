@@ -5,4 +5,6 @@
     <%= button_to "Add to my ORCID Record", orcid_works_path, class: 'btn orcid-button',
                   remote: false, params: { authorship_id: a.id } %>
   <% end %>
+<% else %>
+  <sup>*</sup>This information cannot be added to ORCID.
 <% end %>
