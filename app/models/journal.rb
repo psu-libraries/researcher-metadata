@@ -45,6 +45,7 @@ class Journal < ApplicationRecord
           # Calls Publication instead of publications because calling publications would only allow
           # updates to the publications that are / become associated with a journal, and would not
           # update the publications that were changed to no longer be associated with a journal.
+          # Calling Publication fixes this behavior.
           Publication.assign_journal_assignment_overridden(id)
         end
       end
