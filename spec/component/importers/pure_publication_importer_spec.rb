@@ -547,51 +547,42 @@ describe PurePublicationImporter do
             expect(new_pub.doi).to be_nil
           end
 
-          context 'when the publication journal assignment has not been overridden' do # TODO
-            let!(:existing_journal) { create(:journal,
-                                             title: 'new title',
-                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad') }
+          context 'when the imported journal differs from the assigned journal' do
+            let(:existing_journal) { create(:journal, title: 'Old journal title') }
 
-            it 'does overwrite the journal' do
-              # do I need to change existing_journal here before calling the importer, so it updates the publication in the importer?
-              byebug
-              importer.call
-              byebug
-              existing_pub_reloaded = existing_pub.reload
-              expect(existing_pub_reloaded.journal).to eq existing_journal
+            before do
+              existing_import.update!(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+              existing_pub.update!(journal_assignment_overridden: overridden)
             end
-          end
 
-          context 'when the publication journal assignment has been overridden' do
-            let!(:existing_journal) { create(:journal,
-                                             title: 'new title',
-                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad') }
+            describe 'respects the journal assignment override' do
+              context 'when the assignment is not overridden' do
+                let(:overridden) { false }
 
-            let!(:existing_pub) { create(:publication,
-                                         updated_by_user_at: updated_ts,
-                                         title: 'Existing Title',
-                                         secondary_title: 'Existing Subtitle',
-                                         publication_type: 'Journal Article',
-                                         journal: existing_journal,
-                                         page_range: 'existing range',
-                                         volume: 'existing volume',
-                                         issue: 'existing issue',
-                                         issn: 'existing issn',
-                                         status: 'In Press',
-                                         published_on: Date.new(2018, 8, 22),
-                                         abstract: 'existing abstract',
-                                         visible: false,
-                                         doi: doi,
-                                         journal_assignment_overridden: true) }
+                it 'replaces the old journal with the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
 
-            it 'does not overwrite the journal' do
-              byebug
-              importer.call
-              byebug
-              existing_pub_reloaded = existing_pub.reload
-              # Is it technically overwriting? It is saying the update at time and created at time are different
-              # between start of test and end of test. Path with byebug seems correct
-              expect(existing_pub_reloaded.journal).to eq existing_journal # change to be old journal not new
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq journal
+                  expect(existing_pub.journal.title).to eq 'test journal'
+                end
+              end
+
+              context 'when the assignment is overridden' do
+                let(:overridden) { true }
+
+                it 'keeps the old journal instead of assigning the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
+
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq existing_journal
+                  expect(existing_pub.journal.title).to eq 'Old journal title'
+                end
+              end
             end
           end
 
@@ -813,33 +804,42 @@ describe PurePublicationImporter do
             expect(new_pub.doi).to be_nil
           end
 
-          # Existing publication record has been manually updated
-          context 'when the publication journal assignment has not been overridden' do # TODO
-            let(:existing_journal) { create(:journal,
-                                            title: 'new title',
-                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                            edited_manually: false) }
+          context 'when the imported journal differs from the assigned journal' do
+            let(:existing_journal) { create(:journal, title: 'Old journal title') }
 
-            it 'does overwrite the journal' do
-              importer.call
-
-              existing_pub_reloaded = existing_pub.reload
-              expect(existing_pub_reloaded.journal).to eq existing_journal
+            before do
+              existing_import.update!(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+              existing_pub.update!(journal_assignment_overridden: overridden)
             end
-          end
 
-          context 'when the publication journal assignment has been overridden' do # TODO
-            let(:existing_journal) { create(:journal,
-                                            title: 'new title',
-                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                            edited_manually: true) }
+            describe 'respects the journal assignment override' do
+              context 'when the assignment is not overridden' do
+                let(:overridden) { false }
 
-            it 'does not overwrite the journal' do
-              importer.call
+                it 'replaces the old journal with the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
 
-              existing_pub_reloaded = existing_pub.reload
+                  importer.call
 
-              expect(existing_pub_reloaded.journal).to be_nil # change to be old journal not new
+                  expect(existing_pub.reload.journal).to eq journal
+                  expect(existing_pub.journal.title).to eq 'test journal'
+                end
+              end
+
+              context 'when the assignment is overridden' do
+                let(:overridden) { true }
+
+                it 'keeps the old journal instead of assigning the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
+
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq existing_journal
+                  expect(existing_pub.journal.title).to eq 'Old journal title'
+                end
+              end
             end
           end
 

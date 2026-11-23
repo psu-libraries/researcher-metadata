@@ -38,8 +38,6 @@ class PurePublicationImporter < PureImporter
             false
           end
 
-          byebug
-
           pi.source_updated_at = publication['modifiedDate']
 
           if pi.persisted?
@@ -164,7 +162,6 @@ class PurePublicationImporter < PureImporter
         attrs[:doi_verified] = false
       end
 
-      byebug
       unless @journal_assignment_overridden
         attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
       end
