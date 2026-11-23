@@ -35,16 +35,10 @@ class PurePublicationImporter < PureImporter
           pi.source_updated_at = publication['modifiedDate']
 
           if pi.persisted?
-            jao = begin
-              p.journal_assignment_overridden
-            rescue NoMethodError
-              false
-            end
-
             if p.updated_by_user_at.present?
               attrs = {}
 
-              unless jao
+              unless p.journal_assignment_overridden?
                 attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
               end
 
@@ -57,7 +51,7 @@ class PurePublicationImporter < PureImporter
               pi.publication.update!(attrs)
             else
               original_doi = p.doi
-              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi, journal_assignment_overridden: jao))
+              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi, journal_assignment_overridden: p.journal_assignment_overridden?))
               DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
