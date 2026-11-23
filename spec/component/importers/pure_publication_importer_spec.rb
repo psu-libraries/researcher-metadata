@@ -533,32 +533,51 @@ describe PurePublicationImporter do
             expect(new_pub.doi).to be_nil
           end
 
-          context 'when the journal has not been edited manually' do
-            let(:existing_journal) { create(:journal,
-                                            title: 'new title',
-                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                            edited_manually: false) }
+          context 'when the publication journal assignment has not been overridden' do # TODO
+            let!(:existing_journal) { create(:journal,
+                                             title: 'new title',
+                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad') }
 
-            it 'does link to the publication' do
+            it 'does overwrite the journal' do
+              # do I need to change existing_journal here before calling the importer, so it updates the publication in the importer?
+              byebug
               importer.call
-
+              byebug
               existing_pub_reloaded = existing_pub.reload
               expect(existing_pub_reloaded.journal).to eq existing_journal
             end
           end
 
-          context 'when publication journal_assignment_overridden is true' do
-            let(:existing_journal) { create(:journal,
-                                            title: 'new title',
-                                            pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
-                                            edited_manually: true) }
+          context 'when the publication journal assignment has been overridden' do
+            let!(:existing_journal) { create(:journal,
+                                             title: 'new title',
+                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad') }
 
-            it 'does not link to the publication' do
+            let!(:existing_pub) { create(:publication,
+                                         updated_by_user_at: updated_ts,
+                                         title: 'Existing Title',
+                                         secondary_title: 'Existing Subtitle',
+                                         publication_type: 'Journal Article',
+                                         journal: existing_journal,
+                                         page_range: 'existing range',
+                                         volume: 'existing volume',
+                                         issue: 'existing issue',
+                                         issn: 'existing issn',
+                                         status: 'In Press',
+                                         published_on: Date.new(2018, 8, 22),
+                                         abstract: 'existing abstract',
+                                         visible: false,
+                                         doi: doi,
+                                         journal_assignment_overridden: true) }
+
+            it 'does not overwrite the journal' do
+              byebug
               importer.call
-
+              byebug
               existing_pub_reloaded = existing_pub.reload
-
-              expect(existing_pub_reloaded.journal).to be_nil
+              # Is it technically overwriting? It is saying the update at time and created at time are different
+              # between start of test and end of test. Path with byebug seems correct
+              expect(existing_pub_reloaded.journal).to eq existing_journal # change to be old journal not new
             end
           end
 
@@ -780,13 +799,14 @@ describe PurePublicationImporter do
             expect(new_pub.doi).to be_nil
           end
 
-          context 'when the journal has not been edited manually' do
+          # Existing publication record has been manually updated
+          context 'when the publication journal assignment has not been overridden' do # TODO
             let(:existing_journal) { create(:journal,
                                             title: 'new title',
                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
                                             edited_manually: false) }
 
-            it 'does link to the publication' do
+            it 'does overwrite the journal' do
               importer.call
 
               existing_pub_reloaded = existing_pub.reload
@@ -794,18 +814,18 @@ describe PurePublicationImporter do
             end
           end
 
-          context 'when the journal has been edited manually' do
+          context 'when the publication journal assignment has been overridden' do # TODO
             let(:existing_journal) { create(:journal,
                                             title: 'new title',
                                             pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad',
                                             edited_manually: true) }
 
-            it 'does not link to the publication' do
+            it 'does not overwrite the journal' do
               importer.call
 
               existing_pub_reloaded = existing_pub.reload
 
-              expect(existing_pub_reloaded.journal).to be_nil
+              expect(existing_pub_reloaded.journal).to be_nil # change to be old journal not new
             end
           end
 
