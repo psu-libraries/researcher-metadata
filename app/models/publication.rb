@@ -569,6 +569,8 @@ class Publication < ApplicationRecord
       group :preferred_version do
         field(:preferred_version)
         field(:preferred_file_version_none_email_sent)
+        field(:preferred_version_updated_at) { read_only true }
+        field(:preferred_version_updated_by) { read_only true }
       end
     end
 
