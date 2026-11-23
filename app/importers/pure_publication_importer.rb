@@ -32,9 +32,10 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
-          @journal_assignment_overridden = begin
-            Publication.find(pi.publication_id).journal_assignment_overridden
-          rescue ActiveRecord::RecordNotFound
+          byebug
+          journal_assignment_overridden = begin
+            p.journal_assignment_overridden
+          rescue ActiveRecord::RecordNotFound, NoMethodError
             false
           end
 
@@ -44,7 +45,7 @@ class PurePublicationImporter < PureImporter
             if p.updated_by_user_at.present?
               attrs = {}
 
-              unless @journal_assignment_overridden
+              unless journal_assignment_overridden
                 attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
               end
 
@@ -57,11 +58,11 @@ class PurePublicationImporter < PureImporter
               pi.publication.update!(attrs)
             else
               original_doi = p.doi
-              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi))
+              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi, journal_assignment_overridden: journal_assignment_overridden))
               DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
-            p = Publication.create!(pub_attrs(publication))
+            p = Publication.create!(pub_attrs(publication, journal_assignment_overridden: journal_assignment_overridden))
             # Verify the DOI for new publications
             DOIVerificationJob.perform_later(p.id)
             pi.publication = p
@@ -140,7 +141,7 @@ class PurePublicationImporter < PureImporter
 
   private
 
-    def pub_attrs(publication, prev_doi: nil)
+    def pub_attrs(publication, prev_doi: nil, journal_assignment_overridden: false)
       doi_changed = doi(publication) != prev_doi
       attrs = {
         title: title(publication),
@@ -162,7 +163,7 @@ class PurePublicationImporter < PureImporter
         attrs[:doi_verified] = false
       end
 
-      unless @journal_assignment_overridden
+      unless journal_assignment_overridden
         attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
       end
 
