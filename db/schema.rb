@@ -472,6 +472,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_152935) do
     t.index ["tag_id"], name: "index_publication_taggings_on_tag_id"
   end
 
+  create_table "publication_year_snapshots", force: :cascade do |t|
+    t.integer "publication_year"
+    t.integer "total_article_count"
+    t.integer "open_access_article_count"
+    t.bigint "statistics_snapshot_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["statistics_snapshot_id", "publication_year"], name: "idx_on_statistics_snapshot_id_publication_year_7fcfe77df1", unique: true
+  end
+
   create_table "publications", force: :cascade do |t|
     t.text "abstract"
     t.string "activity_insight_postprint_status"
@@ -499,7 +509,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_152935) do
     t.boolean "preferred_file_version_none_email_sent"
     t.string "preferred_version"
     t.datetime "preferred_version_updated_at"
-    t.string "preferred_version_updated_by"    
+    t.string "preferred_version_updated_by"
     t.string "publication_type", null: false
     t.date "published_on"
     t.text "publisher_name"
@@ -748,6 +758,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_152935) do
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
+  add_foreign_key "publication_year_snapshots", "statistics_snapshots"
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
   add_foreign_key "publications", "journals"
   add_foreign_key "research_funds", "grants", name: "research_funds_grant_id_fk", on_delete: :cascade
