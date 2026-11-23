@@ -42,6 +42,9 @@ class Journal < ApplicationRecord
 
         # Set journal_assignment_overridden to true for each publication that had its association changed
         changed_associations.each do |id|
+          # Calls Publication instead of publications because calling publications would only allow
+          # updates to the publications that are / become associated with a journal, and would not
+          # update the publications that were changed to no longer be associated with a journal.
           Publication.assign_journal_assignment_overridden(id)
         end
       end
