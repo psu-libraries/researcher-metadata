@@ -144,7 +144,7 @@ class PurePublicationImporter < PureImporter
 
     def pub_attrs(publication, prev_doi: nil)
       doi_changed = doi(publication) != prev_doi
-      attrs = attrs = {
+      attrs = {
         title: title(publication),
         secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['en_US']),
@@ -163,7 +163,6 @@ class PurePublicationImporter < PureImporter
       if doi_changed
         attrs[:doi_verified] = false
       end
-      attrs
 
       byebug
       unless @journal_assignment_overridden
