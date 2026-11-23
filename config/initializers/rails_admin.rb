@@ -137,4 +137,10 @@ RailsAdmin.config do |config|
   config.navigation_static_links = {
     'Activity Insight Open Access Workflow' => '/activity_insight_oa_workflow'
   }
+
+  config.model PublicationYearSnapshot do
+    object_label_method do
+      :admin_label
+    end
+  end
 end
