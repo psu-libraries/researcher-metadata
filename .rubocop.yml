@@ -43,6 +43,10 @@ RSpec/AnyInstance:
     - 'spec/integration/admin/activity_insight_oa_workflow/wrong_version_author_notified_review_spec.rb'
     - 'spec/integration/admin/activity_insight_oa_workflow/preferred_version_none_spec.rb'
 
+RSpec/DescribedClass:
+  Exclude:
+    - 'spec/component/models/publication_spec.rb'
+
 RSpec/LeakyConstantDeclaration:
   Exclude:
     - 'spec/component/models/concerns/null_object_pattern_spec.rb'
