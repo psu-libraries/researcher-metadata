@@ -9,6 +9,7 @@ class Publication < ApplicationRecord
   IN_PRESS_STATUS = 'In Press'
 
   PUBLISHED_OR_ACCEPTED_VERSION = 'Published or Accepted'
+  NO_POLICY_FOUND = 'No Policy Found'
   NO_VERSION = 'None'
 
   WRONG_VERSION_EMAIL_NOT_SENT = <<-SQL.squish
@@ -85,11 +86,14 @@ class Publication < ApplicationRecord
       [I18n.t('file_versions.accepted_version_display'), ActivityInsightOAFile::ACCEPTED_VERSION],
       [I18n.t('file_versions.published_version_display'), ActivityInsightOAFile::PUBLISHED_VERSION],
       [I18n.t('file_versions.published_or_accepted_version_display'), PUBLISHED_OR_ACCEPTED_VERSION],
+      [I18n.t('file_versions.no_policy_found_display'), ActivityInsightOAFile::NO_POLICY_FOUND],
       [I18n.t('file_versions.no_version_display'), NO_VERSION]
     ].freeze
   end
 
   before_validation :strip_p_tags_from_abstract
+  before_save :track_preferred_version_change,
+              if: :will_save_change_to_preferred_version?
 
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
@@ -277,6 +281,12 @@ class Publication < ApplicationRecord
       .filter_oa_status_from_workflow
       .where.not(permissions_last_checked_at: nil)
       .where(preferred_version: nil)
+  }
+  scope :no_policy_found, -> {
+    nonspecial_attn_activity_insight_oa_publication
+      .filter_oa_status_from_workflow
+      .where.not(permissions_last_checked_at: nil)
+      .where(preferred_version: 'noPolicyFound')
   }
   scope :preferred_file_version_none, -> {
                                         nonspecial_attn_activity_insight_oa_publication
@@ -559,6 +569,8 @@ class Publication < ApplicationRecord
       group :preferred_version do
         field(:preferred_version)
         field(:preferred_file_version_none_email_sent)
+        field(:preferred_version_updated_at) { read_only true }
+        field(:preferred_version_updated_by) { read_only true }
       end
     end
 
@@ -977,5 +989,10 @@ class Publication < ApplicationRecord
         abstract.slice!(0..2) if abstract[0..2] == '<p>'
         abstract.slice!(-4..-1) if abstract[-4..] == '</p>'
       end
+    end
+
+    def track_preferred_version_change
+      self.preferred_version_updated_at = Time.current
+      self.preferred_version_updated_by = Current.user&.webaccess_id ? Current.user.webaccess_id : 'automated process'
     end
 end

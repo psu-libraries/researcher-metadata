@@ -227,6 +227,8 @@ en:
       preferred_file_version_none_curation_description: Publications for which no version can be deposited
       preferred_version_curation_title: Review Preferred Version
       preferred_version_curation_description: Publications that require manual check for preferred version.
+      no_policy_found_curation_title: No Policy Found
+      no_policy_found_curation_description: Publications for which manual review found no preferred version policy.
       permissions_curation_title: Review File Permissions
       permissions_curation_description: Publications with a file that can be deposited that does not have all required permissions metadata.
       metadata_curation_title: Review Publication Metadata
@@ -252,4 +254,5 @@ en:
     published_version_display: 'Final Published Version'
     published_or_accepted_version_display: 'Final Published Version or Accepted Manuscript'
     no_version_display: 'None'
+    no_policy_found_display: 'No Policy Found'
     not_article_file_display: 'Not Article File'
