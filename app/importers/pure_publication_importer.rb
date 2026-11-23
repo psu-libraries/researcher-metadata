@@ -32,9 +32,9 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
-          journal_assignment_overridden = begin
+          jao = begin
             p.journal_assignment_overridden
-          rescue ActiveRecord::RecordNotFound, NoMethodError
+          rescue NoMethodError
             false
           end
 
@@ -44,7 +44,7 @@ class PurePublicationImporter < PureImporter
             if p.updated_by_user_at.present?
               attrs = {}
 
-              unless journal_assignment_overridden
+              unless jao
                 attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
               end
 
@@ -57,11 +57,11 @@ class PurePublicationImporter < PureImporter
               pi.publication.update!(attrs)
             else
               original_doi = p.doi
-              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi, journal_assignment_overridden: journal_assignment_overridden))
+              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi, journal_assignment_overridden: jao))
               DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
-            p = Publication.create!(pub_attrs(publication, journal_assignment_overridden: journal_assignment_overridden))
+            p = Publication.create!(pub_attrs(publication, journal_assignment_overridden: jao))
             # Verify the DOI for new publications
             DOIVerificationJob.perform_later(p.id)
             pi.publication = p
