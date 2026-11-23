@@ -32,7 +32,6 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
-          byebug
           journal_assignment_overridden = begin
             p.journal_assignment_overridden
           rescue ActiveRecord::RecordNotFound, NoMethodError
