@@ -42,6 +42,7 @@ RSpec/AnyInstance:
     - 'spec/integration/admin/activity_insight_oa_workflow/wrong_file_version_review_spec.rb'
     - 'spec/integration/admin/activity_insight_oa_workflow/wrong_version_author_notified_review_spec.rb'
     - 'spec/integration/admin/activity_insight_oa_workflow/preferred_version_none_spec.rb'
+    - 'spec/integration/admin/activity_insight_oa_workflow/no_policy_found_spec.rb'
 
 RSpec/LeakyConstantDeclaration:
   Exclude:
@@ -59,10 +60,12 @@ Style/Semicolon:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/importers/activity_insight_importer.rb'
+    - 'app/importers/pure_publication_importer.rb'
 
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/importers/activity_insight_importer.rb'
+    - 'app/importers/pure_publication_importer.rb'
 
 RSpec/PendingWithoutReason:
   Exclude:

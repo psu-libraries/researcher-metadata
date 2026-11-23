@@ -25,6 +25,10 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.needs_manual_preferred_version_check.count
   end
 
+  def no_policy_found_count
+    Publication.no_policy_found.count
+  end
+
   def needs_manual_permissions_review_count
     Publication.needs_manual_permissions_review.count
   end

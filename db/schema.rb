@@ -507,6 +507,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_171944) do
     t.datetime "permissions_last_checked_at", precision: nil
     t.boolean "preferred_file_version_none_email_sent"
     t.string "preferred_version"
+    t.datetime "preferred_version_updated_at"
+    t.string "preferred_version_updated_by"
     t.string "publication_type", null: false
     t.date "published_on"
     t.text "publisher_name"
