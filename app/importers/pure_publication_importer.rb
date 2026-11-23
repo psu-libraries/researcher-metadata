@@ -37,7 +37,11 @@ class PurePublicationImporter < PureImporter
           if pi.persisted?
             if p.updated_by_user_at.present?
               attrs = {}
-              attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+
+              unless p.journal_assignment_overridden?
+                attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+              end
+
               if !p.published?
                 attrs[:status] = status_value(publication)
               end
@@ -47,7 +51,7 @@ class PurePublicationImporter < PureImporter
               pi.publication.update!(attrs)
             else
               original_doi = p.doi
-              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi))
+              pi.publication.update!(pub_attrs(publication, prev_doi: p.doi, journal_assignment_overridden: p.journal_assignment_overridden?))
               DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
@@ -130,7 +134,7 @@ class PurePublicationImporter < PureImporter
 
   private
 
-    def pub_attrs(publication, prev_doi: nil)
+    def pub_attrs(publication, prev_doi: nil, journal_assignment_overridden: false)
       doi_changed = doi(publication) != prev_doi
       attrs = {
         title: title(publication),
@@ -139,7 +143,6 @@ class PurePublicationImporter < PureImporter
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
-        journal: journal_present?(publication) ? journal(publication) : nil,
         issn: journal_present?(publication) ? issn(publication) : nil,
         status: status_value(publication),
         published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -152,6 +155,11 @@ class PurePublicationImporter < PureImporter
       if doi_changed
         attrs[:doi_verified] = false
       end
+
+      unless journal_assignment_overridden
+        attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+      end
+
       attrs
     end
 

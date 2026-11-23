@@ -12,6 +12,7 @@ describe 'the journals table', type: :model do
   it { is_expected.to have_db_column(:publisher_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:edited_manually).of_type(:boolean).with_options(null: false) }
 
   it { is_expected.to have_db_index :publisher_id }
 
@@ -72,6 +73,41 @@ describe Journal, type: :model do
 
     it 'returns the number of publications associated with the publisher that were published by PSU faculty while they were PSU faculty' do
       expect(journal.psu_publication_count).to eq 2
+    end
+  end
+
+  describe '.mark_as_updated_by_user' do
+    let!(:j) { create(:journal, title: 'a') }
+    let!(:p) { create(:publication,
+                      title: 'test pub',
+                      publication_type: 'In-house Journal Article',
+                      status: 'Published') }
+
+    it 'sets journal to edited_manually when title is updated' do
+      j.init_pub_ids = Set[]
+
+      j.title = 'New Title'
+      j.mark_as_updated_by_user
+      j.save
+
+      expect(j.reload.edited_manually).to be true
+    end
+
+    it 'sets journal to edited_manually when associated publications are updated' do
+      j.init_pub_ids = Set[p.id] # Simulates a change in publication associations, ensuring pub_ids_changed is true
+      j.mark_as_updated_by_user
+      j.save
+
+      expect(j.reload.edited_manually).to be true
+    end
+
+    it "doesn't set journal to edited_manually when no changes occur" do
+      j.init_pub_ids = Set[]
+
+      j.mark_as_updated_by_user
+      j.save
+
+      expect(j.reload.edited_manually).to be false
     end
   end
 

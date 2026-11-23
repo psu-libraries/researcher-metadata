@@ -98,7 +98,8 @@ RailsAdmin.config do |config|
             :InternalPublicationWaiver,
             :OpenAccessLocation,
             :OANotificationSetting,
-            :ActivityInsightOAFile]
+            :ActivityInsightOAFile,
+            :Journal]
     end
     delete do
       only [:APIToken,

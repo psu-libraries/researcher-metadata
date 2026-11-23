@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 require 'capybara/dsl'
 
 # Put temp files with the rest of the rails files

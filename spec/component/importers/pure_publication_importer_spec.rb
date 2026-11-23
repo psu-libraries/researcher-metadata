@@ -265,6 +265,12 @@ describe PurePublicationImporter do
                                     author_number: 4)).not_to be_nil
         end
 
+        it 'saves the correct data for the journal' do
+          importer.call
+
+          expect(journal.title).to eq 'test journal'
+        end
+
         context 'when possible duplicate publications exists' do
           let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
           let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
@@ -541,6 +547,45 @@ describe PurePublicationImporter do
             expect(new_pub.doi).to be_nil
           end
 
+          context 'when the imported journal differs from the assigned journal' do
+            let(:existing_journal) { create(:journal, title: 'Old journal title') }
+
+            before do
+              existing_import.update!(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+              existing_pub.update!(journal_assignment_overridden: overridden)
+            end
+
+            describe 'respects the journal assignment override' do
+              context 'when the assignment is not overridden' do
+                let(:overridden) { false }
+
+                it 'replaces the old journal with the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
+
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq journal
+                  expect(existing_pub.journal.title).to eq 'test journal'
+                end
+              end
+
+              context 'when the assignment is overridden' do
+                let(:overridden) { true }
+
+                it 'keeps the old journal instead of assigning the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
+
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq existing_journal
+                  expect(existing_pub.journal.title).to eq 'Old journal title'
+                end
+              end
+            end
+          end
+
           context 'when there are possible duplicates' do
             let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
             let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
@@ -757,6 +802,45 @@ describe PurePublicationImporter do
             expect(new_pub.abstract).to eq 'This is the third abstract.'
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
+          end
+
+          context 'when the imported journal differs from the assigned journal' do
+            let(:existing_journal) { create(:journal, title: 'Old journal title') }
+
+            before do
+              existing_import.update!(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+              existing_pub.update!(journal_assignment_overridden: overridden)
+            end
+
+            describe 'respects the journal assignment override' do
+              context 'when the assignment is not overridden' do
+                let(:overridden) { false }
+
+                it 'replaces the old journal with the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
+
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq journal
+                  expect(existing_pub.journal.title).to eq 'test journal'
+                end
+              end
+
+              context 'when the assignment is overridden' do
+                let(:overridden) { true }
+
+                it 'keeps the old journal instead of assigning the imported journal' do
+                  expect(existing_pub.reload.journal.title).to eq 'Old journal title'
+                  expect(journal.title).to eq 'test journal'
+
+                  importer.call
+
+                  expect(existing_pub.reload.journal).to eq existing_journal
+                  expect(existing_pub.journal.title).to eq 'Old journal title'
+                end
+              end
+            end
           end
 
           context 'when there are possible duplicates' do

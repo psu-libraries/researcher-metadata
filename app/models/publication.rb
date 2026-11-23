@@ -433,6 +433,10 @@ class Publication < ApplicationRecord
     d.try(:gsub, 'https://doi.org/', '')
   end
 
+  def self.assign_journal_assignment_overridden(id)
+    find(id).update(journal_assignment_overridden: true)
+  end
+
   rails_admin do
     list do
       scopes [
@@ -449,6 +453,7 @@ class Publication < ApplicationRecord
       field(:secondary_title)
       field(:organizations)
       field(:journal_title)
+      field(:journal_assignment_overridden)
       field(:volume)
       field(:issue)
       field(:edition)
@@ -519,6 +524,7 @@ class Publication < ApplicationRecord
       field(:publication_type)
       field(:journal_title)
       field(:journal)
+      field(:journal_assignment_overridden)
       field(:publisher_name)
       field(:status)
       field(:volume)
