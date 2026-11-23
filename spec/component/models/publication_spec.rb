@@ -1972,6 +1972,8 @@ describe Publication, type: :model do
     let(:pub) { create(:publication) }
 
     it 'sets journal_assignment_overridden value to true' do
+      # Calls publication class instead of described class to replicate
+      # usage behavior.
       Publication.assign_journal_assignment_overridden(pub.id)
 
       expect(pub.reload.journal_assignment_overridden).to be true
