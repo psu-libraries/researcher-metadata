@@ -32,15 +32,15 @@ class PurePublicationImporter < PureImporter
 
           p = pi.publication
 
-          jao = begin
-            p.journal_assignment_overridden
-          rescue NoMethodError
-            false
-          end
-
           pi.source_updated_at = publication['modifiedDate']
 
           if pi.persisted?
+            jao = begin
+              p.journal_assignment_overridden
+            rescue NoMethodError
+              false
+            end
+
             if p.updated_by_user_at.present?
               attrs = {}
 
@@ -61,7 +61,7 @@ class PurePublicationImporter < PureImporter
               DOIVerificationJob.perform_later(pi.publication.id) unless original_doi == pi.publication.doi
             end
           else
-            p = Publication.create!(pub_attrs(publication, journal_assignment_overridden: jao))
+            p = Publication.create!(pub_attrs(publication))
             # Verify the DOI for new publications
             DOIVerificationJob.perform_later(p.id)
             pi.publication = p
